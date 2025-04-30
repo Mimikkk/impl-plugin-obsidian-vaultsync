@@ -12,18 +12,20 @@
   },
   "lint": {
     "rules": {
-      "exclude": ["no-namespace", "no-explicit-any", "no-empty-interface", "no-empty", "ban-types"]
+      "exclude": [
+        "no-namespace",
+        "no-explicit-any",
+        "no-empty-interface",
+        "no-empty",
+        "ban-types"
+      ]
     }
   },
-  "tasks": {
-    "dev": {
-      "description": "Run the development server",
-      "command": "deno run -A --env-file=.env --watch ./src/server.ts"
-    },
-    "server": {
-      "description": "Run the production server",
-      "command": "deno run -A --env-file=.env ./src/server.ts"
-    }
-  },
-  "vendor": true
+  "vendor": true,
+  "workspace": {
+    "members": [
+      "apps/plugin",
+      "apps/server"
+    ]
+  }
 }

@@ -1,6 +1,6 @@
-# Obsidian plugin - ObsidianSync
+# Obsidian plugin - VaultSync
 
-ObsidianSync enables file synchronization between Obsidian vaults over a local WLAN connection.
+VaultSync enables file synchronization between Obsidian vaults over a local WLAN connection.
 
 ## Features
 
@@ -13,18 +13,18 @@ ObsidianSync enables file synchronization between Obsidian vaults over a local W
 ### Prerequisites
 
 - Multiple devices running Obsidian
-  - ObsidianSync plugin installed on all devices
+  - VaultSync plugin installed on all devices
 - Devices connected to the same WLAN network
 
 ### Installation
 
-1. Download the ObsidianSync plugin from the repository
+1. Download the VaultSync plugin from the repository
 2. Install in your Obsidian vault through the Community Plugins section
 3. Enable the plugin in Obsidian settings
 
 ### Configuration
 
-1. Open ObsidianSync settings in Obsidian
+1. Open VaultSync settings in Obsidian
 2. Set a unique identifier for your vault
 3. Configure which folders to include/exclude from synchronization
 4. Save your settings
