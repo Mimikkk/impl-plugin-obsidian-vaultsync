@@ -1,0 +1,6 @@
+.env.local
+node_modules
+build
+.vscode
+vendor
+todo.md
