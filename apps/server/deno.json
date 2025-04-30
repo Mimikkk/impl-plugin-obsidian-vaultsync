@@ -1,4 +1,6 @@
 {
+  "name": "@nimir/obsidian-plugin-vault-sync-server",
+  "exports": "./mod.ts",
   "tasks": {
     "dev": {
       "description": "Run the development server",

@@ -8,6 +8,8 @@
       "singleQuote": false,
       "useTabs": false
     },
+
+    "include": ["**/*.ts", "**/*.json"],
     "exclude": ["node_modules", "vendor"]
   },
   "lint": {
