@@ -50,6 +50,7 @@ const createDebouncedEventHandler = (
 };
 
 const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUrl: string }) => {
+  console.clear();
   console.info(`${colors.blue("[event]")} Syncing plugin to vault...`);
   const result = await rebuild();
   if (result === "build-failed") {
@@ -72,6 +73,7 @@ const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUr
   }
 
   console.info(`${colors.blue("[event]")} Plugin synced to vault successfully!`);
+  console.info(`${colors.gray("[info]")} Watching for changes...`);
 };
 
 const vaultPath = Deno.env.get("VAULT_PATH");
@@ -105,15 +107,11 @@ if (urls === "obsidian-location-does-not-exist") {
   Deno.exit(1);
 }
 
-console.info(`${colors.gray("[info]")} Initial sync...`);
 await synchronize(urls);
-
 if (!Deno.args.includes("--watch")) Deno.exit(0);
 
 const watcher = Deno.watchFs("apps/plugin/src");
 const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
-
-console.info(`${colors.gray("[info]")} Watching for changes...`);
 for await (const event of watcher) {
   handleEvent(event);
 }
