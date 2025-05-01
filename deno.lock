@@ -1,7 +1,11 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@cliffy/ansi@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@std/dotenv@*": "0.225.3",
+    "jsr:@std/encoding@~1.0.5": "1.0.8",
+    "jsr:@std/fmt@~1.0.2": "1.0.6",
     "jsr:@std/fs@*": "1.0.17",
     "jsr:@std/fs@1.0.17": "1.0.17",
     "jsr:@std/fs@1.0.9": "1.0.9",
@@ -30,8 +34,25 @@
     "npm:obsidian@1.8.7": "1.8.7_@codemirror+state@6.5.2_@codemirror+view@6.36.6"
   },
   "jsr": {
+    "@cliffy/ansi@1.0.0-rc.7": {
+      "integrity": "f71c921cce224c13d322e5cedba4f38e8f7354c7d855c9cb22729362a53f25aa",
+      "dependencies": [
+        "jsr:@cliffy/internal",
+        "jsr:@std/encoding",
+        "jsr:@std/fmt"
+      ]
+    },
+    "@cliffy/internal@1.0.0-rc.7": {
+      "integrity": "10412636ab3e67517d448be9eaab1b70c88eba9be22617b5d146257a11cc9b17"
+    },
     "@std/dotenv@0.225.3": {
       "integrity": "a95e5b812c27b0854c52acbae215856d9cce9d4bbf774d938c51d212711e8d4a"
+    },
+    "@std/encoding@1.0.8": {
+      "integrity": "a6c8f3f933ab1bed66244f435d1dc0fd23a888e07195532122ddc3d5f8f0e6b4"
+    },
+    "@std/fmt@1.0.6": {
+      "integrity": "a2c56a69a2369876ddb3ad6a500bb6501b5bad47bb3ea16bfb0c18974d2661fc"
     },
     "@std/fs@1.0.9": {
       "integrity": "3eef7e3ed3d317b29432c7dcb3b20122820dbc574263f721cb0248ad91bad890",
@@ -1532,6 +1553,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@cliffy/ansi@1.0.0-rc.7",
       "jsr:@std/dotenv@0.225.3",
       "jsr:@std/fs@1.0.17"
     ],

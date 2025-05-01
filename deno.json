@@ -1,4 +1,5 @@
 {
+  "license": "MIT",
   "fmt": {
     "options": {
       "indentWidth": 2,
@@ -31,13 +32,18 @@
     ]
   },
   "tasks": {
-    "enable-hot-reload": {
+    "enable-dev": {
       "description": "Enable hot-reload plugin within the vault.",
       "command": "deno run -A --watch scripts/enable-hot-reload.ts"
+    },
+    "push": {
+      "description": "Build the plugin and push it to the vault. --watch can be added to enable hot-reloading.",
+      "command": "deno run -A scripts/push-plugin-to-vault.ts"
     }
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@1.0.17",
-    "@std/dotenv": "jsr:@std/dotenv@0.225.3"
+    "@std/dotenv": "jsr:@std/dotenv@0.225.3",
+    "@cliffy/ansi": "jsr:@cliffy/ansi@1.0.0-rc.7"
   }
 }

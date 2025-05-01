@@ -1,10 +1,10 @@
 {
-  "id": "hello-world",
-  "name": "Hello World",
+  "id": "vault-sync",
+  "name": "Vault Sync",
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
-  "description": "A simple Hello World plugin",
-  "author": "Your Name",
-  "authorUrl": "https://github.com/yourusername",
+  "description": "Plugin meant for syncing vaults between different locations over WLAN",
+  "author": "Daniel Zdancewicz",
+  "authorUrl": "https://github.com/mimikkk",
   "isDesktopOnly": false
 }

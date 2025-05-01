@@ -42,6 +42,6 @@ compiler.run(async (error, stats) => {
     Deno.copyFile("versions.json", "dist/versions.json"),
   ]);
 
-  console.log("Build completed successfully!");
-  console.log(stats?.toString({ colors: true }));
+  console.info("Build completed successfully!");
+  console.info(stats?.toString({ colors: true }));
 });
