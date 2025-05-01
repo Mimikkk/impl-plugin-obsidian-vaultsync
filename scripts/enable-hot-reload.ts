@@ -1,6 +1,6 @@
 import * as fs from "jsr:@std/fs";
 import * as path from "jsr:@std/path";
-import "./env.ts";
+import "./read-env.ts";
 
 const command = async ({ args, cwd }: { args: string[]; cwd?: string }) => {
   const process = new Deno.Command("git", { args, cwd });
