@@ -92,21 +92,16 @@ export async function enableHotReload({ remoteUrl, localUrl }: HotReloadRepoUrls
   }
 }
 
-const parseRepoUrls = async (vaultUrl?: string): Promise<HotReloadRepoUrls> => {
-  const remoteUrl = "https://github.com/pjeby/hot-reload.git";
-
+const parseRepoUrls = async (vaultUrl?: string) => {
   if (!vaultUrl) {
-    console.error("VAULT_PATH is not set");
-    Deno.exit(1);
+    return "env-not-set";
+  }
+  if (!(await fs.exists(vaultUrl))) {
+    return "obsidian-location-does-not-exist";
   }
 
+  const remoteUrl = "https://github.com/pjeby/hot-reload.git";
   const obsidianUrl = path.join(vaultUrl, ".obsidian");
-
-  if (!(await fs.exists(obsidianUrl))) {
-    console.error("Obsidian location does not exist.");
-    Deno.exit(1);
-  }
-
   const pluginsUrl = path.join(obsidianUrl, "plugins");
   const pluginUrl = path.join(pluginsUrl, "hot-reload");
 
@@ -115,8 +110,20 @@ const parseRepoUrls = async (vaultUrl?: string): Promise<HotReloadRepoUrls> => {
   return { remoteUrl, localUrl: pluginUrl };
 };
 
-const { remoteUrl, localUrl } = await parseRepoUrls(Deno.env.get("VAULT_PATH"));
-const result = await enableHotReload({ remoteUrl, localUrl });
+const urlsResult = await parseRepoUrls(Deno.env.get("VAULT_PATH"));
+if (urlsResult === "env-not-set") {
+  console.error("[error] VAULT_PATH is not set.");
+  console.error("- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.");
+  Deno.exit(1);
+}
+
+if (urlsResult === "obsidian-location-does-not-exist") {
+  console.error("[error] Obsidian location does not exist.");
+  console.error("- Please check your vault path.");
+  Deno.exit(1);
+}
+
+const result = await enableHotReload(urlsResult);
 
 if (result === "already-up-to-date") {
   console.log("[info] Hot-reload plugin is already up to date.");
@@ -125,15 +132,20 @@ if (result === "already-up-to-date") {
 
 if (result === "invalid-local-hash") {
   console.error("[error] Invalid local hash. Please check your vault path.");
+  console.error("- Verify your vault path is correct.");
   Deno.exit(1);
 }
 
 if (result === "invalid-remote-hash") {
   console.error("[error] Invalid remote hash. Please check your internet connection.");
+  console.error("- Please check your internet connection.");
+  console.error("- Please check the remote URL.");
   Deno.exit(1);
 }
 
 if (result === "clone-failure") {
   console.error("[error] Failed to clone repository.");
+  console.error("- Please check your internet connection.");
+  console.error("- Please check the remote URL.");
   Deno.exit(1);
 }
