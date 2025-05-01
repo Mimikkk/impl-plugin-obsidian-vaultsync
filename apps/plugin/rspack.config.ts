@@ -35,7 +35,7 @@ rspack({
     Deno.exit(1);
   }
 
-  const files = ["manifest.json", "versions.json"];
+  const files = ["manifest.json", "versions.json", ".hotreload"];
   console.info("Moving static files...");
   await Promise.all(
     files.map((file) => Deno.copyFile(file, resolve("dist", file))),
