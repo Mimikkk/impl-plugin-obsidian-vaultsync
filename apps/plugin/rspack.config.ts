@@ -8,7 +8,9 @@ const compiler = rspack({
     filename: "main.js",
     clean: true,
   },
-  resolve: { extensions: [".ts"] },
+  resolve: {
+    extensions: [".ts"],
+  },
   externals: ["obsidian"],
   module: {
     rules: [
@@ -24,7 +26,7 @@ const compiler = rspack({
   mode: "production",
 });
 
-compiler.run((error, stats) => {
+compiler.run(async (error, stats) => {
   if (error) {
     console.error("Build failed:", error);
     Deno.exit(1);
@@ -34,6 +36,11 @@ compiler.run((error, stats) => {
     console.error("Build completed with errors:", stats.toString({ colors: true }));
     Deno.exit(1);
   }
+
+  await Promise.all([
+    Deno.copyFile("manifest.json", "dist/manifest.json"),
+    Deno.copyFile("versions.json", "dist/versions.json"),
+  ]);
 
   console.log("Build completed successfully!");
   console.log(stats?.toString({ colors: true }));

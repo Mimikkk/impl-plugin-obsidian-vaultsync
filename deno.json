@@ -10,7 +10,7 @@
     },
 
     "include": ["**/*.ts", "**/*.json"],
-    "exclude": ["node_modules", "vendor"]
+    "exclude": ["node_modules", "vendor", "**/dist"]
   },
   "lint": {
     "rules": {
@@ -29,5 +29,15 @@
       "apps/plugin",
       "apps/server"
     ]
+  },
+  "tasks": {
+    "enable-hot-reload": {
+      "description": "Enable hot-reload plugin within the vault.",
+      "command": "deno run -A --watch scripts/enable-hot-reload.ts"
+    }
+  },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@1.0.17",
+    "@std/dotenv": "jsr:@std/dotenv@0.225.3"
   }
 }
