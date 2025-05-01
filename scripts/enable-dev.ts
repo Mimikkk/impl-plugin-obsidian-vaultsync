@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
-import * as fs from "jsr:@std/fs";
-import * as path from "jsr:@std/path";
+import * as fs from "@std/fs";
+import * as path from "@std/path";
 import "./read-env.ts";
 
 const command = async ({ args, cwd }: { args: string[]; cwd?: string }) => {
