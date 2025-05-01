@@ -6,19 +6,23 @@ import "./read-env.ts";
 const nextlineRe = /\r?\n/;
 const lines = (text: Uint8Array) => new TextDecoder().decode(text).trim().split(nextlineRe);
 
-const rebuild = () =>
-  new Deno.Command("deno", { args: ["task", "-f", "plugin", "build"], stdout: "piped", stderr: "piped" }).output().then(
-    ({ stdout, stderr }) => {
-      const outputLines = lines(stdout);
-      const errorLines = lines(stderr);
-      const hasOutput = outputLines.length > 0 || errorLines.length > 0;
+const rebuild = async () => {
+  const { stderr, stdout, success } = await new Deno.Command("deno", {
+    args: ["task", "-f", "plugin", "build"],
+    stdout: "piped",
+    stderr: "piped",
+  }).output();
 
-      if (!hasOutput) return;
-      console.info(`${colors.green("[Task]")} sync:`);
-      console.info(errorLines.map((line) => `  - ${line}`).join("\n"));
-      console.info(outputLines.map((line) => `  - ${line}`).join("\n"));
-    },
-  );
+  const outputLines = lines(stdout);
+  const errorLines = lines(stderr);
+
+  console.info(`${colors.green("[Task]")} sync:`);
+  console.info(errorLines.map((line) => `  - ${line}`).join("\n"));
+  console.info(outputLines.map((line) => `  - ${line}`).join("\n"));
+
+  if (!success) return "build-failed";
+  return "build-success";
+};
 
 const createDebouncedEventHandler = (
   { onEvent, debounceMs = 200 }: { onEvent: (event: Deno.FsEvent) => Promise<void> | void; debounceMs?: number },
@@ -47,7 +51,12 @@ const createDebouncedEventHandler = (
 
 const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUrl: string }) => {
   console.info(`${colors.blue("[event]")} Syncing plugin to vault...`);
-  await rebuild();
+  const result = await rebuild();
+  if (result === "build-failed") {
+    console.info(`${colors.red("[event]")} Build failed. Please check the error message.`);
+    return;
+  }
+
   await fs.ensureDir(remoteUrl);
   await Deno.remove(remoteUrl, { recursive: true });
   await fs.ensureDir(remoteUrl);

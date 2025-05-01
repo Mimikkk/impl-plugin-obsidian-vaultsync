@@ -1,6 +1,8 @@
 import { rspack } from "@rspack/core";
 import { resolve } from "@std/path";
 
+console.log(resolve("../../node_modules/obsidian"));
+
 const compiler = rspack({
   entry: "./src/main.ts",
   output: {
