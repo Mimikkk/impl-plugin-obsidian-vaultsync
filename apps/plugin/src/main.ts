@@ -6,17 +6,19 @@ export default class HelloWorldPlugin extends Plugin {
   }
 
   override async onload() {
+    console.log("Hello World!");
+
     // Add a ribbon icon
-    this.addRibbonIcon("dice", "Hello World", () => {
-      console.log("Hello World!");
+    this.addRibbonIcon("cloud", "Synchronize", () => {
+      console.log("Synchronizing...");
     });
 
     // Add a command
     this.addCommand({
-      id: "hello-world",
-      name: "Print Hello World",
+      id: "synchronize",
+      name: "Synchronize",
       callback: () => {
-        console.log("Hello World!");
+        console.log("Synchronizing...");
       },
     });
   }
