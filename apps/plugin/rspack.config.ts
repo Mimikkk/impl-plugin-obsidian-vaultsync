@@ -2,28 +2,35 @@ import { rspack } from "@rspack/core";
 import { resolve } from "@std/path";
 
 rspack({
-  entry: "./src/main.ts",
+  entry: "./src/mod.ts",
   output: {
     path: resolve("dist"),
-    filename: "main.js",
     clean: true,
+    filename: "main.js",
+    cssFilename: "styles.css",
     library: { type: "commonjs-static" },
   },
-  experiments: { outputModule: true },
-  resolve: { extensions: [".ts"] },
+  resolve: {
+    extensions: [".ts", ".tsx"],
+    alias: { "@plugin": resolve("src") },
+  },
+  experiments: {
+    css: true,
+  },
   externals: ["obsidian"],
   module: {
     rules: [
+      { test: /\.css$/, loader: "postcss-loader", type: "css" },
       {
         test: /\.ts$/,
         loader: "builtin:swc-loader",
-        options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
         type: "javascript/auto",
+        options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
       },
     ],
   },
   stats: "normal",
-  mode: "production",
+  mode: "development",
 }).run(async (error, stats) => {
   if (error) {
     console.error("Build failed:", error);
