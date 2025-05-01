@@ -1,34 +1,30 @@
 import { rspack } from "@rspack/core";
 import { resolve } from "@std/path";
 
-console.log(resolve("../../node_modules/obsidian"));
-
-const compiler = rspack({
+rspack({
   entry: "./src/main.ts",
   output: {
     path: resolve("dist"),
     filename: "main.js",
     clean: true,
+    library: { type: "commonjs-static" },
   },
-  resolve: {
-    extensions: [".ts"],
-  },
+  experiments: { outputModule: true },
+  resolve: { extensions: [".ts"] },
   externals: ["obsidian"],
   module: {
     rules: [
       {
         test: /\.ts$/,
         loader: "builtin:swc-loader",
-        options: { jsc: { parser: { syntax: "typescript" } } },
+        options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
         type: "javascript/auto",
       },
     ],
   },
   stats: "normal",
   mode: "production",
-});
-
-compiler.run(async (error, stats) => {
+}).run(async (error, stats) => {
   if (error) {
     console.error("Build failed:", error);
     Deno.exit(1);
@@ -39,10 +35,13 @@ compiler.run(async (error, stats) => {
     Deno.exit(1);
   }
 
-  await Promise.all([
-    Deno.copyFile("manifest.json", "dist/manifest.json"),
-    Deno.copyFile("versions.json", "dist/versions.json"),
-  ]);
+  const files = ["manifest.json", "versions.json"];
+  console.info("Moving static files...");
+  await Promise.all(
+    files.map((file) => Deno.copyFile(file, resolve("dist", file))),
+  );
+  console.info(files.map((file) => `- asset ${file}`).join("\n"));
+  console.info("Static files moved successfully!");
 
   console.info("Build completed successfully!");
   console.info(stats?.toString({ colors: true }));
