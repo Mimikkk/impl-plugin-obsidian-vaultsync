@@ -41,3 +41,6 @@ VaultSync enables file synchronization between Obsidian vaults over a local WLAN
 - Ensure all devices are connected to the same WLAN
 - Check firewall settings if connections are being blocked
 - Restart the plugin if synchronization issues persist
+
+###### Reason
+I wanted to use Obsidian on my phone and my PC but I dislike the idea of 'cloud' of any kind and shape. Why not use Git? - You could use it, but Git is not designed for large files like photos, videos, etc.
