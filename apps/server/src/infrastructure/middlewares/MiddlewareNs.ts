@@ -1,3 +1,4 @@
+import { CorsMiddleware } from "@server/infrastructure/middlewares/impls/CorsMiddleware.ts";
 import { BarrierMiddleware } from "./impls/BarrierMiddleware.ts";
 import { RedirectMiddleware } from "./impls/RedirectMiddleware.ts";
 import { RouteMiddleware } from "./impls/RouteMiddleware.ts";
@@ -8,4 +9,5 @@ export namespace MiddlewareNs {
   export const barrier = BarrierMiddleware.create;
   export const timeout = TimeoutMiddleware.create;
   export const routes = RouteMiddleware.create;
+  export const cors = CorsMiddleware.create;
 }
