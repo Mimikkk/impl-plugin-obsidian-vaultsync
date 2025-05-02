@@ -19,7 +19,9 @@ export class HealthController {
     tags: [OpenApiTag.Health],
     responses: [HealthResponse.Ok],
   })
-  get() {
+  async get() {
+    await sleep(4000);
     return HealthResponse.ok();
   }
 }
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

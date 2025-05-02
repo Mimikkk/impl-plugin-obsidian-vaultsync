@@ -1,4 +1,4 @@
-import { DefinePlugin, rspack } from "@rspack/core";
+import { rspack } from "@rspack/core";
 import { load } from "@std/dotenv";
 import { resolve } from "@std/path";
 
@@ -14,11 +14,6 @@ rspack({
     cssFilename: "styles.css",
     library: { type: "commonjs-static" },
   },
-  plugins: [
-    new DefinePlugin({
-      "globalThis.__VAULT_SYNC_SERVICE_URL__": JSON.stringify(Deno.env.get("VAULT_SYNC_SERVICE_URL")),
-    }),
-  ],
   resolve: {
     extensions: [".ts", ".tsx"],
     alias: {

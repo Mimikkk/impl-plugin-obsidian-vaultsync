@@ -9,5 +9,7 @@ export namespace VaultSyncService {
     message: string;
   }
 
+  export const sync = () => ky.post(url + "/sync").json();
+
   export const health = () => ky.get<HealthResponse>(url + "/health").json();
 }

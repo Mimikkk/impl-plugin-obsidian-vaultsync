@@ -9,6 +9,7 @@
   },
   "imports": {
     "@plugin/": "./src/",
+    "@env": "./.env",
     "@tailwindcss/postcss": "npm:@tailwindcss/postcss@^4.1.5",
     "obsidian": "npm:obsidian@1.8.7",
     "solid-js": "npm:solid-js@1.9.6",
@@ -34,7 +35,7 @@
     "babel-preset-solid": "npm:babel-preset-solid@1.9.6",
     "@tanstack/solid-query": "npm:@tanstack/solid-query@5.75.0",
     "ky": "npm:ky@1.8.1",
-    "@env": "./.env"
+    "clsx": "npm:clsx@^2.1.1"
   },
   "compilerOptions": {
     "lib": ["deno.window", "deno.ns", "DOM", "DOM.Iterable", "ESNext"],

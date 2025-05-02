@@ -110,7 +110,7 @@ if (urls === "obsidian-location-does-not-exist") {
 await synchronize(urls);
 if (!Deno.args.includes("--watch")) Deno.exit(0);
 
-const watcher = Deno.watchFs("apps/plugin/src");
+const watcher = Deno.watchFs("apps/plugin");
 const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
 for await (const event of watcher) {
   handleEvent(event);

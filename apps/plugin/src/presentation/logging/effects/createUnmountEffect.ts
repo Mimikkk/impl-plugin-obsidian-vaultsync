@@ -1,9 +1,12 @@
 import { onCleanup } from "solid-js";
+import { cleanupQueryClient } from "../../../shared/values/queryClient.ts";
 
 export const createUnmountEffect = () => {
-  console.log("Sync plugin mounted.");
+  console.info("Sync plugin mounted.");
 
-  onCleanup(() => {
-    console.log("Sync plugin unmounted.");
+  onCleanup(async () => {
+    await cleanupQueryClient();
+
+    console.info("Sync plugin unmounted.");
   });
 };
