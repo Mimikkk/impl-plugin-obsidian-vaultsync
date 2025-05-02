@@ -1,4 +1,6 @@
 .env
+apps/plugin/.env
+apps/server/.env
 node_modules
 build
 dist
