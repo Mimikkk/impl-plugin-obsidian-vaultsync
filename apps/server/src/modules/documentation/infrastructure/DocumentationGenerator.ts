@@ -12,7 +12,7 @@ export class DocumentationGenerator {
       title: "Vault Sync",
       version: "1.0.0",
       description: Str.trimlines`
-        Docs for the vault sync server.
+        Documentation of the API for the vault sync server.
       `,
     },
     openapi: "3.1.1",
