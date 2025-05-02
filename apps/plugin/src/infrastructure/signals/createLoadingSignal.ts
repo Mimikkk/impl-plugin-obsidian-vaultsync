@@ -1,4 +1,4 @@
-import type { Awaitable } from "@plugin/shared/common-types.ts";
+import type { Awaitable } from "../../shared/commonTypes.ts";
 import { createSignal } from "solid-js";
 
 export const createLoadingSignal = (action: () => Awaitable<void>) => {

@@ -1,61 +1,45 @@
+import { defer } from "@plugin/shared/commonFns.ts";
 import type { Command } from "obsidian";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createEffect, createMemo, createSignal, on, onCleanup } from "solid-js";
 import { definePlugin } from "./infrastructure/definePlugin.ts";
 import { createLoadingSignal } from "./infrastructure/signals/createLoadingSignal.ts";
 import "./styles.css";
 
-let button!: HTMLElement;
-let status!: HTMLElement;
-let command!: Command;
-
-const root = document.createElement("div");
-root.id = "sync-plugin-root";
+export namespace Self {
+  export let button!: HTMLElement;
+  export let status!: HTMLElement;
+  export let command!: Command;
+}
 
 const [sync, isSyncing] = createLoadingSignal(async () => {
   console.log("Synchronizing...");
-  await sleep(5000);
+
+  await sleep(2000);
+
   console.log("Synchronized.");
 });
 
-const [isMounted, setIsMounted] = createSignal(false);
+const createButtonEffect = () =>
+  createEffect(on(isSyncing, (value) => {
+    if (value) {
+      Self.button.setAttribute("aria-disabled", "true");
+      Self.button.classList.toggle("!cursor-not-allowed", true);
+    } else {
+      Self.button.removeAttribute("aria-disabled");
+      Self.button.classList.toggle("!cursor-not-allowed", false);
+    }
+  }, defer));
 
-createEffect(() => {
-  if (isMounted()) {
-    console.log("Sync plugin mounted.");
-  } else {
-    console.log("Sync plugin unmounted.");
-  }
-});
+const createStatusBarEffect = () => {
+  const [isSynced, setIsSynced] = createSignal(false);
 
-createEffect(() => {
-  if (!isMounted()) return;
+  const label = createMemo(() => {
+    if (isSyncing()) {
+      setIsSynced(false);
 
-  if (isSyncing()) {
-    button.setAttribute("aria-disabled", "true");
-    button.classList.toggle("!cursor-not-allowed", true);
-  } else {
-    button.removeAttribute("aria-disabled");
-    button.classList.toggle("!cursor-not-allowed", false);
-  }
-});
-
-let timeout!: number;
-export default definePlugin({
-  onMount(plugin) {
-    document.body.appendChild(root);
-
-    button = plugin.addRibbonIcon("cloud", "Synchronize", sync);
-    command = plugin.addCommand({ id: "synchronize", name: "Synchronize", icon: "cloud", callback: sync });
-    status = plugin.addStatusBarItem();
-
-    const [isSynced, setIsSynced] = createSignal(false);
-
-    const statusBarValue = createMemo(() => {
-      if (isSyncing()) {
-        setIsSynced(false);
-        return (`
-        <div class="flex items-center gap-2 text-sm">
-          <div class="icon !h-4 !w-4">
+      return (`
+        <div class="flex items-center gap-1 -m-1">
+          <div class="h-4 w-4 -my-1">
             <svg class="animate-[spin_2s_linear_infinite]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
               <path d="M21 3v5h-5"/>
@@ -63,42 +47,54 @@ export default definePlugin({
               <path d="M8 16H3v5"/>
             </svg>
           </div>
-          <span class="text-sm">Synchronizing...</span>
+          <span>Synchronizing...</span>
         </div>
       `);
-      }
+    }
 
-      if (isSynced()) {
-        return (`
-        <div class="flex items-center gap-2 text-sm">
-          <span class="text-sm">Synchronized.</span>
+    if (isSynced()) {
+      return (`
+        <div class="flex items-center gap-1">
+          <span>Synchronized.</span>
         </div>
       `);
-      }
+    }
 
-      return "";
+    return "";
+  });
+
+  createEffect(on(isSyncing, (value) => {
+    if (value) return;
+    setIsSynced(true);
+
+    const timeout = setTimeout(() => {
+      setIsSynced(false);
+    }, 1000);
+
+    onCleanup(() => {
+      clearTimeout(timeout);
     });
+  }, defer));
 
-    createEffect(() => {
-      status.setHTMLUnsafe(statusBarValue());
-    });
+  createEffect(on(label, (value) => {
+    Self.status.setHTMLUnsafe(value);
+  }, defer));
+};
 
-    createEffect(() => {
-      if (!isSyncing()) {
-        setIsSynced(true);
+const createUnmountEffect = () => {
+  console.log("Sync plugin mounted.");
 
-        timeout = setTimeout(() => {
-          setIsSynced(false);
-        }, 1000);
-      }
-    });
+  onCleanup(() => {
+    console.log("Sync plugin unmounted.");
+  });
+};
 
-    setIsMounted(true);
-  },
-  onTeardown() {
-    clearTimeout(timeout);
-    document.body.removeChild(root);
+export default definePlugin((plugin) => {
+  Self.button = plugin.addRibbonIcon("cloud", "Synchronize", sync);
+  Self.command = plugin.addCommand({ id: "synchronize", name: "Synchronize", icon: "cloud", callback: sync });
+  Self.status = plugin.addStatusBarItem();
 
-    setIsMounted(false);
-  },
+  createButtonEffect();
+  createStatusBarEffect();
+  createUnmountEffect();
 });

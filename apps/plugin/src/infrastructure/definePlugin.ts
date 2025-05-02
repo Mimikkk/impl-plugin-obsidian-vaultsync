@@ -1,21 +1,28 @@
-import type { Awaitable } from "@plugin/shared/common-types.ts";
 import { Plugin } from "obsidian";
+import { createRoot } from "solid-js";
+import type { Awaitable } from "../shared/commonTypes.ts";
 
-export interface DefinePluginOptions<S> {
-  onMount(plugin: Plugin): Awaitable<S>;
-  onTeardown(plugin: Plugin, state: S): Awaitable<void>;
-}
-
-export const definePlugin = <State>({ onMount, onTeardown }: DefinePluginOptions<State>) => {
-  let state: State;
+export const definePlugin = (runtime: (plugin: Plugin) => Awaitable<void>) => {
+  const root = document.createElement("div");
+  root.id = "vault-sync-plugin-root";
+  let cleanup: () => Awaitable<void>;
 
   return class extends Plugin {
     override async onload() {
-      state = await onMount(this);
+      await createRoot(async (dispose) => {
+        document.body.appendChild(root);
+
+        cleanup = () => {
+          document.body.removeChild(root);
+          dispose();
+        };
+
+        await runtime(this);
+      });
     }
 
     override async onunload() {
-      await onTeardown(this, state);
+      await cleanup();
     }
   };
 };
