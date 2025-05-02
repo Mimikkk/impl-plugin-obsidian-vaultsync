@@ -1,0 +1,15 @@
+import { isSyncing } from "@plugin/domain/signals/isSyncing.ts";
+import { defer } from "@plugin/shared/commonFns.ts";
+import { createEffect, on } from "solid-js";
+
+export const createRibbonAdapterEffect = (button: HTMLElement) => {
+  createEffect(on(isSyncing, (value) => {
+    if (value) {
+      button.setAttribute("aria-disabled", "true");
+      button.classList.toggle("!cursor-not-allowed", true);
+    } else {
+      button.removeAttribute("aria-disabled");
+      button.classList.toggle("!cursor-not-allowed", false);
+    }
+  }, defer));
+};
