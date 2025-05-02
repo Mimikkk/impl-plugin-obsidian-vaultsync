@@ -1,9 +1,9 @@
 import { defer } from "@plugin/shared/commonFns.ts";
 import { createEffect, on, onCleanup } from "solid-js";
 import { definePlugin } from "./infrastructure/definePlugin.ts";
-import { isSyncing, sync } from "./isSyncing.ts";
+import { isSyncing, sync } from "./domain/signals/isSyncing.ts";
 import { createStatusBar } from "./presentation/statusbar/createStatusBar.tsx";
-import { Self } from "./Self.ts";
+import { Self } from "./domain/Self.ts";
 import "./styles.css";
 
 const createButtonEffect = () =>

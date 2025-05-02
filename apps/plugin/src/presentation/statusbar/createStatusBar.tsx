@@ -1,4 +1,4 @@
-import { Self } from "@plugin/Self.ts";
+import { Self } from "../../domain/Self.ts";
 import { render } from "solid-js/web";
 import { StatusBar } from "./components/StatusBar.tsx";
 

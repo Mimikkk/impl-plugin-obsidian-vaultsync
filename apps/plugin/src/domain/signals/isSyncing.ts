@@ -1,4 +1,4 @@
-import { createActionSignal } from "./infrastructure/signals/createActionSignal.ts";
+import { createActionSignal } from "../../infrastructure/signals/createActionSignal.ts";
 
 export const [sync, isSyncing] = createActionSignal(async () => {
   console.log("Synchronizing...");

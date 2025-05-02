@@ -1,9 +1,9 @@
 {
   "id": "vault-sync-plugin",
   "name": "Vault Sync",
-  "version": "1.0.0",
-  "minAppVersion": "1.0.0",
-  "description": "Plugin meant for syncing vaults between different locations over WLAN",
+  "version": "0.0.0",
+  "minAppVersion": "1.8.10",
+  "description": "Plugin for syncing vaults between different locations over WLAN",
   "author": "Daniel Zdancewicz",
   "authorUrl": "https://github.com/mimikkk",
   "isDesktopOnly": false

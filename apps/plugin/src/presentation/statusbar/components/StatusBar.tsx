@@ -1,5 +1,5 @@
 import { createTimeoutAccessor } from "@plugin/infrastructure/signals/createTimeoutAccessor.ts";
-import { isSyncing } from "@plugin/isSyncing.ts";
+import { isSyncing } from "../../../domain/signals/isSyncing.ts";
 import { Match, Switch } from "solid-js";
 
 export const StatusBar = () => {
