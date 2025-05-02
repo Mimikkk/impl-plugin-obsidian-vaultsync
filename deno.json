@@ -1,5 +1,8 @@
 {
   "license": "MIT",
+  "compilerOptions": {
+    "verbatimModuleSyntax": true
+  },
   "fmt": {
     "options": {
       "indentWidth": 2,
@@ -15,6 +18,7 @@
   },
   "lint": {
     "rules": {
+      "include": ["verbatim-module-syntax"],
       "exclude": [
         "no-namespace",
         "no-explicit-any",

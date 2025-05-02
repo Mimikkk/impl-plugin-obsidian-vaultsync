@@ -1,4 +1,4 @@
-import { TagObject } from "openapi3-ts/oas31";
+import type { TagObject } from "openapi3-ts/oas31";
 
 export enum OpenApiTag {
   Health = "Health",

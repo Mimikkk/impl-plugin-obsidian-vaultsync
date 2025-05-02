@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/solid-query";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { queryClient } from "./queryClient.ts";
 
 export const withQueryClient = (component: Component) => () => (

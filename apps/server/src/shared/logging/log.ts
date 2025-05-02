@@ -13,7 +13,7 @@ export namespace Log {
     console.warn(colors.bold.yellow("[warn]"), ...message);
   };
 
-  export const event: typeof console.log = (...message) => {
-    console.log(colors.bold.green("[event]"), ...message);
+  export const event: typeof console.info = (...message) => {
+    console.info(colors.bold.green("[event]"), ...message);
   };
 }

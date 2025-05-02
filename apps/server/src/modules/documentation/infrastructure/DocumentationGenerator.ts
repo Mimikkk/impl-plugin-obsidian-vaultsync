@@ -1,9 +1,9 @@
 import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
 import { OpenApiRouteNs } from "@server/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
-import { OpenApiTag, OpenApiTagOrder, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { type OpenApiTag, OpenApiTagOrder, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { Str } from "@server/shared/utils/strings.ts";
-import { OpenApiBuilder, OpenAPIObject, ResponseObject } from "openapi3-ts/oas31";
+import { OpenApiBuilder, type OpenAPIObject, type ResponseObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../../../infrastructure/routing/controllers/ControllerStore.ts";
 
 export class DocumentationGenerator {

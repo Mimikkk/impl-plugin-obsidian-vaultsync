@@ -50,7 +50,7 @@ export class HttpDocumentationController {
     tags: [OpenApiTag.Documentation],
     responses: [HttpJsonResponse.Shapeless],
   })
-  async root() {
+  root() {
     return HttpJsonResponse.shapeless({
       message: "Visit the documentation at /docs",
       documentation: `http://${ServerConfiguration.hostname}:${ServerConfiguration.port}/docs`,

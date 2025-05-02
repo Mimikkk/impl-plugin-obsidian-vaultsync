@@ -1,6 +1,6 @@
-import { Store } from "@server/infrastructure/persistence/stores/Store.ts";
+import type { Store } from "@server/infrastructure/persistence/stores/Store.ts";
 import { VolatileStore } from "@server/infrastructure/persistence/stores/VolatileStore.ts";
-import { Controller, ControllerClass } from "@server/infrastructure/routing/controllers/ControllerTypes.ts";
+import type { Controller, ControllerClass } from "@server/infrastructure/routing/controllers/ControllerTypes.ts";
 
 export class ControllerStore {
   static instance = ControllerStore.create();
