@@ -4,11 +4,7 @@ import { createMemo } from "solid-js";
 import { withQueryClient } from "../../../../shared/components/withQueryClient.tsx";
 import { Status } from "../../../../shared/types/Status.ts";
 
-export const RibbonBar = withQueryClient(() => (
-  <>
-    <RibbonServiceStatus />
-  </>
-));
+export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
 
 const RibbonServiceStatus = () => {
   const status = useHealthStatus();
@@ -29,15 +25,21 @@ const RibbonServiceStatus = () => {
   const label = createMemo(() => {
     switch (status()) {
       case Status.Loading:
-        return "Checking health...";
+        return "Checking sync service health...";
       case Status.Error:
-        return "Server is not responding. Please check your connection.";
+        return "Sync service is not responding. Please check your connection.";
       case Status.Success:
-        return "Server is live.";
+        return "Sync service is live.";
       default:
         return undefined;
     }
   });
 
-  return <div aria-label={label()} class={cx("absolute top-0.5 right-0.5 w-2 h-2 rounded-full", color())} />;
+  return (
+    <div
+      aria-label={label()}
+      data-tooltip-position="right"
+      class={cx("absolute top-0.5 right-0.5 w-2 h-2 rounded-full", color())}
+    />
+  );
 };
