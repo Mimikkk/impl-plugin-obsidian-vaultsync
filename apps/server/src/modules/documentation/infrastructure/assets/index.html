@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API Documentation</title>
+    <meta name="description" content="SwaggerUI" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .opblock-trace {
+        .opblock-summary-method {
+          color: transparent !important;
+          position: relative;
+
+          &::before {
+            content: "WS";
+            position: absolute;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+
+        :is(.opblock-section, .execute-wrapper, .responses-wrapper) {
+          display: none !important;
+        }
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/static/node_modules/swagger-ui-dist/swagger-ui.css" />
+    <script src="/static/node_modules/swagger-ui-dist/swagger-ui-bundle.js"></script>
+    <script src="/static/node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+  </head>
+  <body>
+    <div id="openapi-ui"></div>
+    <script type="module" defer>
+      const host = new URL(window.location.href).host;
+
+      const x = SwaggerUIBundle({
+        url: `http://${host}/docs/openapi-spec.json`,
+        dom_id: "#openapi-ui",
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset,
+        ],
+        validatorUrl: null,
+        layout: "StandaloneLayout",
+        docExpansion: "none",
+        onComplete() {
+          const sections = document.querySelectorAll(".opblock-tag-section");
+          const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+              const tag = mutation.target;
+              const name = tag.dataset.tag;
+              const isOpen = tag.dataset.isOpen === "true";
+
+              if (isOpen) {
+                localStorage.setItem(name, "true");
+              } else {
+                localStorage.removeItem(name);
+              }
+            }
+          });
+
+          for (const section of sections) {
+            const tag = section.querySelector(".opblock-tag");
+            if (tag === null) continue;
+            const expander = section.querySelector(".expand-operation");
+            if (expander === null) continue;
+
+            observer.observe(tag, { attributes: true, attributeFilter: ["data-is-open"] });
+
+            const name = tag.dataset.tag;
+            const isOpen = localStorage.getItem(name) === "true";
+            if (isOpen) expander.click();
+          }
+        },
+      });
+      console.log(x);
+    </script>
+  </body>
+</html>

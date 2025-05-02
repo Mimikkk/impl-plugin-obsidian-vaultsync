@@ -4,11 +4,16 @@
   "tasks": {
     "dev": {
       "description": "Run the development server",
-      "command": "deno run -A --env-file=.env ./src/server.ts"
+      "command": "deno run -A --env-file=.env --watch ./src/server.ts"
     },
     "serve": {
       "description": "Serve the production server",
       "command": "deno run -A --env-file=.env ./src/server.ts"
     }
+  },
+  "imports": {
+    "@server/": "./src/",
+    "openapi3-ts": "npm:openapi3-ts@^4.4.0",
+    "swagger-ui-dist": "npm:swagger-ui-dist@^5.11.0"
   }
 }
