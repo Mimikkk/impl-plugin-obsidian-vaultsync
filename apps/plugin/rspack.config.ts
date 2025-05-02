@@ -1,5 +1,9 @@
-import { rspack } from "@rspack/core";
+import { DefinePlugin, rspack } from "@rspack/core";
+import { load } from "@std/dotenv";
 import { resolve } from "@std/path";
+
+await load({ envPath: resolve(".env"), export: true });
+await load({ envPath: resolve(".env.local"), export: true });
 
 rspack({
   entry: "./src/mod.ts",
@@ -10,9 +14,17 @@ rspack({
     cssFilename: "styles.css",
     library: { type: "commonjs-static" },
   },
+  plugins: [
+    new DefinePlugin({
+      "globalThis.__VAULT_SYNC_SERVICE_URL__": JSON.stringify(Deno.env.get("VAULT_SYNC_SERVICE_URL")),
+    }),
+  ],
   resolve: {
     extensions: [".ts", ".tsx"],
-    alias: { "@plugin": resolve("src") },
+    alias: {
+      "@plugin": resolve("src"),
+      "@env": resolve(".env"),
+    },
   },
   experiments: { css: true },
   externals: ["obsidian"],
@@ -28,6 +40,11 @@ rspack({
         loader: "builtin:swc-loader",
         type: "javascript/auto",
         options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
+      },
+      {
+        test: /\\.env$/,
+        loader: "./env-loader.ts",
+        type: "json",
       },
       {
         test: /\.tsx$/,

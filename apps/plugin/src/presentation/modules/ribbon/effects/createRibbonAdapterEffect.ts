@@ -3,6 +3,8 @@ import { defer } from "@plugin/shared/commonFns.ts";
 import { createEffect, on } from "solid-js";
 
 export const createRibbonAdapterEffect = (button: HTMLElement) => {
+  button.classList.add("relative");
+
   createEffect(on(isSyncing, (value) => {
     if (value) {
       button.setAttribute("aria-disabled", "true");

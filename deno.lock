@@ -36,11 +36,13 @@
     "npm:@rspack/core@1.3.8": "1.3.8_@swc+helpers@0.5.17",
     "npm:@rspack/core@^1.2.2": "1.3.8_@swc+helpers@0.5.17",
     "npm:@tailwindcss/postcss@^4.1.5": "4.1.5",
+    "npm:@tanstack/solid-query@5.75.0": "5.75.0_solid-js@1.9.6__seroval@1.2.1",
     "npm:@types/node@*": "22.12.0",
     "npm:babel-loader@9.1.2": "9.1.2_@babel+core@7.27.1_webpack@5.99.7",
     "npm:babel-loader@^8.4.0": "8.4.1_@babel+core@7.27.1_webpack@5.99.7",
     "npm:babel-preset-solid@1.9.6": "1.9.6_@babel+core@7.27.1",
     "npm:babel-preset-solid@^1.9.5": "1.9.6_@babel+core@7.27.1",
+    "npm:ky@1.8.1": "1.8.1",
     "npm:obsidian@*": "1.8.7_@codemirror+state@6.5.2_@codemirror+view@6.36.6",
     "npm:obsidian@1.8.7": "1.8.7_@codemirror+state@6.5.2_@codemirror+view@6.36.6",
     "npm:openapi3-ts@^4.4.0": "4.4.0",
@@ -713,6 +715,16 @@
         "@tailwindcss/oxide",
         "postcss",
         "tailwindcss"
+      ]
+    },
+    "@tanstack/query-core@5.75.0": {
+      "integrity": "sha512-rk8KQuCdhoRkzjRVF3QxLgAfFUyS0k7+GCQjlGEpEGco+qazJ0eMH6aO1DjDjibH7/ik383nnztua3BG+lOnwg=="
+    },
+    "@tanstack/solid-query@5.75.0_solid-js@1.9.6__seroval@1.2.1": {
+      "integrity": "sha512-H67h9Wfzg4P0GXj2PVajMPT4FEFb7gWKF9ezYRSYuVDK3e5sYISGZTbkuQJnuTruFf7KBG+FAHNcoSrkt1dB7g==",
+      "dependencies": [
+        "@tanstack/query-core",
+        "solid-js"
       ]
     },
     "@tybys/wasm-util@0.9.0": {
@@ -1810,6 +1822,9 @@
     "json5@2.2.3": {
       "integrity": "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg=="
     },
+    "ky@1.8.1": {
+      "integrity": "sha512-7Bp3TpsE+L+TARSnnDpk3xg8Idi8RwSLdj6CMbNWoOARIrGrbuLGusV0dYwbZOm4bB3jHNxSw8Wk/ByDqJEnDw=="
+    },
     "launch-editor@2.10.0": {
       "integrity": "sha512-D7dBRJo/qcGX9xlvt/6wUYzQxjh5G1RvZPgPv8vi4KRU99DVQL/oW7tnVOCCTm2HGeo3C5HvGE5Yrh6UBoZ0vA==",
       "dependencies": [
@@ -2790,8 +2805,10 @@
           "npm:@rspack/binding@1.3.8",
           "npm:@rspack/core@1.3.8",
           "npm:@tailwindcss/postcss@^4.1.5",
+          "npm:@tanstack/solid-query@5.75.0",
           "npm:babel-loader@9.1.2",
           "npm:babel-preset-solid@1.9.6",
+          "npm:ky@1.8.1",
           "npm:obsidian@1.8.7",
           "npm:postcss-loader@^8.1.1",
           "npm:postcss@^8.5.3",

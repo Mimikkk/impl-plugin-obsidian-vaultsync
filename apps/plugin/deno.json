@@ -31,11 +31,15 @@
     "babel-loader": "npm:babel-loader@9.1.2",
     "@babel/core": "npm:@babel/core@7.27.1",
     "@babel/preset-typescript": "npm:@babel/preset-typescript@7.27.1",
-    "babel-preset-solid": "npm:babel-preset-solid@1.9.6"
+    "babel-preset-solid": "npm:babel-preset-solid@1.9.6",
+    "@tanstack/solid-query": "npm:@tanstack/solid-query@5.75.0",
+    "ky": "npm:ky@1.8.1",
+    "@env": "./.env"
   },
   "compilerOptions": {
     "lib": ["deno.window", "deno.ns", "DOM", "DOM.Iterable", "ESNext"],
     "jsx": "precompile",
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "types": ["./declarations/config.d.ts"]
   }
 }
