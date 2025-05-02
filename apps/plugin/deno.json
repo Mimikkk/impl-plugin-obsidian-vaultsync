@@ -27,7 +27,11 @@
     "@std/fs": "jsr:@std/fs@1.0.9",
     "postcss": "npm:postcss@^8.5.3",
     "postcss-loader": "npm:postcss-loader@^8.1.1",
-    "tailwindcss": "npm:tailwindcss@^4.1.5"
+    "tailwindcss": "npm:tailwindcss@^4.1.5",
+    "babel-loader": "npm:babel-loader@9.1.2",
+    "@babel/core": "npm:@babel/core@7.27.1",
+    "@babel/preset-typescript": "npm:@babel/preset-typescript@7.27.1",
+    "babel-preset-solid": "npm:babel-preset-solid@1.9.6"
   },
   "compilerOptions": {
     "lib": ["deno.window", "deno.ns", "DOM", "DOM.Iterable", "ESNext"],

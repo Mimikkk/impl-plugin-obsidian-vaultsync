@@ -14,18 +14,26 @@ rspack({
     extensions: [".ts", ".tsx"],
     alias: { "@plugin": resolve("src") },
   },
-  experiments: {
-    css: true,
-  },
+  experiments: { css: true },
   externals: ["obsidian"],
   module: {
     rules: [
-      { test: /\.css$/, loader: "postcss-loader", type: "css" },
+      {
+        test: /\.css$/,
+        loader: "postcss-loader",
+        type: "css",
+      },
       {
         test: /\.ts$/,
         loader: "builtin:swc-loader",
         type: "javascript/auto",
         options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
+      },
+      {
+        test: /\.tsx$/,
+        loader: "babel-loader",
+        type: "javascript/auto",
+        options: { presets: ["@babel/preset-typescript", "solid"] },
       },
     ],
   },
