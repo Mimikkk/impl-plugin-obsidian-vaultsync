@@ -7,8 +7,7 @@ services:
       - PGID=1000
       - TZ=Europe/Warsaw
     volumes:
-      - ./syncthing/config:/config
-      - ./syncthing/st-sync:/storage
+      - ./syncthing/st-sync:/var/syncathing
     ports:
       # Web interface
       - 8384:8384 
@@ -27,6 +26,6 @@ services:
       - 8385:80
     volumes:
       - ./filebrowser/config:/config
-      - ./syncthing/st-sync:/storage
-    command: ["--root", "/storage/Sync"]
+      - ./syncthing/st-sync:/var/syncathing/Sync
+    command: ["--root", "/var/syncathing/Sync"]
     restart: unless-stopped
