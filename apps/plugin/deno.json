@@ -41,6 +41,6 @@
     "lib": ["deno.window", "deno.ns", "DOM", "DOM.Iterable", "ESNext"],
     "jsx": "precompile",
     "jsxImportSource": "solid-js",
-    "types": ["./declarations/config.d.ts"]
+    "types": ["./declarations/config.d.ts", "./declarations/app.d.ts"]
   }
 }

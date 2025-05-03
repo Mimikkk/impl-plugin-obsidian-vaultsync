@@ -7,3 +7,6 @@ dist
 .vscode
 vendor
 todo.md
+
+external/filebrowser
+external/syncthing

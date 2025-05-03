@@ -1,0 +1,32 @@
+services:
+  syncthing:
+    image: syncthing/syncthing
+    container_name: storage
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Warsaw
+    volumes:
+      - ./syncthing/config:/config
+      - ./syncthing/st-sync:/storage
+    ports:
+      # Web interface
+      - 8384:8384 
+      # File transfer
+      - 22000:22000/tcp 
+      # File transfer
+      - 22000:22000/udp 
+      # Discovery
+      - 21027:21027/udp 
+    restart: unless-stopped
+  filebrowser:
+    image: filebrowser/filebrowser
+    container_name: storage-browser
+    ports:
+      # Web interface
+      - 8385:80
+    volumes:
+      - ./filebrowser/config:/config
+      - ./syncthing/st-sync:/storage
+    command: ["--root", "/storage/Sync"]
+    restart: unless-stopped
