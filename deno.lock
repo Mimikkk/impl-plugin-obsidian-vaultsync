@@ -43,7 +43,6 @@
     "npm:babel-preset-solid@1.9.6": "1.9.6_@babel+core@7.27.1",
     "npm:babel-preset-solid@^1.9.5": "1.9.6_@babel+core@7.27.1",
     "npm:clsx@^2.1.1": "2.1.1",
-    "npm:ky@1.8.1": "1.8.1",
     "npm:obsidian@*": "1.8.7_@codemirror+state@6.5.2_@codemirror+view@6.36.6",
     "npm:obsidian@1.8.7": "1.8.7_@codemirror+state@6.5.2_@codemirror+view@6.36.6",
     "npm:openapi3-ts@^4.4.0": "4.4.0",
@@ -1826,9 +1825,6 @@
     "json5@2.2.3": {
       "integrity": "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg=="
     },
-    "ky@1.8.1": {
-      "integrity": "sha512-7Bp3TpsE+L+TARSnnDpk3xg8Idi8RwSLdj6CMbNWoOARIrGrbuLGusV0dYwbZOm4bB3jHNxSw8Wk/ByDqJEnDw=="
-    },
     "launch-editor@2.10.0": {
       "integrity": "sha512-D7dBRJo/qcGX9xlvt/6wUYzQxjh5G1RvZPgPv8vi4KRU99DVQL/oW7tnVOCCTm2HGeo3C5HvGE5Yrh6UBoZ0vA==",
       "dependencies": [
@@ -2813,7 +2809,6 @@
           "npm:babel-loader@9.1.2",
           "npm:babel-preset-solid@1.9.6",
           "npm:clsx@^2.1.1",
-          "npm:ky@1.8.1",
           "npm:obsidian@1.8.7",
           "npm:postcss-loader@^8.1.1",
           "npm:postcss@^8.5.3",
