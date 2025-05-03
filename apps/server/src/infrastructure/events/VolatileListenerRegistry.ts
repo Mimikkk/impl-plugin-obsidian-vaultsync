@@ -1,4 +1,4 @@
-import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
+import type { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
 
 export class VolatileListenerRegistry<V> implements ListenerRegistry<V> {
   static create<V>(): VolatileListenerRegistry<V> {

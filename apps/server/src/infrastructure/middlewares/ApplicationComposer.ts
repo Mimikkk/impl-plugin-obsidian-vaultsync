@@ -1,4 +1,4 @@
-import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
+import type { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
 export class ApplicationComposer {

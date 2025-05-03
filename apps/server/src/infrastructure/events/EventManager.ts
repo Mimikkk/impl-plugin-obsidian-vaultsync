@@ -1,4 +1,4 @@
-import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
+import type { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
 
 export interface EventManager<EventMap extends Record<string, unknown>> {
   notify<const E extends keyof EventMap>(event: E, value: EventMap[E]): void;

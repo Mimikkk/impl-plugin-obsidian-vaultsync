@@ -1,4 +1,7 @@
-import { FileWatchHandle, FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
+import type {
+  FileWatchHandle,
+  FileWatchHandler,
+} from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
 
 export interface CallbackFileWatchHandlerOptions {
   onEvent: FileWatchHandle;

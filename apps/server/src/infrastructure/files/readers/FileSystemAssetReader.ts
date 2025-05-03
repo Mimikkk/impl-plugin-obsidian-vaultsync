@@ -1,5 +1,5 @@
 import { FileSystemReader } from "@server/infrastructure/files/readers/FileSystemReader.ts";
-import { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
+import type { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 
 export class FileSystemAssetReader {
   static create(path: string): FileSystemAssetReader {

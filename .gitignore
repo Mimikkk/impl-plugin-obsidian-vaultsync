@@ -6,4 +6,4 @@ dist
 vendor
 todo.md
 
-apps/external/storage
+apps/server/external/storage

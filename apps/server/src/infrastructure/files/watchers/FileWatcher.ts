@@ -1,4 +1,4 @@
-import { FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
+import type { FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
 
 export interface FileWatcherOptions {
   handlers?: FileWatchHandler[];

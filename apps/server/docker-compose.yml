@@ -1,0 +1,9 @@
+services:
+  syncthing:
+    extends:
+      file: external/docker-compose.yml
+      service: syncthing
+  filebrowser:
+    extends:
+      file: external/docker-compose.yml
+      service: filebrowser
