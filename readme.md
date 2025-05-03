@@ -23,7 +23,7 @@ To set up the file storage server using Docker:
 
 3. Start the services:
    ```bash
-   docker-compose -f external/docker-compose.yml up -d
+   docker-compose -f apps/external/docker-compose.yml up -d
    ```
 
 4. Access the services:

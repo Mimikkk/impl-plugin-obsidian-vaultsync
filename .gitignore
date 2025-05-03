@@ -8,5 +8,5 @@ dist
 vendor
 todo.md
 
-external/filebrowser
-external/syncthing
+apps/external/filebrowser
+apps/external/syncthing
