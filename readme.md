@@ -47,5 +47,10 @@ To set up the file storage server using Docker:
 - Ensure devices are connected
 - Check firewall settings if connections are being blocked
 
+### Architecture
+
+- Plugin used by multiple Obsidian clients
+- Server hosted on a server (eg. the PC)
+
 ###### Reason
 I wanted to use Obsidian on my phone and my PC but I dislike the idea of private 'cloud' of any kind and shape. Why not use Git? - You could use it, but Git is not designed for large files like photos, videos, etc.
