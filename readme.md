@@ -1,33 +1,39 @@
+# In Progress
+
 # Obsidian plugin - VaultSync
 
-VaultSync enables file synchronization between Obsidian vaults over a local WLAN connection.
+VaultSync enables file synchronization between Obsidian vaults over a local connection.
 
 ## Features
 
 - **One-Click Sync**: Synchronize your Obsidian vault with a button press
-- **Local WLAN Only**: Keep your data private by syncing only over your local network
-- **No Cloud Required**: Direct device-to-device synchronization without third-party services
 
 ## Getting Started
 
 ### Prerequisites
 
+- Docker installed (for file storage server)
 - Multiple devices running Obsidian
   - VaultSync plugin installed on all devices
-- Devices connected to the same WLAN network
+- Devices connected to the server
+
+### Docker Setup
+
+To set up the file storage server using Docker:
+
+3. Start the services:
+   ```bash
+   docker-compose -f external/docker-compose.yml up -d
+   ```
+
+4. Access the services:
+   - Syncthing Web UI: http://localhost:8384
+   - FileBrowser: http://localhost:8385
 
 ### Installation
 
 1. Download the VaultSync plugin from the repository
-2. Install in your Obsidian vault through the Community Plugins section
-3. Enable the plugin in Obsidian settings
-
-### Configuration
-
-1. Open VaultSync settings in Obsidian
-2. Set a unique identifier for your vault
-3. Configure which folders to include/exclude from synchronization
-4. Save your settings
+2. Enable the plugin in Obsidian settings
 
 ## Usage
 
@@ -38,9 +44,8 @@ VaultSync enables file synchronization between Obsidian vaults over a local WLAN
 
 ## Troubleshooting
 
-- Ensure all devices are connected to the same WLAN
+- Ensure devices are connected
 - Check firewall settings if connections are being blocked
-- Restart the plugin if synchronization issues persist
 
 ###### Reason
-I wanted to use Obsidian on my phone and my PC but I dislike the idea of 'cloud' of any kind and shape. Why not use Git? - You could use it, but Git is not designed for large files like photos, videos, etc.
+I wanted to use Obsidian on my phone and my PC but I dislike the idea of private 'cloud' of any kind and shape. Why not use Git? - You could use it, but Git is not designed for large files like photos, videos, etc.
