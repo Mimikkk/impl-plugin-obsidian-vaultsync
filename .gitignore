@@ -1,6 +1,4 @@
 .env
-apps/plugin/.env
-apps/server/.env
 node_modules
 build
 dist
@@ -8,5 +6,4 @@ dist
 vendor
 todo.md
 
-apps/external/filebrowser
-apps/external/syncthing
+apps/external/storage
