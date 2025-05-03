@@ -1,9 +1,9 @@
-import { VaultSyncService } from "@plugin/application/services/VaultSyncService.ts";
 import { useMutation } from "@tanstack/solid-query";
+import { HealthService } from "../services/HealthService.ts";
 
 const key = ["sync"];
 export const useSync = () =>
   useMutation(() => ({
-    mutationFn: VaultSyncService.sync,
+    mutationFn: HealthService.check,
     mutationKey: key,
   }));

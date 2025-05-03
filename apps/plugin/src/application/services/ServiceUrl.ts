@@ -1,6 +1,5 @@
-import { PluginConfiguration } from "../../configurations/PluginConfiguration.ts";
+import { PluginConfiguration } from "../../configurations/EnvironmentConfiguration.ts";
 
 export namespace ServiceUrl {
   export const sync = PluginConfiguration.syncServiceUrl;
-  export const syncthing = PluginConfiguration.syncthingServiceUrl;
 }
