@@ -1,11 +1,13 @@
+import { SyncthingService } from "@plugin/application/services/SyncthingService.ts";
 import { createActionSignal } from "../../infrastructure/signals/createActionSignal.ts";
 
 export const [sync, isSyncing] = createActionSignal(async () => {
   console.log("Synchronizing...");
 
-  const files = app.vault.getFiles();
+  const devices = await SyncthingService.getDevices();
+  console.log({ devices });
 
-  await sleep(2000);
+  await sleep(50);
 
   console.log("Synchronized.");
 });
