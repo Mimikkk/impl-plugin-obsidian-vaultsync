@@ -1,8 +1,8 @@
-import { adaptCommands } from "@plugin/presentation/modules/commands/adaptCommands.ts";
+import { adaptCommands } from "@plugin/presentation/adapters/adaptCommands.ts";
 import { definePlugin } from "./infrastructure/definePlugin.ts";
-import { createUnmountEffect } from "./presentation/logging/effects/createUnmountEffect.ts";
-import { adaptRibbon } from "./presentation/modules/ribbon/adaptRibbon.ts";
-import { adaptStatusBar } from "./presentation/modules/statusbar/adaptStatusBar.ts";
+import { adaptRibbon } from "./presentation/adapters/adaptRibbon.ts";
+import { adaptStatusBar } from "./presentation/adapters/adaptStatusBar.ts";
+import { createUnmountEffect } from "./presentation/effects/createUnmountEffect.ts";
 import "./styles.css";
 
 export default definePlugin((plugin) => {

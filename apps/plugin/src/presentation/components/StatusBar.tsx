@@ -1,7 +1,7 @@
 import { isSyncing } from "@plugin/domain/signals/isSyncing.ts";
 import { createTimeoutAccessor } from "@plugin/infrastructure/signals/createTimeoutAccessor.ts";
 import { Match, Switch } from "solid-js";
-import { withQueryClient } from "../../../../shared/components/withQueryClient.tsx";
+import { withQueryClient } from "../../shared/components/withQueryClient.tsx";
 
 export const StatusBar = withQueryClient(() => {
   const isSynced = createTimeoutAccessor(isSyncing, 1000);

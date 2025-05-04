@@ -9,5 +9,6 @@ export namespace HealthService {
     message: string;
   }
 
-  export const check = () => ky.get<HealthResponse>(url + "/health").json();
+  const healthUrl = url + "/health";
+  export const check = () => ky.get<HealthResponse>(healthUrl).json();
 }

@@ -81,12 +81,32 @@ export class RedirectMiddleware implements Middleware {
       }
 
       if (wildcard) {
-        location = `${to}${url.pathname.slice(from.length)}`;
+        location = `${to}${url.pathname.slice(from.length)}${url.search}`;
       }
 
-      request = new Request(location, { headers: { ...request.headers, ...headers } });
+      const newHeaders = new Headers(request.headers);
+      for (const [key, value] of Object.entries(headers ?? {})) {
+        newHeaders.set(key, value);
+      }
 
-      if (external) return fetch(request);
+      request = new Request(location, {
+        body: request.body,
+        cache: request.cache,
+        credentials: request.credentials,
+        method: request.method,
+        mode: request.mode,
+        redirect: request.redirect,
+        referrer: request.referrer,
+        referrerPolicy: request.referrerPolicy,
+        integrity: request.integrity,
+        keepalive: request.keepalive,
+        signal: request.signal,
+        headers: newHeaders,
+      });
+
+      if (external) {
+        return fetch(request);
+      }
     }
 
     return next(request);

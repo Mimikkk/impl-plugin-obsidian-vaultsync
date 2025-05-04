@@ -1,4 +1,5 @@
 import type { UseQueryResult } from "@tanstack/solid-query";
+import { type Accessor, createMemo } from "solid-js";
 
 export enum Status {
   Idle = "idle",
@@ -23,4 +24,6 @@ export namespace Status {
 
     return Status.Idle;
   };
+
+  export const accessQuery = (query: UseQueryResult): Accessor<Status> => createMemo(() => fromQuery(query));
 }

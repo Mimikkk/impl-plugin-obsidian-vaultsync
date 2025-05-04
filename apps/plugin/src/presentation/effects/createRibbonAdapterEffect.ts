@@ -1,6 +1,6 @@
 import { isSyncing } from "@plugin/domain/signals/isSyncing.ts";
 import { createEffect, on } from "solid-js";
-import { defer } from "../../../../shared/values/common.ts";
+import { defer } from "../../shared/values/common.ts";
 
 export const createRibbonAdapterEffect = (button: HTMLElement) => {
   button.classList.add("relative");
