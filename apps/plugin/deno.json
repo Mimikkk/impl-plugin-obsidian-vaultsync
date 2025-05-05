@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "description": "Build the plugin",
-      "command": "deno run -A ./rspack.config.ts"
+      "command": "deno run -A ./scripts/build.ts"
     },
     "dev": {
       "description": "Run the plugin in development mode",
