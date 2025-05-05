@@ -24,9 +24,9 @@ export class HttpStaticController {
     description: "Get a static file",
     tags: [OpenApiTag.Static],
     responses: [HttpStaticFileResponse.Missing],
-    parameters: [HttpStaticParameter.Path],
+    routeParameters: [HttpStaticParameter.Path],
   })
-  file({ parameters: { values: { path } } }: RouteRequestContext<{ path: StaticAssetUrl }>) {
+  file({ routeParameters: { values: { path } } }: RouteRequestContext<{ path: StaticAssetUrl }>) {
     path = decodeURIComponent(path).replace(/:/g, "/") as StaticAssetUrl;
     return this.read(path);
   }

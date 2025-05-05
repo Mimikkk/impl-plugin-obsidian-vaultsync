@@ -1,6 +1,6 @@
-import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
+import type { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { HttpResponse } from "@server/presentation/messaging/http/responses/HttpResponse.ts";
-import { SchemaObject } from "openapi3-ts/oas31";
+import type { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpJsonResponse {
   export const headers = { "Content-Type": "application/json" } as const;

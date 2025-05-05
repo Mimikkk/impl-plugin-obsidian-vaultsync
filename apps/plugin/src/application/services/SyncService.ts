@@ -5,13 +5,15 @@ import { ServiceUrl } from "./ServiceUrl.ts";
 export namespace SyncService {
   const url = ServiceUrl.sync + "/sync";
 
+  export const download = (path: string) => ky.get(url + "/db/get", { searchParams: { path } });
+
   export const folders = () => ky.get(url + "/config/folders").json();
 
-  export const get = (extra: string, payload: any, params: any) =>
-    ky.get(url + "/" + extra, { json: payload, searchParams: serializeSearchParams(params) }).json();
+  export const get = <T>(extra: string, payload: any, params: any) =>
+    ky.get(url + "/" + extra, { json: payload, searchParams: serializeSearchParams(params) }).json<T>();
 
-  export const post = (extra: string, payload: any, params: any) =>
-    ky.post(url + "/" + extra, { json: payload, searchParams: serializeSearchParams(params) }).json();
+  export const post = <T>(extra: string, payload: any, params: any) =>
+    ky.post(url + "/" + extra, { json: payload, searchParams: serializeSearchParams(params) }).json<T>();
 
   const scanUrl = url + "/db/scan";
   export const scan = () => ky.post(scanUrl);

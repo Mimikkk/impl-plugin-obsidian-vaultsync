@@ -1,4 +1,4 @@
-import { PathParameter } from "@server/presentation/messaging/http/parameters/PathParameter.ts";
+import type { RouteParameter } from "@server/presentation/messaging/http/parameters/RouteParameter.ts";
 import { HttpMethod } from "@server/shared/enums/HttpMethod.ts";
 
 export namespace RouteNs {
@@ -8,7 +8,7 @@ export namespace RouteNs {
   }
 
   export type Options =
-    & { path: string | PathParameter }
+    & { path: string | RouteParameter }
     & (
       | { type: "ws" }
       | { method: HttpMethod; type: "http" }
@@ -42,12 +42,12 @@ export namespace RouteNs {
     }
   };
 
-  export const get = (path: string | PathParameter) => route({ path, method: HttpMethod.Get, type: "http" });
-  export const post = (path: string | PathParameter) => route({ path, method: HttpMethod.Post, type: "http" });
-  export const put = (path: string | PathParameter) => route({ path, method: HttpMethod.Put, type: "http" });
-  export const del = (path: string | PathParameter) => route({ path, method: HttpMethod.Delete, type: "http" });
-  export const patch = (path: string | PathParameter) => route({ path, method: HttpMethod.Patch, type: "http" });
-  export const ws = (path: string | PathParameter) => route({ path, type: "ws" });
+  export const get = (path: string | RouteParameter) => route({ path, method: HttpMethod.Get, type: "http" });
+  export const post = (path: string | RouteParameter) => route({ path, method: HttpMethod.Post, type: "http" });
+  export const put = (path: string | RouteParameter) => route({ path, method: HttpMethod.Put, type: "http" });
+  export const del = (path: string | RouteParameter) => route({ path, method: HttpMethod.Delete, type: "http" });
+  export const patch = (path: string | RouteParameter) => route({ path, method: HttpMethod.Patch, type: "http" });
+  export const ws = (path: string | RouteParameter) => route({ path, type: "ws" });
 
   export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
   export const meta = (value: Meta): Spec => value[symbol];

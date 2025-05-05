@@ -12,7 +12,8 @@ const RibbonServiceStatus = () => {
   const status = useHealthStatus();
   const id = useLastEventId();
 
-  useSyncEvents({ enabled: () => id() === Status.Success });
+  // useSyncEvents({ enabled: () => id() === Status.Success });
+  useSyncEvents();
 
   const color = createMemo(() => {
     switch (status()) {

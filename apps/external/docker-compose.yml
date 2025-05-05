@@ -6,10 +6,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Warsaw
-      - SYNCTHING_STORAGE_URL=${SYNCTHING_STORAGE_URL}
+      - STORAGE_URL=${STORAGE_URL}
       - SYNCTHING_DIRECTORY=${SYNCTHING_DIRECTORY}
     volumes:
-      - ${SYNCTHING_STORAGE_URL}:/var/syncthing
+      - ${STORAGE_URL}:/var/syncthing
       - ./entry.sh:/entry.sh
     ports:
       # Web interface
@@ -29,6 +29,6 @@ services:
       # Web interface
       - 8385:80
     volumes:
-      - ${SYNCTHING_STORAGE_URL}:/var/syncthing
+      - ${STORAGE_URL}:/var/syncthing
     command: ["--root", "/var/syncthing/${SYNCTHING_DIRECTORY}"]
     restart: unless-stopped

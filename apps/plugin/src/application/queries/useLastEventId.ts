@@ -1,5 +1,3 @@
-import { SyncService } from "@plugin/application/services/SyncService.ts";
-import { Memory } from "@plugin/domain/storage/Memory.ts";
 import { useQuery } from "@tanstack/solid-query";
 import { Status } from "../../shared/types/Status.ts";
 
@@ -7,13 +5,13 @@ export const useLastEventId = () =>
   Status.accessQuery(useQuery(() => ({
     queryKey: ["last-event-id"],
     queryFn: async () => {
-      await SyncService.scan();
+      // await SyncService.scan();
 
-      const [event] = await SyncService.events({ since: 0, limit: 1 });
+      // const [event] = await SyncService.events({ since: 0, limit: 1 });
 
-      if (event) {
-        Memory.lastSeenEventId.set(event.id - 1);
-      }
+      // if (event) {
+      //   Memory.lastSeenEventId.set(event.id - 1);
+      // }
 
       return "OK";
     },

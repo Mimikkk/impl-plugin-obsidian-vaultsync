@@ -26,6 +26,9 @@ export const OpenApiTags = new Map<OpenApiTag, TagObject>([
   }],
 ]);
 
-export const OpenApiTagOrder = new Map<OpenApiTag, number>(
-  Object.keys(OpenApiTags).map((item, index) => [item as OpenApiTag, index]),
-);
+export const OpenApiTagOrder = new Map<OpenApiTag, number>([
+  OpenApiTag.FileSystem,
+  OpenApiTag.Health,
+  OpenApiTag.Documentation,
+  OpenApiTag.Static,
+].map((item, index) => [item, index]));

@@ -12,8 +12,12 @@ export class FileSystemReader {
     private readonly reader = FileReader.create(),
   ) {}
 
+  path(path: string): string {
+    return resolve(this.location, path);
+  }
+
   async read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
-    path = resolve(this.location, path) as P;
+    path = this.path(path) as P;
 
     const extension = extname(path).slice(1) as StaticFileNs.Extension;
     if (!extension) return undefined;
@@ -27,11 +31,11 @@ export class FileSystemReader {
   }
 
   async readStr(path: string): Promise<string | undefined> {
-    return await this.reader.readStr(resolve(this.location, path));
+    return await this.reader.readStr(this.path(path));
   }
 
   async readU8(path: string): Promise<Uint8Array | undefined> {
-    return await this.reader.readU8(resolve(this.location, path));
+    return await this.reader.readU8(this.path(path));
   }
 
   async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
@@ -49,7 +53,7 @@ export class FileSystemReader {
 
       return paths;
     }
-    const start = resolve(this.location, options.path ?? ".");
+    const start = this.path(options.path ?? ".");
     const paths = await traverse([], start, options.recursive ?? false);
 
     return paths.map((path) => path.replace(start + "\\", ""));

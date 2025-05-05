@@ -1,4 +1,4 @@
-import { ContentObject } from "openapi3-ts/oas31";
+import type { ContentObject } from "openapi3-ts/oas31";
 
 export namespace OpenApiResponseNs {
   const symbol = Symbol("OpenapiResponseMeta");

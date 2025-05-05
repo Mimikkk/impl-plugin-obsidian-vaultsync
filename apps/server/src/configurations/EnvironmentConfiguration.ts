@@ -4,4 +4,5 @@ export namespace EnvironmentConfiguration {
 
   export const syncthingUrl = Deno.env.get("SYNCTHING_SERVICE_URL")!;
   export const syncthingApiKey = Deno.env.get("SYNCTHING_SERVICE_API_KEY")!;
+  export const storageUrl = Deno.env.get("STORAGE_URL")!;
 }

@@ -1,10 +1,10 @@
-import { ParameterType, RouteSegment } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
+import { type ParameterType, RouteSegment } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 
-export class RouteRequestPathParameterParser {
-  static instance = RouteRequestPathParameterParser.create();
+export class RouteRequestRouteParameterParser {
+  static instance = RouteRequestRouteParameterParser.create();
 
   static create() {
-    return new RouteRequestPathParameterParser();
+    return new RouteRequestRouteParameterParser();
   }
 
   private constructor() {}

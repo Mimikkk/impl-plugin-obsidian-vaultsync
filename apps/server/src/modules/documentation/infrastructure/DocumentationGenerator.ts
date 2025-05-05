@@ -60,7 +60,10 @@ export class DocumentationGenerator {
             summary: openapi.summary,
             deprecated: openapi.deprecated,
             description: `<div>${openapi.description}</div>`,
-            parameters: openapi.parameters.map((p) => p.toObject()),
+            parameters: [
+              ...openapi.routeParameters.map((p) => p.toObject()),
+              ...openapi.queryParameters.map((p) => p.toObject()),
+            ],
             requestBody: openapi.content?.toObject(),
             responses,
           },

@@ -1,7 +1,8 @@
-import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
-import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
-import { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
-import { PathParameter } from "@server/presentation/messaging/http/parameters/PathParameter.ts";
+import type { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import type { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
+import type { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
+import type { QueryParameter } from "@server/presentation/messaging/http/parameters/QueryParameter.ts";
+import type { RouteParameter } from "@server/presentation/messaging/http/parameters/RouteParameter.ts";
 
 export namespace OpenApiRouteNs {
   const symbol = Symbol("OpenapiRouteMeta");
@@ -18,7 +19,8 @@ export namespace OpenApiRouteNs {
     tags: OpenApiTag[];
     responses: OpenApiResponseNs.Meta[];
     deprecated: boolean;
-    parameters: PathParameter[];
+    routeParameters: RouteParameter[];
+    queryParameters: QueryParameter[];
     content?: RequestContent;
   }
 
@@ -28,19 +30,22 @@ export namespace OpenApiRouteNs {
     tags: OpenApiTag[];
     responses?: OpenApiResponseNs.Meta[];
     deprecated?: boolean;
-    parameters?: PathParameter[];
+    routeParameters?: RouteParameter[];
+    queryParameters?: QueryParameter[];
     content?: RequestContent;
   }
 
   export const decorate =
-    ({ summary, description, tags, responses, deprecated, parameters, content }: Options) => (target: any) => {
+    ({ summary, description, tags, responses, deprecated, routeParameters, queryParameters, content }: Options) =>
+    (target: any) => {
       target[symbol] = {
         summary,
         description,
         tags,
         responses: responses ?? [],
         deprecated: deprecated ?? false,
-        parameters: parameters ?? [],
+        routeParameters: routeParameters ?? [],
+        queryParameters: queryParameters ?? [],
         content,
       } satisfies Spec;
     };

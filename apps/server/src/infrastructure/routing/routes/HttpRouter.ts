@@ -1,5 +1,6 @@
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import "@server/modules/documentation/presentation/controllers/http/HttpDocumentationController.ts";
+import "@server/modules/filesystem/presentation/controllers/http/HttpFileSystemController.ts";
 import "@server/modules/health/presentation/controllers/http/HealthController.ts";
 import "@server/modules/static/presentation/controllers/http/HttpStaticController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";

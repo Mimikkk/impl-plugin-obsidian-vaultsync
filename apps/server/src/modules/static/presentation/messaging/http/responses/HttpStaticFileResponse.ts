@@ -1,4 +1,4 @@
-import { StaticFile } from "@server/modules/static/domain/StaticFile.ts";
+import type { StaticFile } from "@server/modules/static/domain/StaticFile.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
 export namespace HttpStaticFileResponse {

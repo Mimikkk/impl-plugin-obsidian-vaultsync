@@ -1,37 +1,51 @@
-import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
-import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
-import { RouteRequestParameters } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestParameters.ts";
-import { Merge } from "@server/shared/types/common.ts";
+import type { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import type { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
+import type { Merge } from "@server/shared/types/common.ts";
 import { RouteRequestContent } from "./RouteRequestContent.ts";
+import { RouteRequestQueryParameters } from "./RouteRequestQueryParameters.ts";
+import { RouteRequestRouteParameters } from "./RouteRequestRouteParameters.ts";
 
 export class RouteRequestContext<
-  Parameters extends Record<string, any> = Record<string, any>,
-  Content extends object | null = object | null,
+  RP extends Record<string, any> = Record<string, any>,
+  SP extends Record<string, any> = Record<string, any>,
+  T extends object | null = object | null,
 > {
-  static create<Parameters extends Record<string, any>, Content extends object | null>(
+  static create<
+    RP extends Record<string, any>,
+    SP extends Record<string, any>,
+    T extends object | null,
+  >(
     request: RequestContext,
-    parameters: RouteRequestParameters<Parameters>,
-    content: RouteRequestContent<Content>,
+    routeParameters: RouteRequestRouteParameters<RP>,
+    queryParameters: RouteRequestQueryParameters<SP>,
+    content: RouteRequestContent<T>,
   ) {
-    return new RouteRequestContext(request, parameters, content);
+    return new RouteRequestContext(request, routeParameters, queryParameters, content);
   }
 
   private constructor(
     public readonly request: RequestContext,
-    public readonly parameters: RouteRequestParameters<Parameters>,
-    public readonly content: RouteRequestContent<Content>,
+    public readonly routeParameters: RouteRequestRouteParameters<RP>,
+    public readonly queryParameters: RouteRequestQueryParameters<SP>,
+    public readonly content: RouteRequestContent<T>,
   ) {}
 
   static async fromRequestRoute(request: RequestContext, route: Route) {
     return RouteRequestContext.create(
       request,
-      RouteRequestParameters.fromUrls(route.url, request.url),
+      RouteRequestRouteParameters.fromUrls(route.url, request.url),
+      RouteRequestQueryParameters.fromRequestContext(request),
       await RouteRequestContent.fromRequestContext(request),
     );
   }
 
-  withParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<Merge<Parameters, P>, Content> {
-    Object.assign(this.parameters.values, parameters);
-    return this as RouteRequestContext<Merge<Parameters, P>, Content>;
+  withRouteParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<Merge<RP, P>, SP, T> {
+    Object.assign(this.routeParameters.values, parameters);
+    return this as RouteRequestContext<Merge<RP, P>, SP, T>;
+  }
+
+  withQueryParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<RP, Merge<SP, P>, T> {
+    Object.assign(this.queryParameters.values, parameters);
+    return this as RouteRequestContext<RP, Merge<SP, P>, T>;
   }
 }

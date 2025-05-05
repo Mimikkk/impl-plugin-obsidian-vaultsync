@@ -1,36 +1,31 @@
-import { PathParameterStore } from "@server/presentation/messaging/http/parameters/PathParameterStore.ts";
-import { ParameterObject, SchemaObject } from "openapi3-ts/oas31";
+import type { ParameterObject, SchemaObject } from "openapi3-ts/oas31";
 
-export class PathParameter {
-  static create({ name, example, description, type, format, options }: PathParameter.Options): PathParameter {
-    const parameter = new PathParameter(name, example, description, type, format, options);
-
-    PathParameterStore.instance.add(parameter);
-
-    return parameter;
+export class RouteParameter {
+  static create({ name, example, description, type, format, options }: RouteParameterNs.Options): RouteParameter {
+    return new RouteParameter(name, example, description, type, format, options);
   }
 
   static integer(
-    { name, options, example = options?.[0] ?? "1", description }: PathParameter.IntegerOptions,
-  ): PathParameter {
+    { name, options, example = options?.[0] ?? "1", description }: RouteParameterNs.IntegerOptions,
+  ): RouteParameter {
     return this.create({ name, example, description, type: "integer", format: "int32", options });
   }
 
   static string(
-    { name, options, example = options?.[0] ?? "text", description }: PathParameter.StringOptions,
-  ): PathParameter {
+    { name, options, example = options?.[0] ?? "text", description }: RouteParameterNs.StringOptions,
+  ): RouteParameter {
     return this.create({ name, example, description, type: "string", options });
   }
 
   static number(
-    { name, options, example = options?.[0] ?? "1.0", description }: PathParameter.NumberOptions,
-  ): PathParameter {
+    { name, options, example = options?.[0] ?? "1.0", description }: RouteParameterNs.NumberOptions,
+  ): RouteParameter {
     return this.create({ name, example, description, type: "number", format: "float", options });
   }
 
   static boolean(
-    { name, options, example = options?.[0] ?? "true", description }: PathParameter.BooleanOptions,
-  ): PathParameter {
+    { name, options, example = options?.[0] ?? "true", description }: RouteParameterNs.BooleanOptions,
+  ): RouteParameter {
     return this.create({ name, example, description, type: "boolean", options });
   }
 
@@ -59,7 +54,7 @@ export class PathParameter {
   }
 }
 
-export namespace PathParameter {
+export namespace RouteParameterNs {
   export interface Options {
     name: string;
     example: string;

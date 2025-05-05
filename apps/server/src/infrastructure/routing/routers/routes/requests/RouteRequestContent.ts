@@ -1,4 +1,4 @@
-import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import type { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
 
 export class RouteRequestContent<P extends object | null> {
   static create<P extends Record<string, any>>(values: P): RouteRequestContent<P> {

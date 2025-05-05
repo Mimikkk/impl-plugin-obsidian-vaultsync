@@ -1,6 +1,6 @@
 import { HttpResponse } from "@server/presentation/messaging/http/responses/HttpResponse.ts";
 import { Str } from "@server/shared/utils/strings.ts";
-import { SchemaObject } from "openapi3-ts/oas31";
+import type { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpHtmlResponse {
   export const headers = { "Content-Type": "text/html" } satisfies HeadersInit;
