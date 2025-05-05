@@ -50,9 +50,11 @@ export class HttpFileSystemController {
       return HttpFileSystemReadResponse.missing();
     }
 
-    const mime = this.service.mime(path);
-    const response = HttpFileSystemReadResponse.file(result);
-    response.headers.set("Content-Type", mime);
+    const response = HttpFileSystemReadResponse.file(result.content);
+    response.headers.set("Content-Type", result.mime);
+    response.headers.set("Content-Disposition", `attachment; filename="${result.path}"`);
+    response.headers.set("Content-Length", result.content.length.toString());
+    response.headers.set("Content-Transfer-Encoding", "binary");
 
     return response;
   }

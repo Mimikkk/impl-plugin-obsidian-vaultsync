@@ -1,4 +1,3 @@
-import { Log } from "@server/shared/logging/log.ts";
 import { dirname } from "@std/path";
 
 export class FileWriter {
@@ -25,9 +24,7 @@ export class FileWriter {
       }
 
       return true;
-    } catch (error: unknown) {
-      Log.error(`Failed to write file ${path}.`, { error });
-
+    } catch {
       return false;
     }
   }
@@ -45,9 +42,7 @@ export class FileWriter {
       await Deno.remove(path, { recursive });
 
       return true;
-    } catch (error: unknown) {
-      Log.error(`Failed to remove file ${path}.`, { error });
-
+    } catch {
       return false;
     }
   }

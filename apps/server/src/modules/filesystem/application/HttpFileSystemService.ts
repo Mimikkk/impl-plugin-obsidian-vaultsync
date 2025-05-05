@@ -25,7 +25,7 @@ export class HttpFileSystemService {
       return "missing";
     }
 
-    return file!;
+    return { content: file, mime: this.mime(path), path: result.value };
   }
 
   async write(path: string, content: Uint8Array) {

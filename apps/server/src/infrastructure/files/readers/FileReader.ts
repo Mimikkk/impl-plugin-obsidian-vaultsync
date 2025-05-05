@@ -1,4 +1,3 @@
-import { Log } from "@server/shared/logging/log.ts";
 import { contentType } from "@std/media-types";
 import { extname } from "@std/path";
 
@@ -14,9 +13,7 @@ export class FileReader {
       }
 
       return await Deno.readFile(path) as FileReader.FileMap[T];
-    } catch (error: unknown) {
-      Log.error(`Failed to read file ${path}.`, { error });
-
+    } catch {
       return undefined;
     }
   }
