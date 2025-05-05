@@ -31,4 +31,24 @@ export class FileWriter {
       return false;
     }
   }
+
+  writeU8(path: string, content: Uint8Array): Promise<boolean> {
+    return this.write(path, content);
+  }
+
+  writeStr(path: string, content: string): Promise<boolean> {
+    return this.write(path, content);
+  }
+
+  async remove(path: string, recursive = false): Promise<boolean> {
+    try {
+      await Deno.remove(path, { recursive });
+
+      return true;
+    } catch (error: unknown) {
+      Log.error(`Failed to remove file ${path}.`, { error });
+
+      return false;
+    }
+  }
 }

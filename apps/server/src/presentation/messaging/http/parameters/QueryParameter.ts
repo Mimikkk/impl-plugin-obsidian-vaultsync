@@ -1,14 +1,20 @@
 import type { ParameterObject, SchemaObject } from "openapi3-ts/oas31";
 
 export class QueryParameter {
-  static create({ name, example, description, type, format, options }: QueryParameterNs.Options): QueryParameter {
-    return new QueryParameter(name, example, description, type, format, options);
+  static create(
+    { name, example, description, type, format, options, required }: QueryParameterNs.Options,
+  ): QueryParameter {
+    return new QueryParameter(name, example, description, type, format, options, required);
   }
 
   static string(
-    { name, options, example = options?.[0] ?? "text", description }: QueryParameterNs.StringOptions,
+    { name, options, example = options?.[0] ?? "text", description, required }: QueryParameterNs.StringOptions,
   ): QueryParameter {
-    return this.create({ name, example, description, type: "string", options });
+    return this.create({ name, example, description, type: "string", options, required });
+  }
+
+  static boolean({ name, example = true, description }: QueryParameterNs.BooleanOptions): QueryParameter {
+    return this.create({ name, example: `${example}`, description, type: "boolean" });
   }
 
   private constructor(
@@ -18,10 +24,11 @@ export class QueryParameter {
     public readonly type: SchemaObject["type"],
     public readonly format: SchemaObject["format"],
     public readonly options: string[] | undefined,
+    public readonly required: boolean = false,
   ) {}
 
   toString(): string {
-    return `{${this.name}:${this.type}}`;
+    return this.name;
   }
 
   toObject(): ParameterObject {
@@ -31,7 +38,7 @@ export class QueryParameter {
       description: this.description,
       schema: { type: this.type, format: this.format, enum: this.options },
       in: "query",
-      required: true,
+      required: this.required,
     };
   }
 }
@@ -44,6 +51,7 @@ export namespace QueryParameterNs {
     type: SchemaObject["type"];
     format?: SchemaObject["format"];
     options?: string[];
+    required?: boolean;
   }
 
   export interface StringOptions {
@@ -51,5 +59,13 @@ export namespace QueryParameterNs {
     example?: string;
     description: string;
     options?: string[];
+    required?: boolean;
+  }
+
+  export interface BooleanOptions {
+    name: string;
+    example?: boolean;
+    description: string;
+    required?: boolean;
   }
 }

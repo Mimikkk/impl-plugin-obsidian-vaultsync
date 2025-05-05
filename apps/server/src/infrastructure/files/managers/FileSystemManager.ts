@@ -32,4 +32,12 @@ export class FileSystemManager {
   write(path: string, content: string): Promise<boolean> {
     return this.writer.write(path, content);
   }
+
+  writeU8(path: string, content: Uint8Array): Promise<boolean> {
+    return this.writer.writeU8(path, content);
+  }
+
+  remove(path: string, recursive = false): Promise<boolean> {
+    return this.writer.remove(path, recursive);
+  }
 }

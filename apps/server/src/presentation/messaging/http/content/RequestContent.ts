@@ -1,8 +1,10 @@
-import { RequestBodyObject, SchemaObject } from "openapi3-ts/oas31";
+import type { RequestBodyObject, SchemaObject } from "openapi3-ts/oas31";
 
 export class RequestContent<T = object> {
-  static create<T>({ name, example, description, properties }: RequestContent.Options<T>): RequestContent<T> {
-    return new RequestContent(name, example, description, properties);
+  static create<T>(
+    { name, example, description, properties, type, required }: RequestContent.Options<T>,
+  ): RequestContent<T> {
+    return new RequestContent(name, example, description, properties, type, required);
   }
 
   private constructor(
@@ -10,6 +12,8 @@ export class RequestContent<T = object> {
     public readonly example: T,
     public readonly description: string,
     public readonly properties: Record<keyof T, SchemaObject>,
+    public readonly type: string = "application/json",
+    public readonly required: string[] = [],
   ) {}
 
   toObject(): RequestBodyObject {
@@ -17,11 +21,12 @@ export class RequestContent<T = object> {
       description: this.description,
       required: true,
       content: {
-        "application/json": {
+        [this.type]: {
           example: this.example,
           schema: {
             type: "object",
             properties: this.properties,
+            required: this.required,
           },
         },
       },
@@ -35,5 +40,7 @@ export namespace RequestContent {
     example: T;
     description: string;
     properties: Record<keyof T, SchemaObject>;
+    type?: string;
+    required?: string[];
   }
 }

@@ -16,4 +16,16 @@ export class FileSystemWriter {
 
     return await this.writer.write(path, content);
   }
+
+  async writeU8(path: string, content: Uint8Array): Promise<boolean> {
+    path = resolve(this.location, path);
+
+    return await this.writer.writeU8(path, content);
+  }
+
+  async remove(path: string, recursive = false): Promise<boolean> {
+    path = resolve(this.location, path);
+
+    return await this.writer.remove(path, recursive);
+  }
 }
