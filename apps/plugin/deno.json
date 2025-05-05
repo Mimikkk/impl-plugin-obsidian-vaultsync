@@ -1,10 +1,14 @@
 {
-  "name": "@nimir/obsidian-plugin-vault-sync",
+  "name": "@nimir/obsidian-vault-sync-plugin",
   "exports": "./src/mod.ts",
   "tasks": {
     "build": {
       "description": "Build the plugin",
       "command": "deno run -A ./rspack.config.ts"
+    },
+    "dev": {
+      "description": "Run the plugin in development mode",
+      "command": "deno run -A ./scripts/dev.ts --watch"
     }
   },
   "imports": {

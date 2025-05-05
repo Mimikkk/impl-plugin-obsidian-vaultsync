@@ -1,7 +1,7 @@
 import { colors } from "@cliffy/ansi/colors";
 import * as fs from "@std/fs";
 import * as path from "@std/path";
-import "./read-env.ts";
+import "../../../scripts/read-env.ts";
 
 const nextlineRe = /\r?\n/;
 const lines = (text: Uint8Array) => new TextDecoder().decode(text).trim().split(nextlineRe);
@@ -73,7 +73,10 @@ const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUr
   }
 
   console.info(`${colors.blue("[event]")} Plugin synced to vault successfully!`);
-  console.info(`${colors.gray("[info]")} Watching for changes...`);
+
+  if (Deno.args.includes("--watch")) {
+    console.info(`${colors.gray("[info]")} Watching for changes...`);
+  }
 };
 
 const vaultPath = Deno.env.get("VAULT_PATH");
@@ -85,7 +88,7 @@ const parseUrls = async (vaultUrl?: string) => {
     return "obsidian-location-does-not-exist";
   }
 
-  const pluginLocalUrl = `apps/plugin/dist`;
+  const pluginLocalUrl = `dist`;
   const obsidianUrl = path.join(vaultUrl, ".obsidian");
   const pluginsUrl = path.join(obsidianUrl, "plugins");
   const pluginRemoteUrl = path.join(pluginsUrl, "vault-sync");
@@ -110,7 +113,7 @@ if (urls === "obsidian-location-does-not-exist") {
 await synchronize(urls);
 if (!Deno.args.includes("--watch")) Deno.exit(0);
 
-const watcher = Deno.watchFs("apps/plugin");
+const watcher = Deno.watchFs(".");
 const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
 for await (const event of watcher) {
   handleEvent(event);

@@ -36,17 +36,29 @@
     ]
   },
   "tasks": {
-    "enable-dev": {
+    "dev:enable": {
       "description": "Enable hot-reload plugin within the vault.",
       "command": "deno run -A --watch scripts/enable-dev.ts"
     },
     "dev": {
-      "description": "Build the plugin and push it to the vault with hot-reloading.",
-      "command": "deno run -A scripts/dev.ts --watch"
+      "description": "Run the plugin and server in development mode.",
+      "dependencies": ["dev:external", "dev:plugin", "dev:server"]
     },
-    "push": {
-      "description": "Build the plugin and push it to the vault.",
-      "command": "deno run -A scripts/dev.ts"
+    "dev:plugin": {
+      "description": "Run the plugin in development mode.",
+      "command": "deno task -f plugin dev"
+    },
+    "dev:server": {
+      "description": "Run the server in development mode.",
+      "command": "deno task -f server dev"
+    },
+    "dev:external": {
+      "description": "Run the external services.",
+      "command": "docker compose -f apps/external/docker-compose.yml up -d"
+    },
+    "dev:external:stop": {
+      "description": "Stop the external services.",
+      "command": "docker compose -f apps/external/docker-compose.yml down"
     }
   },
   "imports": {
