@@ -54,11 +54,7 @@
     },
     "dev:external": {
       "description": "Run the external services.",
-      "command": "docker compose -f apps/external/docker-compose.yml up -d"
-    },
-    "dev:external:stop": {
-      "description": "Stop the external services.",
-      "command": "docker compose -f apps/external/docker-compose.yml down"
+      "command": "docker compose -f apps/external/docker-compose.yml up"
     }
   },
   "imports": {

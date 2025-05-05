@@ -50,7 +50,6 @@ const createDebouncedEventHandler = (
 };
 
 const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUrl: string }) => {
-  console.clear();
   console.info(`${colors.blue("[event]")} Syncing plugin to vault...`);
   const result = await rebuild();
   if (result === "build-failed") {
