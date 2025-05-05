@@ -44,4 +44,8 @@ export class FileSystemManager {
   mime(path: string): string {
     return this.reader.mime(path);
   }
+
+  exists(path: string): Promise<boolean> {
+    return this.reader.exists(path);
+  }
 }

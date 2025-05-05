@@ -14,7 +14,10 @@ export class PathSanitizer {
   private constructor() {}
 
   sanitize(path: string): { value: string } | { error: "absolute-path" | "path-traversal" } {
-    console.log(path);
+    if (path.startsWith(".") && path.length > 1) {
+      return { error: "path-traversal" };
+    }
+
     path = decodeURIComponent(path);
     path = path.replace(regexes.specialChars, "");
     path = path.replace(regexes.backslash, "/");

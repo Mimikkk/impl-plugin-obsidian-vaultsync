@@ -7,6 +7,7 @@ import { HttpFileSystemRemoveResponse } from "@server/modules/filesystem/present
 import { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
 import { HttpFileSystemService } from "../../../application/HttpFileSystemService.ts";
 import { HttpFileSystemParameter } from "../../messaging/http/parameters/HttpFileSystemParameter.ts";
+import { HttpFileSystemExistsResponse } from "../../messaging/http/responses/HttpFileSystemExistsResponse.ts";
 import { HttpFileSystemReadResponse } from "../../messaging/http/responses/HttpFileSystemReadResponse.ts";
 import { HttpFileSystemUploadResponse } from "../../messaging/http/responses/HttpFileSystemUploadResponse.ts";
 
@@ -57,6 +58,63 @@ export class HttpFileSystemController {
     response.headers.set("Content-Transfer-Encoding", "binary");
 
     return response;
+  }
+
+  @RouteNs.get("exists")
+  @OpenApiNs.route({
+    summary: "Check if the file exists on the server",
+    description: "Check if the file exists on the server",
+    tags: [OpenApiTag.FileSystem],
+    responses: [
+      HttpFileSystemReadResponse.Missing,
+      HttpFileSystemReadResponse.Absolute,
+      HttpFileSystemReadResponse.Traversal,
+      HttpFileSystemExistsResponse.Exists,
+    ],
+  })
+  async exists(context: RouteRequestContext<{}, { path: string }>) {
+    const { path } = context.queryParameters.values;
+
+    const result = await this.service.exists(path);
+
+    if (result === "absolute-path") {
+      return HttpFileSystemReadResponse.absolute();
+    }
+
+    if (result === "path-traversal") {
+      return HttpFileSystemReadResponse.traversal();
+    }
+
+    return HttpFileSystemExistsResponse.exists(result);
+  }
+
+  @RouteNs.get("list")
+  @OpenApiNs.route({
+    summary: "List the files in the directory",
+    description: "List the files in the directory",
+    tags: [OpenApiTag.FileSystem],
+    responses: [
+      HttpFileSystemReadResponse.Missing,
+      HttpFileSystemReadResponse.Absolute,
+      HttpFileSystemReadResponse.Traversal,
+      HttpFileSystemReadResponse.List,
+    ],
+    queryParameters: [HttpFileSystemParameter.Path],
+  })
+  async list(context: RouteRequestContext<{}, { path: string }>) {
+    const { path } = context.queryParameters.values;
+
+    const result = await this.service.list(path);
+
+    if (result === "absolute-path") {
+      return HttpFileSystemReadResponse.absolute();
+    }
+
+    if (result === "path-traversal") {
+      return HttpFileSystemReadResponse.traversal();
+    }
+
+    return HttpFileSystemReadResponse.list(result.filter((name) => !name.startsWith(".")));
   }
 
   @RouteNs.post("")

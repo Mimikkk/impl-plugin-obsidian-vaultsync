@@ -62,4 +62,14 @@ export class FileSystemReader {
 
     return paths.map((path) => path.replace(start + "\\", ""));
   }
+
+  async exists(path: string): Promise<boolean> {
+    try {
+      const stat = await Deno.stat(this.path(path));
+
+      return stat.isFile || stat.isDirectory;
+    } catch {
+      return false;
+    }
+  }
 }

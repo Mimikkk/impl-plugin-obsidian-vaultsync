@@ -36,4 +36,13 @@ export namespace HttpFileSystemReadResponse {
     status: 400,
     schema: { type: "object", properties: { error: { type: "string" } } },
   });
+
+  export const [List, list] = HttpJsonResponse.custom({
+    content: (names: string[]) => ({ files: names }),
+    name: "List",
+    description: "List of files",
+    example: { files: ["test.txt", "test2.txt"] },
+    status: 200,
+    schema: { type: "object", properties: { files: { type: "array", items: { type: "string" } } } },
+  });
 }

@@ -69,4 +69,24 @@ export class HttpFileSystemService {
 
     return this.manager.mime(result.value);
   }
+
+  async exists(path: string) {
+    const result = this.sanitizer.sanitize(path);
+
+    if ("error" in result) {
+      return result.error;
+    }
+
+    return await this.manager.exists(result.value);
+  }
+
+  async list(path: string) {
+    const result = this.sanitizer.sanitize(path);
+
+    if ("error" in result) {
+      return result.error;
+    }
+
+    return await this.manager.list({ path: result.value });
+  }
 }
