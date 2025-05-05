@@ -7,7 +7,7 @@ export namespace FileSystemService {
   export const read = async (path: string): Promise<File> => {
     const response = await ky.get(url, { searchParams: { path } });
     const buffer = await response.arrayBuffer();
-    const name = path.split("/").pop() || "file";
+    const name = response.headers.get("content-disposition")?.split("filename=")[1] || path.split("/").pop() || "file";
     const type = response.headers.get("content-type") || "application/octet-stream";
 
     return new File([buffer], name, { type });
