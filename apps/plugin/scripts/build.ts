@@ -38,7 +38,7 @@ rspack({
       },
       {
         test: /\\.env$/,
-        loader: "./env-loader.ts",
+        loader: "./scripts/env-loader.ts",
         type: "json",
       },
       {
@@ -65,7 +65,7 @@ rspack({
   const files = ["manifest.json", "versions.json", ".hotreload"];
   console.info("Moving static files...");
   await Promise.all(
-    files.map((file) => Deno.copyFile(file, resolve("dist", file))),
+    files.map((file) => Deno.copyFile(resolve("assets", file), resolve("dist", file))),
   );
   console.info(files.map((file) => `- asset ${file}`).join("\n"));
   console.info("Static files moved successfully!");
