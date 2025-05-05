@@ -38,6 +38,10 @@ export class FileSystemReader {
     return await this.reader.readU8(this.path(path));
   }
 
+  mime(path: string): string {
+    return this.reader.mime(this.path(path));
+  }
+
   async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
     async function traverse(paths: string[], path: string, recursive: boolean): Promise<string[]> {
       for await (const entry of Deno.readDir(path)) {

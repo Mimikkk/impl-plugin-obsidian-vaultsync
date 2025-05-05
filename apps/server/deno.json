@@ -14,6 +14,7 @@
   "imports": {
     "@server/": "./src/",
     "openapi3-ts": "npm:openapi3-ts@^4.4.0",
-    "swagger-ui-dist": "npm:swagger-ui-dist@^5.11.0"
+    "swagger-ui-dist": "npm:swagger-ui-dist@^5.11.0",
+    "@std/media-types": "jsr:@std/media-types@^1.1.0"
   }
 }

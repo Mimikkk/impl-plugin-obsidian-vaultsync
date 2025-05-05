@@ -59,4 +59,14 @@ export class HttpFileSystemService {
 
     return "success";
   }
+
+  mime(path: string) {
+    const result = this.sanitizer.sanitize(path);
+
+    if ("error" in result) {
+      return result.error;
+    }
+
+    return this.manager.mime(result.value);
+  }
 }

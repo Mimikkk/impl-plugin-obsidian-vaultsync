@@ -5,10 +5,10 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { HttpFileSystemRemoveResponse } from "@server/modules/filesystem/presentation/messaging/http/responses/HttpFileSystemRemoveResponse.ts";
 import { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
+import { HttpFileSystemService } from "../../../application/HttpFileSystemService.ts";
 import { HttpFileSystemParameter } from "../../messaging/http/parameters/HttpFileSystemParameter.ts";
 import { HttpFileSystemReadResponse } from "../../messaging/http/responses/HttpFileSystemReadResponse.ts";
 import { HttpFileSystemUploadResponse } from "../../messaging/http/responses/HttpFileSystemUploadResponse.ts";
-import { HttpFileSystemService } from "../../../application/HttpFileSystemService.ts";
 
 @ControllerNs.controller({ name: "FileSystem", group: "filesystem" })
 export class HttpFileSystemController {
@@ -50,7 +50,11 @@ export class HttpFileSystemController {
       return HttpFileSystemReadResponse.missing();
     }
 
-    return HttpFileSystemReadResponse.file(result);
+    const mime = this.service.mime(path);
+    const response = HttpFileSystemReadResponse.file(result);
+    response.headers.set("Content-Type", mime);
+
+    return response;
   }
 
   @RouteNs.post("")

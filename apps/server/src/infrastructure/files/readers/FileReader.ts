@@ -1,4 +1,6 @@
 import { Log } from "@server/shared/logging/log.ts";
+import { contentType } from "@std/media-types";
+import { extname } from "@std/path";
 
 export class FileReader {
   static create(): FileReader {
@@ -25,6 +27,12 @@ export class FileReader {
 
   readU8(path: string): Promise<Uint8Array | undefined> {
     return this.read(path, "uint8");
+  }
+
+  mime(path: string): string {
+    const extension = extname(path);
+
+    return contentType(extension) || "application/octet-stream";
   }
 }
 

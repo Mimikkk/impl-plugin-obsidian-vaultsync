@@ -40,4 +40,8 @@ export class FileSystemManager {
   remove(path: string, recursive = false): Promise<boolean> {
     return this.writer.remove(path, recursive);
   }
+
+  mime(path: string): string {
+    return this.reader.mime(path);
+  }
 }
