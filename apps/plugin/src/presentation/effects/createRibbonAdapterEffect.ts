@@ -1,4 +1,4 @@
-import { isSyncing } from "@plugin/application/signals/sync.ts";
+import { isSyncing } from "@plugin/presentation/signals/sync.ts";
 import { createEffect, on } from "solid-js";
 import { defer } from "../../shared/values/common.ts";
 

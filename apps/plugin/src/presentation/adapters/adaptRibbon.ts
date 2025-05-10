@@ -1,6 +1,6 @@
-import { sync } from "@plugin/application/signals/sync.ts";
 import { createAdapter } from "@plugin/infrastructure/createAdapter.ts";
 import { createRibbonAdapterEffect } from "@plugin/presentation/effects/createRibbonAdapterEffect.ts";
+import { sync } from "@plugin/presentation/signals/sync.ts";
 import { onCleanup } from "solid-js";
 import { render } from "solid-js/web";
 import { RibbonBar } from "../components/RibbonBar.tsx";

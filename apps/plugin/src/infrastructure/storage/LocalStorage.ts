@@ -1,4 +1,4 @@
-import { LocalStorageParameter } from "@plugin/infrastructure/storage/LocalStorageParameter.ts";
+import { LocalStorageParameter } from "./parameters/LocalStorageParameter.ts";
 
 export namespace LocalStorage {
   export const set = LocalStorageParameter.set;

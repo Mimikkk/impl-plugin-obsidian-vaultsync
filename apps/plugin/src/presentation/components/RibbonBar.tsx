@@ -1,9 +1,9 @@
-import { useHealthStatus } from "@plugin/application/queries/useHealthStatus.ts";
-import { useLastEventId } from "@plugin/application/queries/useLastEventId.ts";
+import { useHealthStatus } from "@plugin/presentation/queries/useHealthStatus.ts";
+import { useLastEventId } from "@plugin/presentation/queries/useLastEventId.ts";
+import { useSyncEvents } from "@plugin/presentation/queries/useSyncEvents.ts";
+import { withQueryClient } from "@plugin/shared/components/withQueryClient.tsx";
 import cx from "clsx";
 import { createMemo } from "solid-js";
-import { useSyncEvents } from "../../application/queries/useSyncEvents.ts";
-import { withQueryClient } from "../../shared/components/withQueryClient.tsx";
 import { Status } from "../../shared/types/Status.ts";
 
 export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);

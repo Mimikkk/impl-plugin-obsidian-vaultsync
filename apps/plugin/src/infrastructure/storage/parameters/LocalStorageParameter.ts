@@ -1,4 +1,4 @@
-import { LocalStorage } from "@plugin/infrastructure/storage/LocalStorage.ts";
+import { LocalStorage } from "../../../infrastructure/storage/LocalStorage.ts";
 
 export class LocalStorageParameter<T> {
   static create<T>(name: string, { serializer, deserializer }: LocalStorageParameterNs.Options<T>) {
