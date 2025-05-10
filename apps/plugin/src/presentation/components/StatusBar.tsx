@@ -1,4 +1,4 @@
-import { isSyncing } from "@plugin/domain/signals/isSyncing.ts";
+import { isSyncing } from "@plugin/application/signals/sync.ts";
 import { createTimeoutAccessor } from "@plugin/infrastructure/signals/createTimeoutAccessor.ts";
 import { Match, Switch } from "solid-js";
 import { withQueryClient } from "../../shared/components/withQueryClient.tsx";

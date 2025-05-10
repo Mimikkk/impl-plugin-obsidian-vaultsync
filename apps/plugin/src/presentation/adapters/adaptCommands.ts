@@ -1,4 +1,4 @@
-import { sync } from "@plugin/domain/signals/isSyncing.ts";
+import { sync } from "@plugin/application/signals/sync.ts";
 import { createAdapter } from "@plugin/infrastructure/createAdapter.ts";
 
 export const adaptCommands = createAdapter((plugin) => {

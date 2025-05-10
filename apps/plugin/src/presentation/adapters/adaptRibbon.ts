@@ -1,4 +1,4 @@
-import { sync } from "@plugin/domain/signals/isSyncing.ts";
+import { sync } from "@plugin/application/signals/sync.ts";
 import { createAdapter } from "@plugin/infrastructure/createAdapter.ts";
 import { createRibbonAdapterEffect } from "@plugin/presentation/effects/createRibbonAdapterEffect.ts";
 import { onCleanup } from "solid-js";

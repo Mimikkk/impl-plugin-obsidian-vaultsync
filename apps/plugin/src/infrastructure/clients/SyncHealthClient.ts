@@ -1,8 +1,8 @@
 import ky from "ky";
-import { ServiceUrl } from "./ServiceUrl.ts";
+import { ClientUrl } from "./ClientUrl.ts";
 
-export namespace HealthService {
-  const url = ServiceUrl.sync;
+export namespace SyncHealthClient {
+  const url = ClientUrl.sync;
 
   export interface HealthResponse {
     status: string;
