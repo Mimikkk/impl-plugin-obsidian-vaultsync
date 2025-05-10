@@ -1,7 +1,7 @@
 import { useHealthStatus } from "@plugin/presentation/queries/useHealthStatus.ts";
 import { useLastEventId } from "@plugin/presentation/queries/useLastEventId.ts";
 import { useSyncEvents } from "@plugin/presentation/queries/useSyncEvents.ts";
-import { withQueryClient } from "@plugin/shared/components/withQueryClient.tsx";
+import { withQueryClient } from "../adapters/withQueryClient.tsx";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { Status } from "../../shared/types/Status.ts";
