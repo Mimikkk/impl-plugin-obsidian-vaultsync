@@ -58,6 +58,13 @@ export class FileSystemReader {
       return paths;
     }
     const start = this.path(options.path ?? ".");
+
+    const exists = await this.exists(start);
+    if (!exists) return [];
+
+    const stat = await Deno.stat(start);
+    if (!stat.isDirectory) return [];
+
     const paths = await traverse([], start, options.recursive ?? false);
 
     return paths.map((path) => path.replace(start + "\\", ""));

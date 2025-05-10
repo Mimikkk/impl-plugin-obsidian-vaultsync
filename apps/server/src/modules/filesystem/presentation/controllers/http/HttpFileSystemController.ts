@@ -102,7 +102,7 @@ export class HttpFileSystemController {
     queryParameters: [HttpFileSystemParameter.Path],
   })
   async list(context: RouteRequestContext<{}, { path: string }>) {
-    const { path } = context.queryParameters.values;
+    const { path = "" } = context.queryParameters.values;
 
     const result = await this.service.list(path);
 

@@ -5,7 +5,6 @@ export namespace HttpFileSystemParameter {
     name: "path",
     description: "The path to the file",
     example: "test.txt",
-    required: true,
   });
 
   export const Recursive = QueryParameter.boolean({
