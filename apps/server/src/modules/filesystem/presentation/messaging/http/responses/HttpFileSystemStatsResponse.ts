@@ -9,10 +9,10 @@ export namespace HttpFileSystemStatsResponse {
     size: stats.size,
   });
 
-  export const [Stats, stats] = HttpJsonResponse.custom({
+  export const [Info, info] = HttpJsonResponse.custom({
     content: fromFileInfo,
     example: { createdAt: today.toISOString(), updatedAt: today.toISOString(), size: 100 },
-    name: "stats",
+    name: "File Info",
     schema: {
       type: "object",
       properties: {
@@ -22,6 +22,6 @@ export namespace HttpFileSystemStatsResponse {
       },
     },
     status: 200,
-    description: "The stats of the file",
+    description: "The info of the file",
   });
 }

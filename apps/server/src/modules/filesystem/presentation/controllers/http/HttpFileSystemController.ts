@@ -61,6 +61,38 @@ export class HttpFileSystemController {
     return response;
   }
 
+  @RouteNs.get("info")
+  @OpenApiNs.route({
+    summary: "Get the info of the file",
+    description: "Get the info of the file",
+    tags: [OpenApiTag.FileSystem],
+    responses: [
+      HttpFileSystemReadResponse.Missing,
+      HttpFileSystemReadResponse.Absolute,
+      HttpFileSystemReadResponse.Traversal,
+      HttpFileSystemStatsResponse.Info,
+    ],
+  })
+  async stats(context: RouteRequestContext<{}, { path: string }>) {
+    const { path } = context.queryParameters.values;
+
+    const result = await this.service.stats(path);
+
+    if (result === "absolute-path") {
+      return HttpFileSystemReadResponse.absolute();
+    }
+
+    if (result === "path-traversal") {
+      return HttpFileSystemReadResponse.traversal();
+    }
+
+    if (result === "missing") {
+      return HttpFileSystemReadResponse.missing();
+    }
+
+    return HttpFileSystemStatsResponse.info(result);
+  }
+
   @RouteNs.get("exists")
   @OpenApiNs.route({
     summary: "Check if the file exists on the server",
@@ -206,37 +238,5 @@ export class HttpFileSystemController {
     }
 
     return HttpFileSystemRemoveResponse.success();
-  }
-
-  @RouteNs.get("stats")
-  @OpenApiNs.route({
-    summary: "Get the stats of the file",
-    description: "Get the stats of the file",
-    tags: [OpenApiTag.FileSystem],
-    responses: [
-      HttpFileSystemReadResponse.Missing,
-      HttpFileSystemReadResponse.Absolute,
-      HttpFileSystemReadResponse.Traversal,
-      HttpFileSystemStatsResponse.Stats,
-    ],
-  })
-  async stats(context: RouteRequestContext<{}, { path: string }>) {
-    const { path } = context.queryParameters.values;
-
-    const result = await this.service.stats(path);
-
-    if (result === "absolute-path") {
-      return HttpFileSystemReadResponse.absolute();
-    }
-
-    if (result === "path-traversal") {
-      return HttpFileSystemReadResponse.traversal();
-    }
-
-    if (result === "missing") {
-      return HttpFileSystemReadResponse.missing();
-    }
-
-    return HttpFileSystemStatsResponse.stats(result);
   }
 }
