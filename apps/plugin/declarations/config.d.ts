@@ -1,7 +1,6 @@
 declare module "@env" {
   const env: {
-    VAULT_SYNC_SERVICE_URL: string;
-    VAULT_PATH: string;
+    VAULT_SYNC_CLIENT_URL: string;
   };
   export default env;
 }

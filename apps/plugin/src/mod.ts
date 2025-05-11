@@ -7,7 +7,7 @@ import { createUnmountEffect } from "./presentation/effects/createUnmountEffect.
 import { ClientState } from "./presentation/state/ClientState.ts";
 import "./styles.css";
 
-export default definePlugin(async (plugin) => {
+export default definePlugin((plugin) => {
   adaptCommands(plugin);
   adaptRibbon(plugin);
   adaptStatusBar(plugin);
