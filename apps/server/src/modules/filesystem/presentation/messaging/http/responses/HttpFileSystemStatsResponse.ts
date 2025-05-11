@@ -1,16 +1,10 @@
-import type { FileInfo } from "@server/infrastructure/files/readers/FileSystemReader.ts";
+import { FileInfoResource } from "@server/presentation/messaging/http/resources/FileInfoResource.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { today } from "@server/shared/consts.ts";
 
 export namespace HttpFileSystemStatsResponse {
-  export const fromFileInfo = (stats: FileInfo) => ({
-    createdAt: stats.birthtime?.toISOString()!,
-    updatedAt: stats.mtime?.toISOString()!,
-    size: stats.size,
-  });
-
   export const [Info, info] = HttpJsonResponse.custom({
-    content: fromFileInfo,
+    content: FileInfoResource.fromFileInfo,
     example: { createdAt: today.toISOString(), updatedAt: today.toISOString(), size: 100 },
     name: "File Info",
     schema: {
