@@ -1,4 +1,4 @@
-import type { Awaitable } from "@server/shared/types/common.ts";
+import type { Awaitable } from "@nimir/shared";
 
 export type Dispatch = (request: Request) => Awaitable<Response>;
 export interface Middleware {

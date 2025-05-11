@@ -1,6 +1,6 @@
-import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
-import { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
-import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
+import type { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
+import type { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
+import type { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileStore } from "@server/infrastructure/persistence/stores/VolatileStore.ts";
 
 export class VolatileRepository<E extends Entity> implements Repository<E> {

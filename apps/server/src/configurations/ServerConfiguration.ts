@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
+import { Log } from "@server/infrastructure/logging/log.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { Log } from "@server/shared/logging/log.ts";
 import { EnvironmentConfiguration } from "./EnvironmentConfiguration.ts";
 
 const c = colors.yellow;

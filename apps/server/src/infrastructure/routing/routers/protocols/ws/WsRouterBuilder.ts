@@ -4,7 +4,7 @@ import { Router } from "@server/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 import { ControllerStore } from "../../../controllers/ControllerStore.ts";
-import { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
+import type { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
 
 export class WsRouterBuilder<R extends Route[] = Route[]> {
   static create(): WsRouterBuilder<[]> {

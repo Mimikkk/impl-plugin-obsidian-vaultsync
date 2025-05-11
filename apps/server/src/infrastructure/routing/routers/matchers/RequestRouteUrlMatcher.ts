@@ -1,6 +1,6 @@
-import { RequestContext } from "../requests/RequestContext.ts";
-import { RouteSegment, RouteUrl } from "../routes/RouteUrl.ts";
-import { RequestMatcher } from "./RequestMatcher.ts";
+import type { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import { RouteSegment, type RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
+import type { RequestMatcher } from "./RequestMatcher.ts";
 
 export class RequestRouteUrlMatcher implements RequestMatcher {
   static create(url: RouteUrl): RequestRouteUrlMatcher {

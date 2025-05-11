@@ -1,5 +1,5 @@
 import { DocumentationAssetProvider } from "../../infrastructure/DocumentationAssetProvider.ts";
-import { DocumentationAssetUrl } from "../../infrastructure/DocumentationAssetUrl.ts";
+import type { DocumentationAssetUrl } from "../../infrastructure/DocumentationAssetUrl.ts";
 
 export class DocumentationService {
   static create(): DocumentationService {

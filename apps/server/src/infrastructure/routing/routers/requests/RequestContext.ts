@@ -1,5 +1,5 @@
+import type { HttpMethod } from "@nimir/shared";
 import { RequestUrl } from "@server/infrastructure/routing/routers/requests/RequestUrl.ts";
-import { HttpMethod } from "../../../../shared/enums/HttpMethod.ts";
 
 export class RequestContext {
   static create(request: Request, method: HttpMethod, url: RequestUrl, parameters: URLSearchParams) {

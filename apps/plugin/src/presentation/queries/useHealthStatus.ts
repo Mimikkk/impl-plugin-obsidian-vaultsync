@@ -1,6 +1,6 @@
+import { TimeMs } from "@nimir/shared";
 import { useQuery } from "@tanstack/solid-query";
-import { Status } from "../../shared/types/Status.ts";
-import { TimeMs } from "../../shared/values/timeMs.ts";
+import { Status } from "../../infrastructure/types/Status.ts";
 
 const key = ["health"];
 export const useHealthStatus = () =>

@@ -1,8 +1,8 @@
+import { DateTimeNs } from "@nimir/shared";
 import { SyncEntryClient } from "@plugin/infrastructure/clients/SyncEntryClient.ts";
 import { SyncEventClient } from "@plugin/infrastructure/clients/SyncEventClient.ts";
 import { SyncFileSystemClient } from "@plugin/infrastructure/clients/SyncFileSystemClient.ts";
 import { ClientState } from "@plugin/presentation/state/ClientState.ts";
-import { DateTimeNs } from "@plugin/shared/types/DateTimeStr.ts";
 import { VaultClient } from "../../infrastructure/clients/VaultClient.ts";
 
 export namespace SyncService {

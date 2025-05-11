@@ -1,7 +1,7 @@
+import { type DateInit, DateTimeStr } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import { ClientUrl } from "@plugin/infrastructure/clients/ClientUrl.ts";
 import { serializeSearchParams } from "@plugin/infrastructure/serializers/serializeSearchParams.ts";
-import { type DateInit, DateTimeStr } from "@plugin/shared/types/DateTimeStr.ts";
 import ky from "ky";
 
 export namespace SyncEntryClient {

@@ -1,7 +1,7 @@
-import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
-import { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
+import type { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
+import type { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
 import { IntEntity } from "@server/infrastructure/persistence/entities/IntEntity.ts";
-import { IdentifierGenerator } from "@server/infrastructure/persistence/identifiers/IdentifierGenerator.ts";
+import type { IdentifierGenerator } from "@server/infrastructure/persistence/identifiers/IdentifierGenerator.ts";
 
 export class IntEntityFactory<E extends Entity<number, any>> implements EntityFactory<E> {
   static create<E extends Entity<number, any>>(

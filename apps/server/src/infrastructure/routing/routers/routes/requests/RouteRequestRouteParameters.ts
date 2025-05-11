@@ -1,5 +1,5 @@
-import { RequestUrl } from "@server/infrastructure/routing/routers/requests/RequestUrl.ts";
-import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
+import type { RequestUrl } from "@server/infrastructure/routing/routers/requests/RequestUrl.ts";
+import type { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 import { RouteRequestRouteParameterParser } from "./RouteRequestRouteParameterParser.ts";
 
 export class RouteRequestRouteParameters<P extends Record<string, any>> {

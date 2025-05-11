@@ -1,4 +1,4 @@
-import { ControllerClass } from "@server/infrastructure/routing/controllers/ControllerTypes.ts";
+import type { ControllerClass } from "@server/infrastructure/routing/controllers/ControllerTypes.ts";
 import { RouteNs } from "./RouteNs.ts";
 
 export namespace ControllerNs {

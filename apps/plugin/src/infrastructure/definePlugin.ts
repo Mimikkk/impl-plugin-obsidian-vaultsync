@@ -1,6 +1,6 @@
 import { Plugin } from "obsidian";
 import { createRoot } from "solid-js";
-import type { Awaitable } from "../shared/types/common.ts";
+import type { Awaitable } from "@nimir/shared";
 
 export const definePlugin = (runtime: (plugin: Plugin) => Awaitable<void>) => {
   const root = document.createElement("div");

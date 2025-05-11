@@ -1,6 +1,6 @@
 import { createEffect, on } from "solid-js";
-import { defer } from "../../shared/values/common.ts";
 import { useSync } from "../signals/useSync.ts";
+import { defer } from "../../infrastructure/conts.ts";
 
 export const createRibbonAdapterEffect = (button: HTMLElement) => {
   const { isMutating } = useSync();

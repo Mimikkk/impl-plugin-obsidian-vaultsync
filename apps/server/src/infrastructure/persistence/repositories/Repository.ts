@@ -1,4 +1,4 @@
-import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
+import type { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
 
 export interface Repository<E extends Entity> {
   find(id: E["id"]): E | undefined;

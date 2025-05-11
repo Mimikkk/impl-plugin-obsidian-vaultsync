@@ -1,7 +1,7 @@
-import { Awaitable } from "@server/shared/types/common.ts";
-import { Controller, ControllerFn, ControllerKey } from "../../controllers/ControllerTypes.ts";
-import { RouteRequestContext } from "../routes/requests/RouteRequestContext.ts";
-import { RequestHandler } from "./RequestHandler.ts";
+import type { Awaitable } from "@nimir/shared";
+import type { Controller, ControllerFn, ControllerKey } from "../../controllers/ControllerTypes.ts";
+import type { RouteRequestContext } from "../routes/requests/RouteRequestContext.ts";
+import type { RequestHandler } from "./RequestHandler.ts";
 
 export class RequestControllerHandler<
   C extends Controller = Controller,

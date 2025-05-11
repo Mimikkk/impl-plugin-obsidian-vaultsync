@@ -1,6 +1,6 @@
+import type { Merge } from "@nimir/shared";
 import type { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
 import type { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
-import type { Merge } from "@server/shared/types/common.ts";
 import { RouteRequestContent } from "./RouteRequestContent.ts";
 import { RouteRequestQueryParameters } from "./RouteRequestQueryParameters.ts";
 import { RouteRequestRouteParameters } from "./RouteRequestRouteParameters.ts";

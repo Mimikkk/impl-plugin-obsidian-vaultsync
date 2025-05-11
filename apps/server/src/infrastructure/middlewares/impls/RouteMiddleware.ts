@@ -1,6 +1,6 @@
+import type { Awaitable } from "@nimir/shared";
 import type { Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import type { Router } from "@server/infrastructure/routing/routers/Router.ts";
-import type { Awaitable } from "@server/shared/types/common.ts";
 
 export interface RouteMiddlewareOptions {
   http: Router;

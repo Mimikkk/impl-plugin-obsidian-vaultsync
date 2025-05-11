@@ -1,6 +1,6 @@
+import type { Awaitable } from "@nimir/shared";
 import type { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import type { Awaitable } from "@server/shared/types/common.ts";
 
 export interface TimeoutMiddlewareOptions {
   timeoutMs: number;

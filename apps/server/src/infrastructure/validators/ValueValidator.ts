@@ -1,6 +1,6 @@
-import { object, Schema } from "@server/infrastructure/validators/Schema.ts";
+import { object, type Schema } from "@server/infrastructure/validators/Schema.ts";
 import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
-import { Validator } from "@server/infrastructure/validators/Validator.ts";
+import type { Validator } from "@server/infrastructure/validators/Validator.ts";
 
 export class ValueValidator<S extends Schema> implements Validator<S> {
   static create<S extends Schema>(schema: S) {

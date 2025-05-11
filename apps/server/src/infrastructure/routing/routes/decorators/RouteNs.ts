@@ -1,5 +1,5 @@
+import { HttpMethod } from "@nimir/shared";
 import type { RouteParameter } from "@server/presentation/messaging/http/parameters/RouteParameter.ts";
-import { HttpMethod } from "@server/shared/enums/HttpMethod.ts";
 
 export namespace RouteNs {
   const symbol = Symbol("RouteMeta");

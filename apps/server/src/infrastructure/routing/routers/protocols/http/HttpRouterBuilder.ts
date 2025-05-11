@@ -1,11 +1,11 @@
+import type { HttpMethod } from "@nimir/shared";
 import { RequestControllerHandler } from "@server/infrastructure/routing/routers/handlers/RequestControllerHandler.ts";
 import { HttpRouteMatcher } from "@server/infrastructure/routing/routers/protocols/http/HttpRouteMatcher.ts";
 import { Router } from "@server/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
-import { HttpMethod } from "../../../../../shared/enums/HttpMethod.ts";
 import { ControllerStore } from "../../../controllers/ControllerStore.ts";
-import { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
+import type { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create(): HttpRouterBuilder<[]> {

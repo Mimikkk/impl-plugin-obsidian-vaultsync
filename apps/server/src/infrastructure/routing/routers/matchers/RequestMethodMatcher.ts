@@ -1,6 +1,6 @@
-import { HttpMethod } from "../../../../shared/enums/HttpMethod.ts";
-import { RequestContext } from "../requests/RequestContext.ts";
-import { RequestMatcher } from "./RequestMatcher.ts";
+import type { HttpMethod } from "@nimir/shared";
+import type { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import type { RequestMatcher } from "./RequestMatcher.ts";
 
 export class RequestMethodMatcher implements RequestMatcher {
   static create(method: HttpMethod): RequestMethodMatcher {

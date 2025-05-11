@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/solid-query";
-import { Status } from "../../shared/types/Status.ts";
+import { Status } from "../../infrastructure/types/Status.ts";
 
 export const useLastEventId = () =>
   Status.accessQuery(useQuery(() => ({

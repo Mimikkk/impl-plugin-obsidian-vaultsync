@@ -1,6 +1,6 @@
+import type { Awaitable } from "@nimir/shared";
 import type { EventManager } from "@server/infrastructure/events/EventManager.ts";
 import type { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
-import type { Awaitable } from "@server/shared/types/common.ts";
 import { VolatileListenerRegistry } from "./VolatileListenerRegistry.ts";
 
 export class VolatileEventManager<EventMap extends Record<string, unknown>> implements EventManager<EventMap> {

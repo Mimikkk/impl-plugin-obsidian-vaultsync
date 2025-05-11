@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/solid-query";
 import type { Accessor } from "solid-js";
-import { Status } from "../../shared/types/Status.ts";
+import { Status } from "../../infrastructure/types/Status.ts";
 
 export const useSyncEvents = (options?: { enabled?: Accessor<boolean> }) =>
   Status.accessQuery(useQuery(() => ({

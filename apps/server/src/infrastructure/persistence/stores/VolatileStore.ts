@@ -1,4 +1,4 @@
-import { Store } from "@server/infrastructure/persistence/stores/Store.ts";
+import type { Store } from "@server/infrastructure/persistence/stores/Store.ts";
 
 export class VolatileStore<K, V> implements Store<K, V> {
   static create<K, V>(): VolatileStore<K, V> {

@@ -1,6 +1,6 @@
+import { today } from "@nimir/shared";
 import { FileInfoResource } from "@server/presentation/messaging/http/resources/FileInfoResource.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { today } from "@server/shared/consts.ts";
 
 export namespace HttpFileSystemStatsResponse {
   export const [Info, info] = HttpJsonResponse.custom({

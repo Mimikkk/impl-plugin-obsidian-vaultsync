@@ -1,5 +1,5 @@
+import type { Awaitable } from "@nimir/shared";
 import type { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
-import type { Awaitable } from "@server/shared/types/common.ts";
 
 interface RedirectOptions {
   from: string;
