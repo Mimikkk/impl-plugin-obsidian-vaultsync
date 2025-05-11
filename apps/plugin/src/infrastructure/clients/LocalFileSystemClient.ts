@@ -63,7 +63,7 @@ export namespace LocalFileSystemClient {
     }
   };
 
-  export const descriptors = (): FileDescriptor[] => {
+  export const list = (): FileDescriptor[] => {
     const files = fs.getFiles();
 
     return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime }));
