@@ -72,6 +72,7 @@ export class HttpFileSystemController {
       HttpFileSystemReadResponse.Traversal,
       HttpFileSystemStatsResponse.Info,
     ],
+    queryParameters: [HttpFileSystemParameter.Path],
   })
   async stats(context: RouteRequestContext<{}, { path: string }>) {
     const { path } = context.queryParameters.values;
@@ -104,6 +105,7 @@ export class HttpFileSystemController {
       HttpFileSystemReadResponse.Traversal,
       HttpFileSystemExistsResponse.Exists,
     ],
+    queryParameters: [HttpFileSystemParameter.Path],
   })
   async exists(context: RouteRequestContext<{}, { path: string }>) {
     const { path } = context.queryParameters.values;
