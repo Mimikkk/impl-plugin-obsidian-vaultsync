@@ -28,14 +28,16 @@ export class HttpFileSystemService {
     return { content: file, mime: this.mime(path), path: result.value };
   }
 
-  async write(path: string, content: Uint8Array) {
+  async write(path: string, file: File) {
     const result = this.sanitizer.sanitize(path);
 
     if ("error" in result) {
       return result.error;
     }
 
-    const success = await this.manager.writeU8(result.value, content);
+    const array = new Uint8Array(await file.arrayBuffer());
+
+    const success = await this.manager.writeU8(result.value, array);
 
     if (!success) {
       return "failure";

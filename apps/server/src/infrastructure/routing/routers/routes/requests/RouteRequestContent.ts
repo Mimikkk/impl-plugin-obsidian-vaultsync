@@ -14,7 +14,18 @@ export class RouteRequestContent<P extends object | null> {
   ): Promise<RouteRequestContent<P>> {
     let values: P;
     try {
-      values = request.original.body ? await request.original.json() : {};
+      const type = request.original.headers.get("Content-Type");
+
+      if (!type) {
+        values = {} as P;
+      } else if (type.includes("application/json")) {
+        values = await request.original.json();
+      } else if (type.includes("multipart/form-data")) {
+        const formData = await request.original.formData();
+        values = Object.fromEntries(formData.entries()) as P;
+      } else {
+        values = {} as P;
+      }
     } catch {
       values = {} as P;
     }

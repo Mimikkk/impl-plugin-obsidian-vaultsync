@@ -1,6 +1,7 @@
+import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
-export namespace VaultManager {
+export namespace VaultClient {
   const fs = globalThis.app.vault;
 
   export const isEntry = (path: string): boolean => getEntry(path) !== null;
@@ -10,6 +11,19 @@ export namespace VaultManager {
   export const getEntry = (path: string): TAbstractFile | null => fs.getAbstractFileByPath(path);
   export const getFile = (path: string): TFile | null => fs.getFileByPath(path);
   export const getFolder = (path: string): TFolder | null => fs.getFolderByPath(path);
+
+  export const read = async (path: string): Promise<ArrayBuffer | null> => {
+    const file = getFile(path);
+    if (!file) return null;
+
+    return await fs.readBinary(file);
+  };
+  export const remove = (path: string) => {
+    const file = getFile(path);
+    if (!file) return;
+
+    return fs.delete(file);
+  };
 
   /** @see {@link https://help.obsidian.md/file-formats | Obsidian File Formats (www)} */
   export const isValid = (path: string): boolean => {
@@ -41,15 +55,17 @@ export namespace VaultManager {
     await maybeCreateFolder(folderOf(path));
 
     const file = getFile(path);
-    const updatedAt = [file?.stat.mtime, file?.stat.ctime];
-    console.log({ file, updatedAt });
-
     if (file) {
-      // if (file.stat.mtime === content) return;
-
-      return fs.modifyBinary(file, content);
+      fs.modifyBinary(file, content);
+      return file;
     } else {
       return fs.createBinary(path, content);
     }
+  };
+
+  export const descriptors = (): FileDescriptor[] => {
+    const files = fs.getFiles();
+
+    return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime }));
   };
 }

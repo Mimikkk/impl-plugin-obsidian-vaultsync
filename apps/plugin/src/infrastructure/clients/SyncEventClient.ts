@@ -5,7 +5,7 @@ import { ClientUrl } from "./ClientUrl.ts";
 export namespace SyncEventClient {
   const url = ClientUrl.sync + "/sync";
   const scanUrl = url + "/db/scan";
-  export const scan = () => ky.post(scanUrl);
+  export const scan = () => ky.post(scanUrl, { json: { folder: "default" } });
 
   /** @see {@link https://docs.syncthing.net/dev/events.html#event-types | Syncthing event types} */
   export type EventType = "LocalIndexUpdated" | "LocalChangeDetected";

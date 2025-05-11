@@ -178,7 +178,7 @@ export class HttpFileSystemController {
       type: "multipart/form-data",
     }),
   })
-  async upload(context: RouteRequestContext<{}, {}, { path: string; file: Uint8Array }>) {
+  async upload(context: RouteRequestContext<{}, {}, { path: string; file: File }>) {
     const { path, file } = context.content.values;
 
     const result = await this.service.write(path, file);

@@ -41,7 +41,7 @@ export namespace SyncEntryClient {
       const path = root ? `${root}/${file.name}` : file.name;
 
       if (EntryTypeNs.isFile(file)) {
-        descriptors.push({ path, timestamp: DateTimeStr.asTimestamp(file.modTime) });
+        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime) });
         continue;
       }
 
@@ -51,4 +51,18 @@ export namespace SyncEntryClient {
     return descriptors;
   }
   export const descriptors = () => traverse([], "default", "");
+
+  export interface InfoResponse {
+    deleted: boolean;
+    modified: DateInit;
+  }
+
+  const infoUrl = url + "/db/file";
+  export const info = async (path: string): Promise<InfoResponse | null> => {
+    const result = await ky.get(infoUrl, { searchParams: { folder: "default", file: path } })
+      .json<{ global: InfoResponse }>()
+      .catch(() => null);
+
+    return result?.global ?? null;
+  };
 }
