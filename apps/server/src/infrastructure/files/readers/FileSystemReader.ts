@@ -2,6 +2,8 @@ import { FileReader } from "@server/infrastructure/files/readers/FileReader.ts";
 import { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 import { extname, resolve } from "@std/path";
 
+export interface FileInfo extends Deno.FileInfo {}
+
 export class FileSystemReader {
   static create(path: string = "."): FileSystemReader {
     return new FileSystemReader(path);
@@ -77,6 +79,16 @@ export class FileSystemReader {
       return stat.isFile || stat.isDirectory;
     } catch {
       return false;
+    }
+  }
+
+  async stats(path: string): Promise<FileInfo | null> {
+    try {
+      const stat = await Deno.stat(this.path(path));
+
+      return stat;
+    } catch {
+      return null;
     }
   }
 }

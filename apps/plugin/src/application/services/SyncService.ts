@@ -13,8 +13,9 @@ export namespace SyncService {
     console.log("Synchronizing...");
 
     const descriptors = await SyncEntryClient.descriptors();
-    await Promise.all(descriptors.filter(() => true).map(updateFile));
+    await Promise.all(descriptors.map(updateFile));
 
     console.log("Synchronized.");
+    return "OK";
   };
 }

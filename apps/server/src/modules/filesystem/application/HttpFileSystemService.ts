@@ -89,4 +89,20 @@ export class HttpFileSystemService {
 
     return await this.manager.list({ path: result.value });
   }
+
+  async stats(path: string) {
+    const result = this.sanitizer.sanitize(path);
+
+    if ("error" in result) {
+      return result.error;
+    }
+
+    const stats = await this.manager.stats(result.value);
+
+    if (stats === null) {
+      return "missing";
+    }
+
+    return stats;
+  }
 }

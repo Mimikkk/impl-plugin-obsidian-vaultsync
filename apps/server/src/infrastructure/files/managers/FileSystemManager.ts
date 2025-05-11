@@ -1,4 +1,4 @@
-import { FileSystemReader } from "@server/infrastructure/files/readers/FileSystemReader.ts";
+import { type FileInfo, FileSystemReader } from "@server/infrastructure/files/readers/FileSystemReader.ts";
 import { FileSystemWriter } from "@server/infrastructure/files/writers/FileSystemWriter.ts";
 import type { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 
@@ -47,5 +47,9 @@ export class FileSystemManager {
 
   exists(path: string): Promise<boolean> {
     return this.reader.exists(path);
+  }
+
+  stats(path: string): Promise<FileInfo | null> {
+    return this.reader.stats(path);
   }
 }

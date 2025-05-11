@@ -1,15 +1,15 @@
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
 export namespace VaultManager {
-  const self = globalThis.app.vault;
+  const fs = globalThis.app.vault;
 
   export const isEntry = (path: string): boolean => getEntry(path) !== null;
   export const isFile = (path: string): boolean => getFile(path) !== null;
   export const isFolder = (path: string): boolean => getFolder(path) !== null;
 
-  export const getEntry = (path: string): TAbstractFile | null => self.getAbstractFileByPath(path);
-  export const getFile = (path: string): TFile | null => self.getFileByPath(path);
-  export const getFolder = (path: string): TFolder | null => self.getFolderByPath(path);
+  export const getEntry = (path: string): TAbstractFile | null => fs.getAbstractFileByPath(path);
+  export const getFile = (path: string): TFile | null => fs.getFileByPath(path);
+  export const getFolder = (path: string): TFolder | null => fs.getFolderByPath(path);
 
   /** @see {@link https://help.obsidian.md/file-formats | Obsidian File Formats (www)} */
   export const isValid = (path: string): boolean => {
@@ -29,7 +29,7 @@ export namespace VaultManager {
     return lastSlashIndex > 0 ? path.substring(0, lastSlashIndex) : "";
   };
 
-  export const createFolder = (path: string) => self.createFolder(path);
+  export const createFolder = (path: string) => fs.createFolder(path);
   export const maybeCreateFolder = (path: string) => {
     if (!path) return;
     if (isFolder(path)) return;
@@ -41,10 +41,15 @@ export namespace VaultManager {
     await maybeCreateFolder(folderOf(path));
 
     const file = getFile(path);
+    const updatedAt = [file?.stat.mtime, file?.stat.ctime];
+    console.log({ file, updatedAt });
+
     if (file) {
-      return self.modifyBinary(file, content);
+      // if (file.stat.mtime === content) return;
+
+      return fs.modifyBinary(file, content);
     } else {
-      return self.createBinary(path, content);
+      return fs.createBinary(path, content);
     }
   };
 }

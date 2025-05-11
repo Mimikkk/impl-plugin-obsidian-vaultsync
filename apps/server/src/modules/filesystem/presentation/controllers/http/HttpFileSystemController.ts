@@ -9,6 +9,7 @@ import { HttpFileSystemService } from "../../../application/HttpFileSystemServic
 import { HttpFileSystemParameter } from "../../messaging/http/parameters/HttpFileSystemParameter.ts";
 import { HttpFileSystemExistsResponse } from "../../messaging/http/responses/HttpFileSystemExistsResponse.ts";
 import { HttpFileSystemReadResponse } from "../../messaging/http/responses/HttpFileSystemReadResponse.ts";
+import { HttpFileSystemStatsResponse } from "../../messaging/http/responses/HttpFileSystemStatsResponse.ts";
 import { HttpFileSystemUploadResponse } from "../../messaging/http/responses/HttpFileSystemUploadResponse.ts";
 
 @ControllerNs.controller({ name: "FileSystem", group: "filesystem" })
@@ -205,5 +206,37 @@ export class HttpFileSystemController {
     }
 
     return HttpFileSystemRemoveResponse.success();
+  }
+
+  @RouteNs.get("stats")
+  @OpenApiNs.route({
+    summary: "Get the stats of the file",
+    description: "Get the stats of the file",
+    tags: [OpenApiTag.FileSystem],
+    responses: [
+      HttpFileSystemReadResponse.Missing,
+      HttpFileSystemReadResponse.Absolute,
+      HttpFileSystemReadResponse.Traversal,
+      HttpFileSystemStatsResponse.Stats,
+    ],
+  })
+  async stats(context: RouteRequestContext<{}, { path: string }>) {
+    const { path } = context.queryParameters.values;
+
+    const result = await this.service.stats(path);
+
+    if (result === "absolute-path") {
+      return HttpFileSystemReadResponse.absolute();
+    }
+
+    if (result === "path-traversal") {
+      return HttpFileSystemReadResponse.traversal();
+    }
+
+    if (result === "missing") {
+      return HttpFileSystemReadResponse.missing();
+    }
+
+    return HttpFileSystemStatsResponse.stats(result);
   }
 }

@@ -1,14 +1,16 @@
 import { createTimeoutAccessor } from "@plugin/infrastructure/signals/createTimeoutAccessor.ts";
-import { isSyncing } from "@plugin/presentation/signals/sync.ts";
 import { Match, Switch } from "solid-js";
 import { withQueryClient } from "../../infrastructure/queries/withQueryClient.tsx";
+import { useSync } from "../signals/useSync.ts";
 
 export const StatusBar = withQueryClient(() => {
-  const isSynced = createTimeoutAccessor(isSyncing, 1000);
+  const { isMutating } = useSync();
+
+  const isSynced = createTimeoutAccessor(isMutating, 1000);
 
   return (
     <Switch>
-      <Match when={isSyncing()}>
+      <Match when={isMutating()}>
         <div class="flex items-center gap-1 -m-1">
           <div class="h-4 w-4 -my-1">
             <svg
