@@ -32,7 +32,8 @@
   "workspace": {
     "members": [
       "apps/plugin",
-      "apps/server"
+      "apps/server",
+      "libs/shared"
     ]
   },
   "tasks": {

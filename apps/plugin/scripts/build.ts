@@ -19,6 +19,7 @@ rspack({
     alias: {
       "@plugin": resolve("src"),
       "@env": resolve(".env"),
+      "@nimir/shared": resolve("../../libs/shared/src/mod.ts"),
     },
   },
   experiments: { css: true },
