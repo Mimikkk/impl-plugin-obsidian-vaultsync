@@ -1,28 +1,10 @@
+import { type ChangeCommand, ChangeType } from "@plugin/application/commands/ChangeCommand.ts";
 import { LocalFileSystemClient } from "@plugin/infrastructure/clients/LocalFileSystemClient.ts";
 import { RemoteFileSystemClient } from "@plugin/infrastructure/clients/RemoteFileSystemClient.ts";
 
 export namespace ChangeService {
   const locals = LocalFileSystemClient;
   const remotes = RemoteFileSystemClient;
-
-  export enum ChangeType {
-    UpdateLocal = "update-local",
-    UpdateRemote = "update-remote",
-    RemoveLocal = "remove-local",
-    RemoveRemote = "remove-remote",
-  }
-
-  export interface ChangeCommand {
-    type: ChangeType;
-    path: string;
-  }
-
-  export namespace ChangeCommands {
-    export const updateLocal = (path: string): ChangeCommand => ({ type: ChangeType.UpdateLocal, path });
-    export const updateRemote = (path: string): ChangeCommand => ({ type: ChangeType.UpdateRemote, path });
-    export const removeLocal = (path: string): ChangeCommand => ({ type: ChangeType.RemoveLocal, path });
-    export const removeRemote = (path: string): ChangeCommand => ({ type: ChangeType.RemoveRemote, path });
-  }
 
   export async function updates(commands: ChangeCommand[]) {
     return await Promise.all(commands.map(update));

@@ -15,4 +15,6 @@ export namespace DateTimeNs {
   export const isBefore = (a: DateInit, b: DateInit) => compare(a, b) < 0;
   export const isBeforeOrEqual = (a: DateInit, b: DateInit) => compare(a, b) <= 0;
   export const isSame = (a: DateInit, b: DateInit) => compare(a, b) === 0;
+
+  export const within = (a: DateInit, b: DateInit, ms: number) => Math.abs(compare(a, b)) <= ms;
 }
