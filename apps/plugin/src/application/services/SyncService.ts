@@ -1,120 +1,98 @@
 import { DateTimeNs } from "@nimir/shared";
-import { SyncEntryClient } from "@plugin/infrastructure/clients/SyncEntryClient.ts";
+import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import { SyncEventClient } from "@plugin/infrastructure/clients/SyncEventClient.ts";
-import { SyncFileSystemClient } from "@plugin/infrastructure/clients/SyncFileSystemClient.ts";
-import { ClientState } from "@plugin/presentation/state/ClientState.ts";
-import { VaultClient } from "../../infrastructure/clients/VaultClient.ts";
+import { LocalFileSystemClient } from "../../infrastructure/clients/LocalFileSystemClient.ts";
+import { RemoteFileSystemClient } from "../../infrastructure/clients/RemoteFileSystemClient.ts";
+import { ChangeService } from "./ChangeService.ts";
+import { FileService } from "./FileService.ts";
 
 export namespace SyncService {
   const events = SyncEventClient;
-  const remote = SyncEntryClient;
-  const files = SyncFileSystemClient;
-  const local = VaultClient;
+  const remotes = RemoteFileSystemClient;
+  const locals = LocalFileSystemClient;
+  const files = FileService;
+  const changer = ChangeService;
 
-  export const sync = async () => {
+  export async function sync() {
     console.log("Synchronizing...");
 
     await events.scan();
-    const remoteDescriptors = await remote.descriptors();
-    const localDescriptors = local.descriptors();
 
-    for (const localDescriptor of localDescriptors) {
-      const remoteDescriptor = remoteDescriptors.find((r) => r.path === localDescriptor.path);
+    const { both, localOnly, remoteOnly } = await files.byLocation();
+    const commands = await Promise.all([syncConflicts(both), syncLocalOnly(localOnly), syncRemoteOnly(remoteOnly)]);
 
-      if (remoteDescriptor) {
-        const isUpToDate = await hasHashEqual(localDescriptor.path);
-        if (!isUpToDate) {
-          if (DateTimeNs.isBefore(localDescriptor.updatedAt, remoteDescriptor.updatedAt)) {
-            await updateLocal(localDescriptor.path);
-          } else {
-            await updateRemote(localDescriptor.path);
-          }
-        }
-      } else {
-        const file = await remote.info(localDescriptor.path);
-
-        if (file) {
-          const wasDeleted = file.deleted;
-
-          if (wasDeleted) {
-            const deletedAt = file.modified;
-            if (DateTimeNs.isAfterOrEqual(localDescriptor.updatedAt, deletedAt)) {
-              await updateRemote(localDescriptor.path);
-            } else {
-              await removeLocal(localDescriptor.path);
-            }
-          }
-        } else {
-          await updateRemote(localDescriptor.path);
-        }
-      }
-    }
-
-    for (const remoteDescriptor of remoteDescriptors) {
-      const localDescriptor = localDescriptors.find((l) => l.path === remoteDescriptor.path);
-
-      if (!localDescriptor) {
-        const wasDeleted = ClientState.deleted.has(remoteDescriptor.path);
-
-        if (wasDeleted) {
-          const deletedAt = ClientState.deleted.get(remoteDescriptor.path)!;
-          if (DateTimeNs.isAfterOrEqual(remoteDescriptor.updatedAt, deletedAt)) {
-            await updateLocal(remoteDescriptor.path);
-          } else {
-            await removeRemote(remoteDescriptor.path);
-          }
-        } else {
-          await updateLocal(remoteDescriptor.path);
-        }
-      }
-    }
+    await changer.updates(commands.flat());
 
     console.log("Synchronized.");
     return "OK";
-  };
+  }
 
-  const hasHashEqual = async (path: string) => {
-    const localBuffer = await local.read(path);
-    const remoteBuffer = await files.read(path);
+  async function syncLocalOnly(descriptors: FileDescriptor[]): Promise<ChangeService.ChangeCommand[]> {
+    const commands: ChangeService.ChangeCommand[] = [];
 
-    const isEqual = await isHashEqual(localBuffer!, remoteBuffer!);
-    return isEqual;
-  };
+    for (const descriptor of descriptors) {
+      const file = await remotes.info(descriptor.path);
 
-  const isHashEqual = async (a: ArrayBuffer, b: ArrayBuffer): Promise<boolean> => {
-    const [hash1, hash2] = await Promise.all([hash(a), hash(b)]);
-    return areBuffersEqual(hash1, hash2);
-  };
+      if (file) {
+        const wasDeleted = file.deleted;
 
-  const hash = async (buffer: ArrayBuffer): Promise<ArrayBuffer> => await crypto.subtle.digest("SHA-256", buffer);
+        if (!wasDeleted) continue;
+        const deletedAt = file.modified;
+        const isLocalNewer = DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt);
 
-  const areBuffersEqual = (a: ArrayBuffer, b: ArrayBuffer): boolean => areViewsEqual(new DataView(a), new DataView(b));
-  const areViewsEqual = (a: DataView, b: DataView): boolean => {
-    if (a.byteLength !== b.byteLength) return false;
-
-    for (let i = 0; i < a.byteLength; i++) {
-      if (a.getUint8(i) !== b.getUint8(i)) return false;
+        if (isLocalNewer) {
+          commands.push(ChangeService.ChangeCommands.updateRemote(descriptor.path));
+        } else {
+          commands.push(ChangeService.ChangeCommands.removeLocal(descriptor.path));
+        }
+      } else {
+        commands.push(ChangeService.ChangeCommands.updateRemote(descriptor.path));
+      }
     }
 
-    return true;
-  };
+    return commands;
+  }
 
-  const updateRemote = async (path: string) => {
-    const content = await local.read(path);
+  function syncRemoteOnly(descriptors: FileDescriptor[]): ChangeService.ChangeCommand[] {
+    const commands: ChangeService.ChangeCommand[] = [];
 
-    if (!content) {
-      console.warn("Failed to update the remote file", path);
-      return;
+    for (const descriptor of descriptors) {
+      const info = locals.info(descriptor.path);
+
+      if (info) {
+        const deletedAt = info.deletedAt;
+        const isRemoteNewer = DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt);
+
+        if (isRemoteNewer) {
+          commands.push(ChangeService.ChangeCommands.updateLocal(descriptor.path));
+        } else {
+          commands.push(ChangeService.ChangeCommands.removeRemote(descriptor.path));
+        }
+      } else {
+        commands.push(ChangeService.ChangeCommands.updateLocal(descriptor.path));
+      }
     }
 
-    return files.write(path, content);
-  };
+    return commands;
+  }
 
-  const removeLocal = (path: string) => local.remove(path);
-  const removeRemote = (path: string) => files.remove(path);
+  async function syncConflicts(
+    conflicts: { local: FileDescriptor; remote: FileDescriptor }[],
+  ): Promise<ChangeService.ChangeCommand[]> {
+    const commands: ChangeService.ChangeCommand[] = [];
 
-  const updateLocal = async (path: string) => {
-    const content = await files.read(path);
-    return local.update(path, content);
-  };
+    for (const { local, remote } of conflicts) {
+      const isUpToDate = await files.areFilesEqual(local, remote);
+      if (isUpToDate) continue;
+
+      const isRemoteNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
+      if (isRemoteNewer) {
+        commands.push(ChangeService.ChangeCommands.updateLocal(local.path));
+      } else {
+        commands.push(ChangeService.ChangeCommands.updateRemote(local.path));
+      }
+    }
+
+    return commands;
+  }
 }

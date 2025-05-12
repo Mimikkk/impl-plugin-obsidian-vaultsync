@@ -1,7 +1,8 @@
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
+import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
-export namespace VaultClient {
+export namespace LocalFileSystemClient {
   const fs = globalThis.app.vault;
 
   export const isEntry = (path: string): boolean => getEntry(path) !== null;
@@ -63,7 +64,15 @@ export namespace VaultClient {
     }
   };
 
-  export const descriptors = (): FileDescriptor[] => {
+  const state = ClientState.deleted;
+  export const info = (path: string): { deletedAt: number } | null => {
+    const deletedAt = state.get(path);
+    if (!deletedAt) return null;
+
+    return { deletedAt };
+  };
+
+  export const list = (): FileDescriptor[] => {
     const files = fs.getFiles();
 
     return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime }));
