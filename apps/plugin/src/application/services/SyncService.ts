@@ -1,132 +1,120 @@
 import { DateTimeNs } from "@nimir/shared";
-import { HashService } from "@plugin/application/services/HashService.ts";
-import { LocalFileSystemService } from "@plugin/application/services/LocalFileSystemService.ts";
-import { RemoteFileSystemService } from "@plugin/application/services/RemoteFileSystemService.ts";
-import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
+import { SyncEntryClient } from "@plugin/infrastructure/clients/SyncEntryClient.ts";
 import { SyncEventClient } from "@plugin/infrastructure/clients/SyncEventClient.ts";
+import { SyncFileSystemClient } from "@plugin/infrastructure/clients/SyncFileSystemClient.ts";
 import { ClientState } from "@plugin/presentation/state/ClientState.ts";
+import { VaultClient } from "../../infrastructure/clients/VaultClient.ts";
 
 export namespace SyncService {
   const events = SyncEventClient;
-  const remote = RemoteFileSystemService;
-  const local = LocalFileSystemService;
-  const hash = HashService;
+  const remote = SyncEntryClient;
+  const files = SyncFileSystemClient;
+  const local = VaultClient;
 
   export const sync = async () => {
     console.log("Synchronizing...");
 
     await events.scan();
+    const remoteDescriptors = await remote.descriptors();
+    const localDescriptors = local.descriptors();
 
-    const { localOnly, remoteOnly, both } = groupByLocation(local.list(), await remote.list());
+    for (const localDescriptor of localDescriptors) {
+      const remoteDescriptor = remoteDescriptors.find((r) => r.path === localDescriptor.path);
 
-    await syncLocalOnly(localOnly);
-    await syncRemoteOnly(remoteOnly);
-    await syncConflicts(both);
+      if (remoteDescriptor) {
+        const isUpToDate = await hasHashEqual(localDescriptor.path);
+        if (!isUpToDate) {
+          if (DateTimeNs.isBefore(localDescriptor.updatedAt, remoteDescriptor.updatedAt)) {
+            await updateLocal(localDescriptor.path);
+          } else {
+            await updateRemote(localDescriptor.path);
+          }
+        }
+      } else {
+        const file = await remote.info(localDescriptor.path);
 
-    ClientState.deleted.clear();
-    ClientState.lastSync.now();
+        if (file) {
+          const wasDeleted = file.deleted;
+
+          if (wasDeleted) {
+            const deletedAt = file.modified;
+            if (DateTimeNs.isAfterOrEqual(localDescriptor.updatedAt, deletedAt)) {
+              await updateRemote(localDescriptor.path);
+            } else {
+              await removeLocal(localDescriptor.path);
+            }
+          }
+        } else {
+          await updateRemote(localDescriptor.path);
+        }
+      }
+    }
+
+    for (const remoteDescriptor of remoteDescriptors) {
+      const localDescriptor = localDescriptors.find((l) => l.path === remoteDescriptor.path);
+
+      if (!localDescriptor) {
+        const wasDeleted = ClientState.deleted.has(remoteDescriptor.path);
+
+        if (wasDeleted) {
+          const deletedAt = ClientState.deleted.get(remoteDescriptor.path)!;
+          if (DateTimeNs.isAfterOrEqual(remoteDescriptor.updatedAt, deletedAt)) {
+            await updateLocal(remoteDescriptor.path);
+          } else {
+            await removeRemote(remoteDescriptor.path);
+          }
+        } else {
+          await updateLocal(remoteDescriptor.path);
+        }
+      }
+    }
 
     console.log("Synchronized.");
     return "OK";
   };
 
-  const compareFiles = async (path: string) => {
-    const [localBuffer, remoteBuffer] = await Promise.all([local.read(path), remote.read(path)]);
+  const hasHashEqual = async (path: string) => {
+    const localBuffer = await local.read(path);
+    const remoteBuffer = await files.read(path);
 
-    return hash.areEqual(localBuffer!, remoteBuffer!);
+    const isEqual = await isHashEqual(localBuffer!, remoteBuffer!);
+    return isEqual;
   };
 
-  const groupByLocation = (locals: FileDescriptor[], remotes: FileDescriptor[]): {
-    localOnly: FileDescriptor[];
-    remoteOnly: FileDescriptor[];
-    both: { local: FileDescriptor; remote: FileDescriptor }[];
-  } => {
-    const localOnly = [];
-    const remoteOnly = [];
-    const both = [];
-
-    for (const descriptor of locals) {
-      const remote = remotes.find((r) => r.path === descriptor.path);
-
-      if (remote) {
-        both.push({ local: descriptor, remote });
-      } else {
-        localOnly.push(descriptor);
-      }
-    }
-
-    for (const descriptor of remotes) {
-      const local = locals.find((l) => l.path === descriptor.path);
-
-      if (!local) {
-        remoteOnly.push(descriptor);
-      }
-    }
-
-    return { localOnly, remoteOnly, both };
+  const isHashEqual = async (a: ArrayBuffer, b: ArrayBuffer): Promise<boolean> => {
+    const [hash1, hash2] = await Promise.all([hash(a), hash(b)]);
+    return areBuffersEqual(hash1, hash2);
   };
 
-  const syncLocalOnly = async (descriptors: FileDescriptor[]) => {
-    for (const descriptor of descriptors) {
-      const info = await remote.info(descriptor.path);
+  const hash = async (buffer: ArrayBuffer): Promise<ArrayBuffer> => await crypto.subtle.digest("SHA-256", buffer);
 
-      const existed = info !== null;
-      if (existed) {
-        const wasDeleted = info.deleted;
+  const areBuffersEqual = (a: ArrayBuffer, b: ArrayBuffer): boolean => areViewsEqual(new DataView(a), new DataView(b));
+  const areViewsEqual = (a: DataView, b: DataView): boolean => {
+    if (a.byteLength !== b.byteLength) return false;
 
-        if (wasDeleted) {
-          const deletedAt = info.modified;
-          if (DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt)) {
-            const content = await local.read(descriptor.path);
-
-            await remote.update(descriptor.path, content!);
-          } else {
-            await local.remove(descriptor.path);
-          }
-        }
-      } else {
-        const content = await local.read(descriptor.path);
-
-        await remote.update(descriptor.path, content!);
-      }
+    for (let i = 0; i < a.byteLength; i++) {
+      if (a.getUint8(i) !== b.getUint8(i)) return false;
     }
+
+    return true;
   };
 
-  const syncRemoteOnly = async (descriptors: FileDescriptor[]) => {
-    for (const descriptor of descriptors) {
-      const wasDeleted = ClientState.deleted.has(descriptor.path);
+  const updateRemote = async (path: string) => {
+    const content = await local.read(path);
 
-      if (wasDeleted) {
-        const deletedAt = ClientState.deleted.get(descriptor.path)!;
-
-        if (DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt)) {
-          const content = await local.read(descriptor.path);
-
-          await remote.update(descriptor.path, content!);
-        } else {
-          await remote.remove(descriptor.path);
-        }
-      } else {
-        const content = await remote.read(descriptor.path);
-
-        await local.update(descriptor.path, content!);
-      }
+    if (!content) {
+      console.warn("Failed to update the remote file", path);
+      return;
     }
+
+    return files.write(path, content);
   };
 
-  const syncConflicts = async (conflicts: { local: FileDescriptor; remote: FileDescriptor }[]) => {
-    for (const { local: l, remote: r } of conflicts) {
-      const isUpToDate = await compareFiles(l.path);
+  const removeLocal = (path: string) => local.remove(path);
+  const removeRemote = (path: string) => files.remove(path);
 
-      if (isUpToDate) continue;
-
-      if (DateTimeNs.isBefore(l.updatedAt, r.updatedAt)) {
-        const content = await local.read(l.path);
-        await remote.update(l.path, content!);
-      } else {
-        const content = await local.read(l.path);
-        await remote.update(l.path, content!);
-      }
-    }
+  const updateLocal = async (path: string) => {
+    const content = await files.read(path);
+    return local.update(path, content);
   };
 }

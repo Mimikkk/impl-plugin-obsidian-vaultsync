@@ -1,7 +1,7 @@
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
-export namespace LocalFileSystemClient {
+export namespace VaultClient {
   const fs = globalThis.app.vault;
 
   export const isEntry = (path: string): boolean => getEntry(path) !== null;
