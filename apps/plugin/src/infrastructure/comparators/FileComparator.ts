@@ -10,10 +10,21 @@ export namespace FileComparator {
   const hashes = BufferHashComparator;
 
   export async function compare(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
-    return areTimestampsNear(local, remote) || await areHashesEqual(local, remote);
+    if (areTimestampsSimilar(local, remote)) return true;
+
+    console.log(
+      "Here",
+      local.path,
+      local.updatedAt,
+      remote.updatedAt,
+      local.updatedAt - remote.updatedAt,
+      areTimestampsSimilar(local, remote),
+    );
+
+    return await areHashesEqual(local, remote);
   }
 
-  function areTimestampsNear(local: FileDescriptor, remote: FileDescriptor): boolean {
+  function areTimestampsSimilar(local: FileDescriptor, remote: FileDescriptor): boolean {
     return DateTimeNs.within(local.updatedAt, remote.updatedAt, 1000);
   }
 

@@ -21,52 +21,54 @@ export namespace FileChangeDetector {
       detectRemoteOnly(remoteOnly),
     ]);
 
+    console.log(commands);
+
     return commands.flat();
   }
 
-  async function detectLocalOnly(descriptors: FileDescriptor[]): Promise<ChangeCommand[]> {
+  async function detectLocalOnly(locals: FileDescriptor[]): Promise<ChangeCommand[]> {
     const commands: ChangeCommand[] = [];
 
-    for (const descriptor of descriptors) {
-      const file = await remotes.info(descriptor.path);
+    for (const local of locals) {
+      const file = await remotes.info(local.path);
 
       if (file) {
         const wasDeleted = file.deleted;
 
         if (!wasDeleted) continue;
         const deletedAt = file.modified;
-        const isLocalNewer = DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt);
+        const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, deletedAt);
 
         if (isLocalNewer) {
-          commands.push(ChangeCommands.updateRemote(descriptor.path));
+          commands.push(ChangeCommands.updateRemote(local.path));
         } else {
-          commands.push(ChangeCommands.removeLocal(descriptor.path));
+          commands.push(ChangeCommands.removeLocal(local.path));
         }
       } else {
-        commands.push(ChangeCommands.updateRemote(descriptor.path));
+        commands.push(ChangeCommands.updateRemote(local.path));
       }
     }
 
     return commands;
   }
 
-  function detectRemoteOnly(descriptors: FileDescriptor[]): ChangeCommand[] {
+  function detectRemoteOnly(remotes: FileDescriptor[]): ChangeCommand[] {
     const commands: ChangeCommand[] = [];
 
-    for (const descriptor of descriptors) {
-      const info = locals.info(descriptor.path);
+    for (const remote of remotes) {
+      const info = locals.info(remote.path);
 
       if (info) {
         const deletedAt = info.deletedAt;
-        const isRemoteNewer = DateTimeNs.isAfterOrEqual(descriptor.updatedAt, deletedAt);
+        const isRemoteNewer = DateTimeNs.isAfterOrEqual(remote.updatedAt, deletedAt);
 
         if (isRemoteNewer) {
-          commands.push(ChangeCommands.updateLocal(descriptor.path));
+          commands.push(ChangeCommands.updateLocal(remote.path));
         } else {
-          commands.push(ChangeCommands.removeRemote(descriptor.path));
+          commands.push(ChangeCommands.removeRemote(remote.path));
         }
       } else {
-        commands.push(ChangeCommands.updateLocal(descriptor.path));
+        commands.push(ChangeCommands.updateLocal(remote.path));
       }
     }
 
@@ -80,13 +82,14 @@ export namespace FileChangeDetector {
 
     for (const { local, remote } of conflicts) {
       const isUpToDate = await comparator.compare(local, remote);
+
       if (isUpToDate) continue;
 
-      const isRemoteNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
-      if (isRemoteNewer) {
-        commands.push(ChangeCommands.updateLocal(local.path));
-      } else {
+      const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
+      if (isLocalNewer) {
         commands.push(ChangeCommands.updateRemote(local.path));
+      } else {
+        commands.push(ChangeCommands.updateLocal(local.path));
       }
     }
 

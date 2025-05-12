@@ -20,4 +20,9 @@ export class LastSyncTs {
     this.ts = null;
     return this;
   }
+
+  now(): this {
+    this.ts = Date.now();
+    return this;
+  }
 }

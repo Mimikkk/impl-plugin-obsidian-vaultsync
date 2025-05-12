@@ -1,4 +1,5 @@
 import { EventService } from "@plugin/application/services/EventService.ts";
+import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 import { FileChangeDetector } from "../../infrastructure/detectors/FileChangeDetector.ts";
 import { ChangeService } from "./ChangeService.ts";
 
@@ -12,9 +13,13 @@ export namespace SyncService {
 
     await events.scan();
 
-    const commands = await detector.detect();
+    const detected = await detector.detect();
 
-    await changes.updates(commands);
+    await changes.updates(detected);
+
+    ClientState.deleted.clear();
+    ClientState.lastSync.now();
+    ClientState.save();
 
     console.log("Synchronized.");
     return "OK";
