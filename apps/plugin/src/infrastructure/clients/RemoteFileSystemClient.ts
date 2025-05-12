@@ -16,6 +16,6 @@ export namespace RemoteFileSystemClient {
   };
   export const remove = (path: string, recursive = false) => ky.post(url, { json: { path, recursive } });
 
-  export const list = SyncEntryClient.descriptors;
+  export const descriptors = SyncEntryClient.descriptors;
   export const info = SyncEntryClient.info;
 }

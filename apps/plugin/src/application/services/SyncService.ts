@@ -4,7 +4,7 @@ import { LocalFileSystemService } from "@plugin/application/services/LocalFileSy
 import { RemoteFileSystemService } from "@plugin/application/services/RemoteFileSystemService.ts";
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import { SyncEventClient } from "@plugin/infrastructure/clients/SyncEventClient.ts";
-import { ClientState } from "@plugin/application/state/ClientState.ts";
+import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 
 export namespace SyncService {
   const events = SyncEventClient;
