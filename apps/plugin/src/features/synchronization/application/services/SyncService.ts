@@ -1,6 +1,6 @@
 import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
-import { SyncHealthClient } from "../../../../core/infrastructure/clients/external/SyncHealthClient.ts";
+import { HealthClient } from "../../../../core/infrastructure/clients/external/HealthClient.ts";
 import { EventService } from "../../../events/application/services/EventService.ts";
 import { ChangeService } from "./ChangeService.ts";
 
@@ -8,7 +8,7 @@ export class SyncService {
   static create(
     events: EventService = EventService.create(),
     changes: ChangeService = ChangeService.create(),
-    health: SyncHealthClient = SyncHealthClient.create(),
+    health: HealthClient = HealthClient.create(),
     detector: FileChangeDetector = FileChangeDetector.create(),
   ) {
     return new SyncService(events, changes, health, detector);
@@ -17,7 +17,7 @@ export class SyncService {
   private constructor(
     private readonly events: EventService,
     private readonly changes: ChangeService,
-    private readonly healths: SyncHealthClient,
+    private readonly healths: HealthClient,
     private readonly detector: FileChangeDetector,
   ) {}
 
