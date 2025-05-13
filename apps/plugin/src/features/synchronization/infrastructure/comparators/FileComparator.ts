@@ -6,25 +6,52 @@ import { StateProvider } from "../../../state/infrastructure/StateProvider.ts";
 import { FileHashSource } from "../sources/FileHashSource.ts";
 import { FileHashStore } from "../stores/FileHashStore.ts";
 
+export class FileHashStoreWithState {
+  static as(type: "remote" | "local") {
+    const provider = StateProvider.instance;
+    const state = provider.get();
+
+    if (type === "remote") {
+      const filesystem = RemoteFileSystemClient.create();
+
+      const store = FileHashStore.create(
+        FileHashSource.create(({ path }) => filesystem.read(path)),
+        state.remoteHashes.get(),
+      );
+
+      store.subscribe(({ key, value }) => {
+        state.remoteHashes.add(key, value);
+      });
+
+      return store;
+    } else {
+      const filesystem = LocalFileSystemClient.create();
+
+      const store = FileHashStore.create(
+        FileHashSource.create(({ path }) => filesystem.read(path)),
+        state.localHashes.get(),
+      );
+
+      store.subscribe(({ key, value }) => {
+        state.localHashes.add(key, value);
+      });
+
+      return store;
+    }
+  }
+}
+
 export class FileComparator {
   static create(
-    locals: LocalFileSystemClient = LocalFileSystemClient.create(),
-    remotes: RemoteFileSystemClient = RemoteFileSystemClient.create(),
-    localHashStore: FileHashStore = FileHashStore.create(
-      FileHashSource.create(({ path }) => locals.read(path)),
-      StateProvider.instance.get().localHashes.get(),
-    ),
-    remoteHashStore: FileHashStore = FileHashStore.create(
-      FileHashSource.create(({ path }) => remotes.read(path)),
-      StateProvider.instance.get().remoteHashes.get(),
-    ),
+    locals: FileHashStore = FileHashStoreWithState.as("local"),
+    remotes: FileHashStore = FileHashStoreWithState.as("remote"),
   ) {
-    return new FileComparator(localHashStore, remoteHashStore);
+    return new FileComparator(locals, remotes);
   }
 
   private constructor(
-    private readonly localHashStore: FileHashStore,
-    private readonly remoteHashStore: FileHashStore,
+    private readonly locals: FileHashStore,
+    private readonly remotes: FileHashStore,
   ) {}
 
   async compare(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
@@ -38,8 +65,8 @@ export class FileComparator {
 
   async areHashesEqual(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
     const [localHash, remoteHash] = await Promise.all([
-      this.localHashStore.get(local),
-      this.remoteHashStore.get(remote),
+      this.locals.get(local),
+      this.remotes.get(remote),
     ]);
 
     return localHash === remoteHash;

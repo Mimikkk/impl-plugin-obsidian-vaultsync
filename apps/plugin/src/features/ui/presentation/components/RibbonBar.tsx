@@ -1,9 +1,9 @@
 import { withQueryClient } from "@plugin/core/infrastructure/queries/withQueryClient.tsx";
 import { Status } from "@plugin/core/infrastructure/types/Status.ts";
-import { EventService } from "@plugin/features/synchronization/application/services/EventService.ts";
-import { useHealthCheck } from "@plugin/features/synchronization/presentation/queries/useHealthCheck.ts";
-import { useLatestEventId } from "@plugin/features/synchronization/presentation/queries/useLatestEventId.ts";
-import { usePoolEvents } from "@plugin/features/synchronization/presentation/queries/usePoolEvents.ts";
+import { EventService } from "../../../events/application/services/EventService.ts";
+import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";
+import { useLatestEventId } from "../../../events/application/presentation/queries/useLatestEventId.ts";
+import { usePoolEvents } from "../../../events/application/presentation/queries/usePoolEvents.ts";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 

@@ -1,4 +1,4 @@
-import { FileEventClient } from "../../../../core/infrastructure/clients/external/FileEventClient.ts";
+import { FileEventClient } from "@plugin/core/infrastructure/clients/external/FileEventClient.ts";
 
 export class EventService {
   static create(client: FileEventClient = FileEventClient.create()) {

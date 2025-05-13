@@ -1,7 +1,7 @@
 import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
-import { EventService } from "@plugin/features/synchronization/application/services/EventService.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
 import { SyncHealthClient } from "../../../../core/infrastructure/clients/external/SyncHealthClient.ts";
+import { EventService } from "../../../events/application/services/EventService.ts";
 import { ChangeService } from "./ChangeService.ts";
 
 export class SyncService {
@@ -37,7 +37,6 @@ export class SyncService {
     StateProvider.instance.update((state) => {
       state.deleted.clear();
       state.lastSync.set(Date.now());
-      state.localHashes.clear();
     });
 
     console.log("Synchronized.");

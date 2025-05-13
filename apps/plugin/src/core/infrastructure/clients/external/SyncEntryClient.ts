@@ -24,7 +24,7 @@ export class SyncEntryClient {
       const path = root ? `${root}/${file.name}` : file.name;
 
       if (SyncEntryClient.EntryTypeNs.isFile(file)) {
-        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime) });
+        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime), type: "remote" });
         continue;
       }
 

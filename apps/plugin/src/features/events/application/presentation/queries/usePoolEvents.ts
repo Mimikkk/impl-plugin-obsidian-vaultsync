@@ -1,4 +1,4 @@
-import { EventService } from "@plugin/features/synchronization/application/services/EventService.ts";
+import { EventService } from "../../services/EventService.ts";
 import { createUseQuery } from "@plugin/core/infrastructure/queries/createUseQuery.ts";
 import { TimeMs } from "@nimir/shared";
 
