@@ -1,14 +1,15 @@
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
+import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 import type { FileHashSource } from "../sources/FileHashSource.ts";
 
 export class FileHashStore {
-  static create(source: FileHashSource) {
-    return new FileHashStore(source);
+  static create(source: FileHashSource, store: Map<string, string> = new Map()) {
+    return new FileHashStore(source, store);
   }
 
   private constructor(
     private readonly source: FileHashSource,
-    private readonly store = new Map<string, string>(),
+    private readonly store: Map<string, string>,
   ) {}
 
   has(descriptor: FileDescriptor): boolean {
@@ -23,6 +24,7 @@ export class FileHashStore {
     value = await this.source.download(descriptor);
 
     this.store.set(key, value);
+    ClientState.save();
 
     return value;
   }

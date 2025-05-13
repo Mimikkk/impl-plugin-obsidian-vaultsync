@@ -4,13 +4,20 @@ import { LocalFileSystemClient } from "@plugin/infrastructure/clients/LocalFileS
 import { RemoteFileSystemClient } from "@plugin/infrastructure/clients/RemoteFileSystemClient.ts";
 import { FileHashSource } from "../sources/FileHashSource.ts";
 import { FileHashStore } from "../stores/FileHashStore.ts";
+import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 
 export namespace FileComparator {
   const locals = LocalFileSystemClient;
   const remotes = RemoteFileSystemClient;
 
-  const remoteHashStore = FileHashStore.create(FileHashSource.create(({ path }) => remotes.read(path)));
-  const localHashStore = FileHashStore.create(FileHashSource.create(({ path }) => locals.read(path)));
+  const remoteHashStore = FileHashStore.create(
+    FileHashSource.create(({ path }) => remotes.read(path)),
+    ClientState.remoteHashes,
+  );
+  const localHashStore = FileHashStore.create(
+    FileHashSource.create(({ path }) => locals.read(path)),
+    ClientState.localHashes,
+  );
 
   export async function compare(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
     if (areTimestampsSimilar(local, remote)) return true;
