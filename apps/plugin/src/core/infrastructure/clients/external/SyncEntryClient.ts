@@ -4,9 +4,49 @@ import { ExternalClientUrl } from "@plugin/core/infrastructure/clients/external/
 import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
 import ky from "ky";
 
-export namespace SyncEntryClient {
-  const url = ExternalClientUrl.sync + "/sync";
+export class SyncEntryClient {
+  static create(url: string = ExternalClientUrl.sync + "/sync") {
+    return new SyncEntryClient(url);
+  }
 
+  private constructor(private readonly url: string) {}
+
+  browse(params: { folder: string; prefix?: string; levels?: number }) {
+    return ky.get(this.url + "/db/browse", { searchParams: serializeSearchParams(params) }).json<
+      SyncEntryClient.EntryDescriptor[]
+    >();
+  }
+
+  private async traverse(descriptors: FileDescriptor[], folder: string, root: string) {
+    const files = await this.browse({ folder, prefix: root, levels: 0 });
+
+    for (const file of files) {
+      const path = root ? `${root}/${file.name}` : file.name;
+
+      if (SyncEntryClient.EntryTypeNs.isFile(file)) {
+        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime) });
+        continue;
+      }
+
+      await this.traverse(descriptors, folder, path);
+    }
+
+    return descriptors;
+  }
+  descriptors() {
+    return this.traverse([], "default", "");
+  }
+
+  info = async (path: string): Promise<SyncEntryClient.InfoResponse | null> => {
+    const result = await ky.get(this.url + "/db/file", { searchParams: { folder: "default", file: path } })
+      .json<{ global: SyncEntryClient.InfoResponse }>()
+      .catch(() => null);
+
+    return result?.global ?? null;
+  };
+}
+
+export namespace SyncEntryClient {
   export enum EntryType {
     File = "FILE_INFO_TYPE_FILE",
     Directory = "FILE_INFO_TYPE_DIRECTORY",
@@ -30,39 +70,8 @@ export namespace SyncEntryClient {
     type: EntryType;
   }
 
-  const browseUrl = url + "/db/browse";
-  const browse = (params: { folder: string; prefix?: string; levels?: number }) =>
-    ky.get(browseUrl, { searchParams: serializeSearchParams(params) }).json<EntryDescriptor[]>();
-
-  async function traverse(descriptors: FileDescriptor[], folder: string, root: string) {
-    const files = await browse({ folder, prefix: root, levels: 0 });
-
-    for (const file of files) {
-      const path = root ? `${root}/${file.name}` : file.name;
-
-      if (EntryTypeNs.isFile(file)) {
-        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime) });
-        continue;
-      }
-
-      await traverse(descriptors, folder, path);
-    }
-
-    return descriptors;
-  }
-  export const descriptors = () => traverse([], "default", "");
-
   export interface InfoResponse {
     deleted: boolean;
     modified: DateInit;
   }
-
-  const infoUrl = url + "/db/file";
-  export const info = async (path: string): Promise<InfoResponse | null> => {
-    const result = await ky.get(infoUrl, { searchParams: { folder: "default", file: path } })
-      .json<{ global: InfoResponse }>()
-      .catch(() => null);
-
-    return result?.global ?? null;
-  };
 }

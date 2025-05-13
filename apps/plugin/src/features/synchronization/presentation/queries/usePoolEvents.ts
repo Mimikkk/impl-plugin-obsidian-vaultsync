@@ -4,7 +4,7 @@ import { TimeMs } from "@nimir/shared";
 
 export const usePoolEvents = createUseQuery({
   queryKey: ["pool-events"],
-  queryFn: () => EventService.pool(),
+  queryFn: () => EventService.create().pool(),
   refetchInterval: TimeMs.seconds(5),
   refetchIntervalInBackground: true,
   refetchOnWindowFocus: false,

@@ -1,21 +1,42 @@
-import { SyncEntryClient } from "@plugin/core/infrastructure/clients/external/SyncEntryClient.ts";
 import { ExternalClientUrl } from "@plugin/core/infrastructure/clients/external/ExternalClientUrl.ts";
+import { SyncEntryClient } from "@plugin/core/infrastructure/clients/external/SyncEntryClient.ts";
 import ky from "ky";
 
-export namespace RemoteFileSystemClient {
-  const url = ExternalClientUrl.sync + "/filesystem";
+export class RemoteFileSystemClient {
+  static create(
+    url: string = ExternalClientUrl.sync + "/filesystem",
+    client: SyncEntryClient = SyncEntryClient.create(),
+  ) {
+    return new RemoteFileSystemClient(url, client);
+  }
 
-  export const read = (path: string) => ky.get(url, { searchParams: { path } }).arrayBuffer();
-  export const update = (path: string, file: ArrayBuffer) => {
-    const formData = new FormData();
-    formData.append("path", path);
-    formData.append("file", new Blob([file]));
+  private constructor(
+    private readonly url: string,
+    private readonly entries: SyncEntryClient,
+  ) {}
+
+  read(path: string) {
+    return ky.get(this.url, { searchParams: { path } }).arrayBuffer();
+  }
+
+  update(path: string, file: ArrayBuffer) {
+    const data = new FormData();
+    data.append("path", path);
+    data.append("file", new Blob([file]));
 
     /* @ts-expect-error - ky typing fails to infer data property in 1.8.1 */
-    return ky.post(url, { body: formData });
-  };
+    return ky.post(this.url, { body: data });
+  }
 
-  export const remove = (path: string, recursive = false) => ky.post(url, { json: { path, recursive } });
-  export const list = SyncEntryClient.descriptors;
-  export const info = SyncEntryClient.info;
+  remove(path: string, recursive = false) {
+    return ky.post(this.url, { json: { path, recursive } });
+  }
+
+  list() {
+    return this.entries.descriptors();
+  }
+
+  info(path: string) {
+    return this.entries.info(path);
+  }
 }

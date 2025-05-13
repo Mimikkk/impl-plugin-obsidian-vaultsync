@@ -2,11 +2,27 @@ import { ExternalClientUrl } from "@plugin/core/infrastructure/clients/external/
 import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
 import ky from "ky";
 
-export namespace SyncEventClient {
-  const url = ExternalClientUrl.sync + "/sync";
-  const scanUrl = url + "/db/scan";
-  export const scan = () => ky.post(scanUrl, { json: { folder: "default" } });
+export class FileEventClient {
+  static create(url: string = ExternalClientUrl.sync + "/sync") {
+    return new FileEventClient(url);
+  }
 
+  private constructor(private readonly url: string) {}
+
+  scan() {
+    return ky.post(this.url + "/db/scan", { json: { folder: "default" } });
+  }
+
+  events(params?: FileEventClient.PoolOptions) {
+    return ky
+      .get<(FileEventClient.IndexUpdateEvent | FileEventClient.Event)[]>(this.url + "/events", {
+        searchParams: serializeSearchParams(params),
+      })
+      .json();
+  }
+}
+
+export namespace FileEventClient {
   /** @see {@link https://docs.syncthing.net/dev/events.html#event-types | Syncthing event types} */
   export type EventType = "LocalIndexUpdated" | "LocalChangeDetected";
   export interface Event<E extends EventType = EventType, T = unknown> {
@@ -30,8 +46,4 @@ export namespace SyncEventClient {
     since?: number;
     limit?: number;
   }
-
-  const eventsUrl = url + "/events";
-  export const events = (params?: PoolOptions) =>
-    ky.get<(IndexUpdateEvent | Event)[]>(eventsUrl, { searchParams: serializeSearchParams(params) }).json();
 }

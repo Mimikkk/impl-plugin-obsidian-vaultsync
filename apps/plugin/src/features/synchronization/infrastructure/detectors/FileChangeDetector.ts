@@ -9,19 +9,30 @@ import {
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
 import { FileGrouper } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
 
-export namespace FileChangeDetector {
-  const remotes = RemoteFileSystemClient;
-  const locals = LocalFileSystemClient;
-  const comparator = FileComparator;
-  const grouper = FileGrouper;
+export class FileChangeDetector {
+  static create(
+    remotes: RemoteFileSystemClient = RemoteFileSystemClient.create(),
+    locals: LocalFileSystemClient = LocalFileSystemClient.create(),
+    comparator: FileComparator = FileComparator.create(),
+    grouper: FileGrouper = FileGrouper.create(),
+  ) {
+    return new FileChangeDetector(remotes, locals, comparator, grouper);
+  }
 
-  export async function detect(): Promise<ChangeCommand[]> {
-    const { both, localOnly, remoteOnly } = await grouper.byLocation();
+  private constructor(
+    private readonly remotes: RemoteFileSystemClient,
+    private readonly locals: LocalFileSystemClient,
+    private readonly comparator: FileComparator,
+    private readonly grouper: FileGrouper,
+  ) {}
+
+  async detect(): Promise<ChangeCommand[]> {
+    const { both, localOnly, remoteOnly } = await this.grouper.byLocation();
 
     const commands = await Promise.all([
-      detectConflicts(both),
-      detectLocalOnly(localOnly),
-      detectRemoteOnly(remoteOnly),
+      this.detectConflicts(both),
+      this.detectLocalOnly(localOnly),
+      this.detectRemoteOnly(remoteOnly),
     ]);
 
     console.log(commands);
@@ -29,11 +40,11 @@ export namespace FileChangeDetector {
     return commands.flat();
   }
 
-  async function detectLocalOnly(locals: FileDescriptor[]): Promise<ChangeCommand[]> {
+  async detectLocalOnly(locals: FileDescriptor[]): Promise<ChangeCommand[]> {
     const commands: ChangeCommand[] = [];
 
     for (const local of locals) {
-      const file = await remotes.info(local.path);
+      const file = await this.remotes.info(local.path);
 
       if (file) {
         const wasDeleted = file.deleted;
@@ -55,11 +66,11 @@ export namespace FileChangeDetector {
     return commands;
   }
 
-  function detectRemoteOnly(remotes: FileDescriptor[]): ChangeCommand[] {
+  async detectRemoteOnly(remotes: FileDescriptor[]): Promise<ChangeCommand[]> {
     const commands: ChangeCommand[] = [];
 
     for (const remote of remotes) {
-      const info = locals.info(remote.path);
+      const info = this.locals.info(remote.path);
 
       if (info) {
         const deletedAt = info.deletedAt;
@@ -78,13 +89,13 @@ export namespace FileChangeDetector {
     return commands;
   }
 
-  async function detectConflicts(
+  async detectConflicts(
     conflicts: { local: FileDescriptor; remote: FileDescriptor }[],
   ): Promise<ChangeCommand[]> {
     const commands: ChangeCommand[] = [];
 
     for (const { local, remote } of conflicts) {
-      const isUpToDate = await comparator.compare(local, remote);
+      const isUpToDate = await this.comparator.compare(local, remote);
 
       if (isUpToDate) continue;
 

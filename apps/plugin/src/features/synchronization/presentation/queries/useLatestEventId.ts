@@ -4,9 +4,9 @@ import { EventService } from "@plugin/features/synchronization/application/servi
 export const useLatestEventId = createUseQuery({
   queryKey: ["latest-event-id"],
   queryFn: async () => {
-    await EventService.scan();
+    await EventService.create().scan();
 
-    const event = await EventService.latest();
+    const event = await EventService.create().latest();
 
     return event?.id ?? 0;
   },

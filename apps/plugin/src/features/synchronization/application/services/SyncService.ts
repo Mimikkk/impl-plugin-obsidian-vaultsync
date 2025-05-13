@@ -1,30 +1,44 @@
-import { SyncHealthClient } from "@plugin/core/infrastructure/clients/external/SyncHealthClient.ts";
+import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
 import { EventService } from "@plugin/features/synchronization/application/services/EventService.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
-import { ClientState } from "@plugin/features/ui/presentation/state/ClientState.ts";
+import { SyncHealthClient } from "../../../../core/infrastructure/clients/external/SyncHealthClient.ts";
 import { ChangeService } from "./ChangeService.ts";
 
-export namespace SyncService {
-  const events = EventService;
-  const changes = ChangeService;
-  const detector = FileChangeDetector;
-
-  export async function health() {
-    return await SyncHealthClient.check();
+export class SyncService {
+  static create(
+    events: EventService = EventService.create(),
+    changes: ChangeService = ChangeService.create(),
+    health: SyncHealthClient = SyncHealthClient.create(),
+    detector: FileChangeDetector = FileChangeDetector.create(),
+  ) {
+    return new SyncService(events, changes, health, detector);
   }
 
-  export async function sync() {
+  private constructor(
+    private readonly events: EventService,
+    private readonly changes: ChangeService,
+    private readonly healths: SyncHealthClient,
+    private readonly detector: FileChangeDetector,
+  ) {}
+
+  async health() {
+    return await this.healths.check();
+  }
+
+  async sync() {
     console.log("Synchronizing...");
 
-    await events.scan();
+    await this.events.scan();
 
-    const detected = await detector.detect();
+    const detected = await this.detector.detect();
 
-    await changes.updates(detected);
+    await this.changes.updates(detected);
 
-    ClientState.deleted.clear();
-    ClientState.lastSync.now();
-    ClientState.save();
+    StateProvider.instance.update((state) => {
+      state.deleted.clear();
+      state.lastSync.set(Date.now());
+      state.localHashes.clear();
+    });
 
     console.log("Synchronized.");
     return "OK";

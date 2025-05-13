@@ -1,23 +1,24 @@
+import type { Awaitable } from "@nimir/shared";
+import { composeMiddleware, type Middleware } from "@plugin/core/infrastructure/createMiddleware.ts";
 import { Plugin } from "obsidian";
 import { createRoot } from "solid-js";
-import type { Awaitable } from "@nimir/shared";
 
-export const definePlugin = (runtime: (plugin: Plugin) => Awaitable<void>) => {
+export const definePlugin = (middlewares: Middleware[]) => {
   const root = document.createElement("div");
   root.id = "vault-sync-plugin-root";
   let cleanup: () => Awaitable<void>;
 
   return class extends Plugin {
-    override async onload() {
-      await createRoot(async (dispose) => {
+    override onload() {
+      createRoot((dispose) => {
         document.body.appendChild(root);
 
         cleanup = () => {
-          document.body.removeChild(root);
           dispose();
+          document.body.removeChild(root);
         };
 
-        await runtime(this);
+        composeMiddleware(...middlewares)(this);
       });
     }
 

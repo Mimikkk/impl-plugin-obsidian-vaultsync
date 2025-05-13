@@ -1,17 +1,22 @@
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
 import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
-
-export namespace FileGrouper {
-  export interface LocationGroups {
-    both: { local: FileDescriptor; remote: FileDescriptor }[];
-    localOnly: FileDescriptor[];
-    remoteOnly: FileDescriptor[];
+import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
+export class FileGrouper {
+  static create(
+    locals: LocalFileSystemClient = LocalFileSystemClient.create(),
+    remotes: RemoteFileSystemClient = RemoteFileSystemClient.create(),
+  ) {
+    return new FileGrouper(locals, remotes);
   }
 
-  export async function byLocation(): Promise<LocationGroups> {
-    const locals = await LocalFileSystemClient.list();
-    const remotes = await RemoteFileSystemClient.list();
+  private constructor(
+    private readonly locals: LocalFileSystemClient,
+    private readonly remotes: RemoteFileSystemClient,
+  ) {}
+
+  async byLocation(): Promise<FileGrouper.LocationGroups> {
+    const locals = this.locals.list();
+    const remotes = await this.remotes.list();
 
     const both = [];
     const localOnly = [];
@@ -33,5 +38,13 @@ export namespace FileGrouper {
     }
 
     return { both, localOnly, remoteOnly };
+  }
+}
+
+export namespace FileGrouper {
+  export interface LocationGroups {
+    both: { local: FileDescriptor; remote: FileDescriptor }[];
+    localOnly: FileDescriptor[];
+    remoteOnly: FileDescriptor[];
   }
 }

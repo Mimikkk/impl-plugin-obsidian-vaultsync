@@ -14,7 +14,7 @@ const RibbonServiceStatus = () => {
   const { data: id, isLoading: isIdLoading } = useLatestEventId();
 
   usePoolEvents({
-    queryFn: () => EventService.pool({ since: id }),
+    queryFn: () => EventService.create().pool({ since: id }),
     enabled: () => !isIdLoading,
   });
 
