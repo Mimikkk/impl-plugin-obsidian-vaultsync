@@ -1,4 +1,5 @@
 import { EventService } from "@plugin/application/services/EventService.ts";
+import { SyncHealthClient } from "@plugin/infrastructure/clients/SyncHealthClient.ts";
 import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 import { FileChangeDetector } from "../../infrastructure/detectors/FileChangeDetector.ts";
 import { ChangeService } from "./ChangeService.ts";
@@ -7,6 +8,10 @@ export namespace SyncService {
   const events = EventService;
   const changes = ChangeService;
   const detector = FileChangeDetector;
+
+  export async function health() {
+    return await SyncHealthClient.check();
+  }
 
   export async function sync() {
     console.log("Synchronizing...");

@@ -10,6 +10,10 @@ import type {
 import { useMutation } from "@tanstack/solid-query";
 import type { Accessor } from "solid-js";
 
+export type CreateUseMutationOptions<T = unknown, E = DefaultError, V = void, C = unknown> =
+  | UseMutationOptions<T, E, V, C>
+  | SolidMutationOptions<T, E, V, C>;
+
 export type CreateUseMutationResult<T, E, V, C> = [
   mutate: UseMutateAsyncFunction<T, E, V, C>,
   mutation: UseMutationResult<T, E, V, C>,
@@ -21,7 +25,7 @@ export type CreateUseMutationResult<T, E, V, C> = [
 };
 
 export const createUseMutation = <T = unknown, E = DefaultError, V = void, C = unknown>(
-  options: UseMutationOptions<T, E, V, C> | SolidMutationOptions<T, E, V, C>,
+  options: CreateUseMutationOptions<T, E, V, C>,
 ) => {
   const getOptions = typeof options === "object" ? () => options : options;
 

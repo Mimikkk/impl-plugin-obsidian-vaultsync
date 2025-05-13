@@ -1,10 +1,10 @@
 import { useHealthStatus } from "@plugin/presentation/queries/useHealthStatus.ts";
 import { useLastEventId } from "@plugin/presentation/queries/useLastEventId.ts";
-import { useSyncEvents } from "@plugin/presentation/queries/useSyncEvents.ts";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { withQueryClient } from "../../infrastructure/queries/withQueryClient.tsx";
 import { Status } from "../../infrastructure/types/Status.ts";
+import { useSyncFiles } from "../queries/usePoolEvents.ts";
 
 export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
 
@@ -13,7 +13,7 @@ const RibbonServiceStatus = () => {
   const id = useLastEventId();
 
   // useSyncEvents({ enabled: () => id() === Status.Success });
-  useSyncEvents();
+  useSyncFiles();
 
   const color = createMemo(() => {
     switch (status()) {
