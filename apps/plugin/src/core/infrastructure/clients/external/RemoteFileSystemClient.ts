@@ -16,7 +16,7 @@ export class RemoteFileSystemClient {
   ) {}
 
   read(path: string) {
-    return ky.get(this.url + "/filesystem", { searchParams: { path } }).arrayBuffer();
+    return ky.get(this.url + "/filesystem", { searchParams: serializeSearchParams({ path }) }).arrayBuffer();
   }
 
   update(path: string, file: ArrayBuffer) {
@@ -42,7 +42,9 @@ export class RemoteFileSystemClient {
   }
 
   async info(path: string): Promise<RemoteFileSystemClient.InfoResponse | null> {
-    const result = await ky.get(this.url + "/sync/db/file", { searchParams: { folder: "default", file: path } })
+    const result = await ky.get(this.url + "/sync/db/file", {
+      searchParams: serializeSearchParams({ folder: "default", file: path }),
+    })
       .json<{ global: RemoteFileSystemClient.InfoResponse }>()
       .catch(() => null);
 
