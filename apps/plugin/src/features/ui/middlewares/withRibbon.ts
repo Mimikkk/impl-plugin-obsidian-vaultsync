@@ -1,9 +1,9 @@
 import { defer } from "@plugin/core/infrastructure/consts/conts.ts";
-import { createMiddleware } from "@plugin/core/infrastructure/createMiddleware.ts";
+import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { useSync } from "@plugin/features/synchronization/presentation/signals/useSync.ts";
+import { RibbonBar } from "@plugin/features/ui/presentation/components/RibbonBar.tsx";
 import { createEffect, on, onCleanup } from "solid-js";
 import { render } from "solid-js/web";
-import { RibbonBar } from "../components/RibbonBar.tsx";
 
 export const createRibbonAdapterEffect = (button: HTMLElement) => {
   const { isMutating } = useSync();

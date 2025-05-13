@@ -1,4 +1,4 @@
-import { createMiddleware } from "@plugin/core/infrastructure/createMiddleware.ts";
+import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { useSync } from "@plugin/features/synchronization/presentation/signals/useSync.ts";
 
 export const withCommands = createMiddleware((plugin) => {

@@ -1,5 +1,5 @@
 import type { Awaitable } from "@nimir/shared";
-import { composeMiddleware, type Middleware } from "@plugin/core/infrastructure/createMiddleware.ts";
+import { composeMiddleware, type Middleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { Plugin } from "obsidian";
 import { createRoot } from "solid-js";
 

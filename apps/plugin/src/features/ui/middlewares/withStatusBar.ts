@@ -1,4 +1,4 @@
-import { createMiddleware } from "@plugin/core/infrastructure/createMiddleware.ts";
+import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { StatusBar } from "@plugin/features/ui/presentation/components/StatusBar.tsx";
 import { render } from "solid-js/web";
 
