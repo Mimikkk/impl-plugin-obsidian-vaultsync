@@ -1,7 +1,7 @@
 import { SyncHealthClient } from "@plugin/core/infrastructure/clients/external/SyncHealthClient.ts";
-import { ClientState } from "@plugin/features/interface/presentation/state/ClientState.ts";
 import { EventService } from "@plugin/features/synchronization/application/services/EventService.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
+import { ClientState } from "@plugin/features/ui/presentation/state/ClientState.ts";
 import { ChangeService } from "./ChangeService.ts";
 
 export namespace SyncService {

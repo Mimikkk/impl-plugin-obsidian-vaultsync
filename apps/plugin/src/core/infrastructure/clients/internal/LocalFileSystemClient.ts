@@ -1,5 +1,5 @@
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { ClientState } from "@plugin/features/interface/presentation/state/ClientState.ts";
+import { ClientState } from "@plugin/features/ui/presentation/state/ClientState.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
 export namespace LocalFileSystemClient {

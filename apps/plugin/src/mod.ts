@@ -1,10 +1,10 @@
-import { definePlugin } from "@plugin/features/interface/infrastructure/definePlugin.ts";
-import { adaptCommands } from "@plugin/features/interface/presentation/adapters/adaptCommands.ts";
-import { adaptRibbon } from "@plugin/features/interface/presentation/adapters/adaptRibbon.ts";
-import { adaptStatusBar } from "@plugin/features/interface/presentation/adapters/adaptStatusBar.ts";
-import { createUnmountEffect } from "@plugin/features/interface/presentation/effects/createUnmountEffect.ts";
-import { ClientState } from "@plugin/features/interface/presentation/state/ClientState.ts";
 import { useSync } from "@plugin/features/synchronization/presentation/signals/useSync.ts";
+import { definePlugin } from "@plugin/features/ui/infrastructure/definePlugin.ts";
+import { adaptCommands } from "@plugin/features/ui/presentation/adapters/adaptCommands.ts";
+import { adaptRibbon } from "@plugin/features/ui/presentation/adapters/adaptRibbon.ts";
+import { adaptStatusBar } from "@plugin/features/ui/presentation/adapters/adaptStatusBar.ts";
+import { createUnmountEffect } from "@plugin/features/ui/presentation/effects/createUnmountEffect.ts";
+import { ClientState } from "@plugin/features/ui/presentation/state/ClientState.ts";
 import "./styles.css";
 
 export default definePlugin((plugin) => {

@@ -2,7 +2,7 @@ import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
 import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
 import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
-import { ClientState } from "@plugin/features/interface/presentation/state/ClientState.ts";
+import { ClientState } from "@plugin/features/ui/presentation/state/ClientState.ts";
 import { FileHashSource } from "../sources/FileHashSource.ts";
 import { FileHashStore } from "../stores/FileHashStore.ts";
 
