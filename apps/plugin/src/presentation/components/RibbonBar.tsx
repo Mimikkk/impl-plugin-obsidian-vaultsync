@@ -1,19 +1,22 @@
-import { useHealthStatus } from "@plugin/presentation/queries/useHealthStatus.ts";
-import { useLastEventId } from "@plugin/presentation/queries/useLastEventId.ts";
+import { EventService } from "@plugin/application/services/EventService.ts";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { withQueryClient } from "../../infrastructure/queries/withQueryClient.tsx";
 import { Status } from "../../infrastructure/types/Status.ts";
-import { useSyncFiles } from "../queries/usePoolEvents.ts";
+import { useHealthCheck } from "../queries/useHealthCheck.ts";
+import { useLatestEventId } from "../queries/useLatestEventId.ts";
+import { usePoolEvents } from "../queries/usePoolEvents.ts";
 
 export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
 
 const RibbonServiceStatus = () => {
-  const status = useHealthStatus();
-  const id = useLastEventId();
+  const status = Status.accessQuery(useHealthCheck());
+  const { data: id, isLoading: isIdLoading } = useLatestEventId();
 
-  // useSyncEvents({ enabled: () => id() === Status.Success });
-  useSyncFiles();
+  usePoolEvents({
+    queryFn: () => EventService.pool({ since: id }),
+    enabled: () => !isIdLoading,
+  });
 
   const color = createMemo(() => {
     switch (status()) {

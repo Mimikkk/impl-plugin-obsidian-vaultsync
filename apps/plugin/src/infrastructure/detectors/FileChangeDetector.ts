@@ -1,10 +1,10 @@
+import { DateTimeNs } from "@nimir/shared";
 import { type ChangeCommand, ChangeCommands } from "@plugin/application/commands/ChangeCommand.ts";
 import type { FileDescriptor } from "@plugin/domain/types/FileDescriptor.ts";
 import { LocalFileSystemClient } from "@plugin/infrastructure/clients/LocalFileSystemClient.ts";
 import { RemoteFileSystemClient } from "@plugin/infrastructure/clients/RemoteFileSystemClient.ts";
 import { FileComparator } from "@plugin/infrastructure/comparators/FileComparator.ts";
 import { FileGrouper } from "@plugin/infrastructure/groupers/FileGrouper.ts";
-import { DateTimeNs } from "../../../../../libs/shared/src/utils/DateTimeStr.ts";
 
 export namespace FileChangeDetector {
   const remotes = RemoteFileSystemClient;

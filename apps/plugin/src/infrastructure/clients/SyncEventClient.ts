@@ -25,7 +25,13 @@ export namespace SyncEventClient {
     sequence: number;
   }>;
 
+  export interface PoolOptions {
+    events?: EventType[];
+    since?: number;
+    limit?: number;
+  }
+
   const eventsUrl = url + "/events";
-  export const events = (params?: { events?: EventType[]; since?: number; limit?: number }) =>
+  export const events = (params?: PoolOptions) =>
     ky.get<(IndexUpdateEvent | Event)[]>(eventsUrl, { searchParams: serializeSearchParams(params) }).json();
 }

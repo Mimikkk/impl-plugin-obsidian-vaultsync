@@ -1,10 +1,10 @@
 import { EventService } from "@plugin/application/services/EventService.ts";
-import { createUseQuery } from "@plugin/infrastructure/mutations/createUseQUery.ts";
-import { TimeMs } from "../../../../../libs/shared/src/mod.ts";
+import { createUseQuery } from "@plugin/infrastructure/queries/createUseQuery.ts";
+import { TimeMs } from "@nimir/shared";
 
 export const usePoolEvents = createUseQuery({
   queryKey: ["pool-events"],
-  queryFn: EventService.pool,
+  queryFn: () => EventService.pool(),
   refetchInterval: TimeMs.seconds(5),
   refetchIntervalInBackground: true,
   refetchOnWindowFocus: false,
@@ -12,5 +12,4 @@ export const usePoolEvents = createUseQuery({
   gcTime: 0,
   staleTime: 0,
   retry: 0,
-  initialData: undefined,
 });

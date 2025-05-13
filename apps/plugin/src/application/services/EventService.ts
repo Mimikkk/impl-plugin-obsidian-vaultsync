@@ -1,15 +1,20 @@
 import { SyncEventClient } from "@plugin/infrastructure/clients/SyncEventClient.ts";
-import { ClientState } from "@plugin/presentation/state/ClientState.ts";
 
 export namespace EventService {
   const client = SyncEventClient;
-  const state = ClientState.lastSync;
 
   export async function scan() {
     return await client.scan();
   }
 
-  export async function pool() {
-    return await client.events({ since: 0, limit: 100 });
+  export interface PoolOptions extends SyncEventClient.PoolOptions {}
+
+  export async function pool(options?: PoolOptions): Promise<SyncEventClient.Event[]> {
+    return await client.events(options);
+  }
+
+  export async function latest(): Promise<SyncEventClient.Event | undefined> {
+    const events = await pool({ since: 0, limit: 1 });
+    return events[events.length - 1];
   }
 }

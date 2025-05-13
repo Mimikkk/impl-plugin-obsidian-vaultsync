@@ -1,16 +1,16 @@
 const transformers = [
   {
-    type: "array",
+    name: "array",
     test: (value: any): value is any[] => Array.isArray(value),
     transform: (value: any[]) => value.join(","),
   },
   {
-    type: "string",
+    name: "string",
     test: (value: any): value is string => typeof value === "string" && !!value,
     transform: (value: string) => value,
   },
   {
-    type: "number",
+    name: "number",
     test: (value: any): value is number => typeof value === "number",
     transform: (value: number) => value.toString(),
   },
