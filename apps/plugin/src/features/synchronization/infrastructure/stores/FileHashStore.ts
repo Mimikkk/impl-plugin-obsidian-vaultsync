@@ -23,7 +23,7 @@ export class FileHashStore {
     return this.store.has(this.key(descriptor));
   }
 
-  async get(descriptor: FileDescriptor): Promise<string | undefined> {
+  async get(descriptor: FileDescriptor): Promise<string> {
     const key = this.key(descriptor);
     let value = this.store.get(key);
     if (value !== undefined) return value;

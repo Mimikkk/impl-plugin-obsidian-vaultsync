@@ -1,6 +1,9 @@
 import type { DateInit } from "@nimir/shared";
 
-export type FileType = "remote" | "local";
+export enum FileType {
+  Remote = "remote",
+  Local = "local",
+}
 
 export interface FileDescriptor {
   path: string;

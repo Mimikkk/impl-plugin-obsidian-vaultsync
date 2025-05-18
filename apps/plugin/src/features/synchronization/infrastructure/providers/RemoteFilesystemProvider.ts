@@ -3,7 +3,9 @@ import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/exte
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
 
 export class RemoteFilesystemProvider implements FilesystemProvider {
-  static create(client: RemoteFileSystemClient = RemoteFileSystemClient.create()) {
+  static create(
+    client: RemoteFileSystemClient = RemoteFileSystemClient.create(),
+  ) {
     return new RemoteFilesystemProvider(client);
   }
 

@@ -1,23 +1,15 @@
-import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
-import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 
 export class FileGrouper {
-  static create(
-    locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
-    remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
-  ) {
-    return new FileGrouper(locals, remotes);
+  static create() {
+    return new FileGrouper();
   }
 
-  private constructor(
-    private readonly locals: LocalFilesystemProvider,
-    private readonly remotes: RemoteFilesystemProvider,
-  ) {}
+  private constructor() {}
 
-  async byLocation(): Promise<FileGrouperNs.LocationGroups> {
-    const locals = await this.locals.list();
-    const remotes = await this.remotes.list();
+  byLocation(files: FileDescriptor[]): FileGrouperNs.LocationGroups {
+    const locals = files.filter((f) => f.type === FileType.Local);
+    const remotes = files.filter((f) => f.type === FileType.Remote);
 
     const both = [];
     const localOnly = [];

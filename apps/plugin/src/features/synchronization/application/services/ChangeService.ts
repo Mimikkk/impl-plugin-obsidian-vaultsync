@@ -1,4 +1,4 @@
-import { type ChangeCommand, ChangeType } from "@plugin/features/synchronization/application/commands/ChangeCommand.ts";
+import { ChangeType, type FileChange } from "../../domain/FileChange.ts";
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
@@ -15,20 +15,20 @@ export class ChangeService {
     private readonly remotes: RemoteFilesystemProvider,
   ) {}
 
-  async updates(commands: ChangeCommand[]) {
-    return await Promise.all(commands.map((command) => this.update(command)));
+  async updates(changes: FileChange[]) {
+    return await Promise.all(changes.map((command) => this.update(command)));
   }
 
-  async update(command: ChangeCommand) {
-    switch (command.type) {
+  async update(change: FileChange) {
+    switch (change.type) {
       case ChangeType.UpdateLocal:
-        return await this.updateLocal(command.path);
+        return await this.updateLocal(change.path);
       case ChangeType.UpdateRemote:
-        return await this.updateRemote(command.path);
+        return await this.updateRemote(change.path);
       case ChangeType.RemoveLocal:
-        return await this.removeLocal(command.path);
+        return await this.removeLocal(change.path);
       case ChangeType.RemoveRemote:
-        return await this.removeRemote(command.path);
+        return await this.removeRemote(change.path);
     }
   }
 

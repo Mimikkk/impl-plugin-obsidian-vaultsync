@@ -1,22 +1,14 @@
 import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { FileHashStoreProvider } from "../providers/FileHashStoreProvider.ts";
-import type { FileHashStore } from "../stores/FileHashStore.ts";
+import { FileHashProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
 
 export class FileComparator {
-  static create(locals?: FileHashStore, remotes?: FileHashStore) {
-    if (!locals || !remotes) {
-      const state = FileHashStoreProvider.create();
-      locals ??= state.local();
-      remotes ??= state.remote();
-    }
-
-    return new FileComparator(locals, remotes);
+  static create(hashes: FileHashProvider = FileHashProvider.create()) {
+    return new FileComparator(hashes);
   }
 
   private constructor(
-    private readonly locals: FileHashStore,
-    private readonly remotes: FileHashStore,
+    private readonly hashes: FileHashProvider,
   ) {}
 
   async compare(a: FileDescriptor, b: FileDescriptor): Promise<boolean> {
@@ -30,8 +22,8 @@ export class FileComparator {
 
   async areHashesEqual(a: FileDescriptor, b: FileDescriptor): Promise<boolean> {
     const [localHash, remoteHash] = await Promise.all([
-      this.locals.get(a),
-      this.remotes.get(b),
+      this.hashes.get(a),
+      this.hashes.get(b),
     ]);
 
     return localHash === remoteHash;

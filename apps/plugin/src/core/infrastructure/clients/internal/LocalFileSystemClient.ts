@@ -1,4 +1,4 @@
-import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
+import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
 export class LocalFileSystemClient {
@@ -91,6 +91,6 @@ export class LocalFileSystemClient {
   list(): FileDescriptor[] {
     const files = this.fs.getFiles();
 
-    return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime, type: "local" }));
+    return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime, type: FileType.Local }));
   }
 }

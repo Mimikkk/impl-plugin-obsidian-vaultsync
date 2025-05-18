@@ -1,88 +1,85 @@
 import { DateTimeNs } from "@nimir/shared";
-import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import {
-  type ChangeCommand,
-  ChangeCommands,
-} from "@plugin/features/synchronization/application/commands/ChangeCommand.ts";
+import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
+import { type FileChange, FileChanges } from "../../domain/FileChange.ts";
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
-import { FileGrouper } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
-import {
-  RemoteFilesystemProvider,
-} from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
-import { LocalFilesystemProvider } from "../providers/LocalFilesystemProvider.ts";
+import { FileProvider } from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
 
 export class FileChangeDetector {
   static create(
-    remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
-    locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
+    files: FileProvider = FileProvider.create(),
     comparator: FileComparator = FileComparator.create(),
-    grouper: FileGrouper = FileGrouper.create(),
   ) {
-    return new FileChangeDetector(remotes, locals, comparator, grouper);
+    return new FileChangeDetector(files, comparator);
   }
 
   private constructor(
-    private readonly remotes: RemoteFilesystemProvider,
-    private readonly locals: LocalFilesystemProvider,
+    private readonly files: FileProvider,
     private readonly comparator: FileComparator,
-    private readonly grouper: FileGrouper,
   ) {}
 
-  async detect(): Promise<ChangeCommand[]> {
-    const { both, localOnly, remoteOnly } = await this.grouper.byLocation();
+  async detect(): Promise<FileChange[]> {
+    const { both, localOnly, remoteOnly } = await this.files.byLocation();
 
-    const commands = await Promise.all([
+    const changes = await Promise.all([
       this.detectConflicts(both),
       this.detectLocalOnly(localOnly),
       this.detectRemoteOnly(remoteOnly),
     ]);
 
-    return commands.flat();
+    return changes.flat();
   }
 
-  async detectLocalOnly(locals: FileDescriptor[]): Promise<ChangeCommand[]> {
-    const commands: ChangeCommand[] = [];
+  async detectLocalOnly(locals: FileDescriptor[]): Promise<FileChange[]> {
+    const commands: FileChange[] = [];
 
     for (const local of locals) {
-      const file = await this.remotes.info(local.path);
+      const info = await this.files.info({
+        path: local.path,
+        updatedAt: undefined!,
+        type: FileType.Remote,
+      });
 
-      if (file) {
-        const wasDeleted = file.deleted;
+      if (info) {
+        const wasDeleted = info.deleted;
 
         if (!wasDeleted) continue;
-        const deletedAt = file.deletedAt;
+        const deletedAt = info.deletedAt;
         const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, deletedAt);
 
         if (isLocalNewer) {
-          commands.push(ChangeCommands.updateRemote(local.path));
+          commands.push(FileChanges.updateRemote(local.path));
         } else {
-          commands.push(ChangeCommands.removeLocal(local.path));
+          commands.push(FileChanges.removeLocal(local.path));
         }
       } else {
-        commands.push(ChangeCommands.updateRemote(local.path));
+        commands.push(FileChanges.updateRemote(local.path));
       }
     }
 
     return commands;
   }
 
-  async detectRemoteOnly(remotes: FileDescriptor[]): Promise<ChangeCommand[]> {
-    const commands: ChangeCommand[] = [];
+  async detectRemoteOnly(remotes: FileDescriptor[]): Promise<FileChange[]> {
+    const commands: FileChange[] = [];
 
     for (const remote of remotes) {
-      const info = await this.locals.info(remote.path);
+      const info = await this.files.info({
+        path: remote.path,
+        updatedAt: undefined!,
+        type: FileType.Local,
+      });
 
       if (info) {
         const deletedAt = info.deletedAt;
         const isRemoteNewer = DateTimeNs.isAfterOrEqual(remote.updatedAt, deletedAt);
 
         if (isRemoteNewer) {
-          commands.push(ChangeCommands.updateLocal(remote.path));
+          commands.push(FileChanges.updateLocal(remote.path));
         } else {
-          commands.push(ChangeCommands.removeRemote(remote.path));
+          commands.push(FileChanges.removeRemote(remote.path));
         }
       } else {
-        commands.push(ChangeCommands.updateLocal(remote.path));
+        commands.push(FileChanges.updateLocal(remote.path));
       }
     }
 
@@ -91,8 +88,8 @@ export class FileChangeDetector {
 
   async detectConflicts(
     conflicts: { local: FileDescriptor; remote: FileDescriptor }[],
-  ): Promise<ChangeCommand[]> {
-    const commands: ChangeCommand[] = [];
+  ): Promise<FileChange[]> {
+    const commands: FileChange[] = [];
 
     for (const { local, remote } of conflicts) {
       const isUpToDate = await this.comparator.compare(local, remote);
@@ -101,9 +98,9 @@ export class FileChangeDetector {
 
       const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
       if (isLocalNewer) {
-        commands.push(ChangeCommands.updateRemote(local.path));
+        commands.push(FileChanges.updateRemote(local.path));
       } else {
-        commands.push(ChangeCommands.updateLocal(local.path));
+        commands.push(FileChanges.updateLocal(local.path));
       }
     }
 

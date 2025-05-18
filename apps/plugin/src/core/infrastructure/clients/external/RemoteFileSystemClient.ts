@@ -1,5 +1,5 @@
 import { type DateInit, DateTimeStr } from "@nimir/shared";
-import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
+import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import { ExternalClientUrl } from "@plugin/core/infrastructure/clients/external/ExternalClientUrl.ts";
 import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
 import ky from "ky";
@@ -58,7 +58,7 @@ export class RemoteFileSystemClient {
       const path = root ? `${root}/${file.name}` : file.name;
 
       if (RemoteFileSystemClientNs.EntryTypeNs.isFile(file)) {
-        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime), type: "remote" });
+        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime), type: FileType.Remote });
         continue;
       }
 
