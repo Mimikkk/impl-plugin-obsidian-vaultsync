@@ -1,20 +1,21 @@
+import { BufferNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { ListenerRegistry } from "@plugin/core/infrastructure/listeners/ListenerRegistry.ts";
 import { VolatileListenerRegistry } from "@plugin/core/infrastructure/listeners/VolatileListenerRegistry.ts";
-import type { FileHashSource } from "../sources/FileHashSource.ts";
+import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
 
 type ChangeValue = { key: string; value: string };
 export class FileHashStore {
   static create(
-    source: FileHashSource,
+    filesystem: FilesystemProvider,
     store: Map<string, string> = new Map(),
     listeners: ListenerRegistry<ChangeValue> = VolatileListenerRegistry.create<ChangeValue>(),
   ) {
-    return new FileHashStore(source, store, listeners);
+    return new FileHashStore(filesystem, store, listeners);
   }
 
   private constructor(
-    private readonly source: FileHashSource,
+    private readonly filesystem: FilesystemProvider,
     private readonly store: Map<string, string>,
     private readonly listeners: ListenerRegistry<ChangeValue>,
   ) {}
@@ -28,7 +29,8 @@ export class FileHashStore {
     let value = this.store.get(key);
     if (value !== undefined) return value;
 
-    value = await this.source.download(descriptor);
+    const buffer = await this.filesystem.read(descriptor.path);
+    value = BufferNs.toString(buffer!);
 
     this.store.set(key, value);
     this.listeners.notify({ key, value });

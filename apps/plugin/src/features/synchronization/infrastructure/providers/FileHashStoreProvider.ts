@@ -1,7 +1,6 @@
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 import { SyncStateProvider } from "@plugin/features/synchronization/infrastructure/providers/SyncStateProvider.ts";
-import { FileHashSource } from "@plugin/features/synchronization/infrastructure/sources/FileHashSource.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
 
 enum FileHashStoreType {
@@ -36,7 +35,7 @@ export class FileHashStoreProvider {
       : LocalFilesystemProvider.create();
 
     const store = FileHashStore.create(
-      FileHashSource.create(({ path }) => filesystem.read(path)),
+      filesystem,
       state.remoteHashes.get(),
     );
 
