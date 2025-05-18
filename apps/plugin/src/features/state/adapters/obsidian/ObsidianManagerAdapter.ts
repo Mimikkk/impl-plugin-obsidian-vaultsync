@@ -3,13 +3,13 @@ import { StateManager } from "../../infrastructure/SyncStateManager.ts";
 import { ObsidianStateSerializer } from "./ObsidianStateSerializer.ts";
 import { ObsidianStateValidator } from "./ObsidianStateValidator.ts";
 
-export class ManagerAdapter {
+export class ObsidianManagerAdapter {
   private static create(
     plugin: Plugin,
     validator: ObsidianStateValidator = ObsidianStateValidator.create(),
     serializer: ObsidianStateSerializer = ObsidianStateSerializer.create(),
   ) {
-    return new ManagerAdapter(plugin, validator, serializer);
+    return new ObsidianManagerAdapter(plugin, validator, serializer);
   }
 
   private constructor(
@@ -24,7 +24,7 @@ export class ManagerAdapter {
     validator: ObsidianStateValidator = ObsidianStateValidator.create(),
     serializer: ObsidianStateSerializer = ObsidianStateSerializer.create(),
   ): Promise<StateManager> {
-    return await ManagerAdapter.create(plugin, validator, serializer).adapt(manager);
+    return await ObsidianManagerAdapter.create(plugin, validator, serializer).adapt(manager);
   }
 
   async adapt(manager: StateManager): Promise<StateManager> {
