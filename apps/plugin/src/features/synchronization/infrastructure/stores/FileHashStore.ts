@@ -1,15 +1,15 @@
 import { BufferNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import type { ListenerRegistry } from "@plugin/core/infrastructure/listeners/ListenerRegistry.ts";
-import { VolatileListenerRegistry } from "@plugin/core/infrastructure/listeners/VolatileListenerRegistry.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
+import type { ListenerManager, ListenerManagerNs } from "../../../../core/infrastructure/listeners/ListenerManager.ts";
+import { VolatileListenerManager } from "../../../../core/infrastructure/listeners/VolatileListenerManager.ts";
 
 type ChangeValue = { key: string; value: string };
 export class FileHashStore {
   static create(
     filesystem: FilesystemProvider,
     store: Map<string, string> = new Map(),
-    listeners: ListenerRegistry<ChangeValue> = VolatileListenerRegistry.create<ChangeValue>(),
+    listeners: ListenerManager<ChangeValue> = VolatileListenerManager.create<ChangeValue>(),
   ) {
     return new FileHashStore(filesystem, store, listeners);
   }
@@ -17,7 +17,7 @@ export class FileHashStore {
   private constructor(
     private readonly filesystem: FilesystemProvider,
     private readonly store: Map<string, string>,
-    private readonly listeners: ListenerRegistry<ChangeValue>,
+    private readonly listeners: ListenerManager<ChangeValue>,
   ) {}
 
   has(descriptor: FileDescriptor): boolean {
@@ -42,7 +42,7 @@ export class FileHashStore {
     return descriptor.path + "-" + descriptor.updatedAt;
   }
 
-  subscribe(listener: ListenerRegistry.Listener<ChangeValue>): ListenerRegistry.Unsubscribe {
+  subscribe(listener: ListenerManagerNs.Listener<ChangeValue>): ListenerManagerNs.Unsubscribe {
     return this.listeners.subscribe(listener);
   }
 }

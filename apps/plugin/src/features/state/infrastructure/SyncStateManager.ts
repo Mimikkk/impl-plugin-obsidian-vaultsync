@@ -1,6 +1,6 @@
 import type { Awaitable } from "@nimir/shared";
-import type { ListenerRegistry } from "@plugin/core/infrastructure/listeners/ListenerRegistry.ts";
-import { VolatileListenerRegistry } from "@plugin/core/infrastructure/listeners/VolatileListenerRegistry.ts";
+import type { ListenerManager, ListenerManagerNs } from "../../../core/infrastructure/listeners/ListenerManager.ts";
+import { VolatileListenerManager } from "../../../core/infrastructure/listeners/VolatileListenerManager.ts";
 import { SyncState } from "../domain/entities/SyncState.ts";
 
 export interface StateManagerUpdate {
@@ -12,14 +12,14 @@ export class StateManager {
 
   static create(
     state: SyncState = SyncState.create(),
-    listeners: ListenerRegistry<SyncState> = VolatileListenerRegistry.create(),
+    listeners: ListenerManager<SyncState> = VolatileListenerManager.create(),
   ) {
     return new StateManager(state, listeners);
   }
 
   private constructor(
     private readonly state: SyncState,
-    private readonly listeners: ListenerRegistry<SyncState>,
+    private readonly listeners: ListenerManager<SyncState>,
   ) {}
 
   async update(callback: StateManagerUpdate): Promise<void> {
@@ -31,7 +31,7 @@ export class StateManager {
     return this.state;
   }
 
-  subscribe(callback: ListenerRegistry.Listener<SyncState>): ListenerRegistry.Unsubscribe {
+  subscribe(callback: ListenerManagerNs.Listener<SyncState>): ListenerManagerNs.Unsubscribe {
     return this.listeners.subscribe(callback);
   }
 }

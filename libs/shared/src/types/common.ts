@@ -26,3 +26,6 @@ export type Every<T extends any[], V> = T extends [infer H, ...infer R] ? [H] ex
   : true;
 
 export type Prettify<T> = { [K in keyof T]: T[K] } & {};
+
+export type RecordToObject<T extends Record<string, unknown>> = { [K in keyof T]: { key: K; value: T[K] } };
+export type RecordToUnion<T extends Record<string, unknown>> = { [K in keyof T]: { key: K; value: T[K] } }[keyof T];
