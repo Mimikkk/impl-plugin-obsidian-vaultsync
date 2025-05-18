@@ -8,15 +8,15 @@ export class FileHashStore {
   static create(
     source: FileHashSource,
     store: Map<string, string> = new Map(),
-    listners: ListenerRegistry<ChangeValue> = VolatileListenerRegistry.create<ChangeValue>(),
+    listeners: ListenerRegistry<ChangeValue> = VolatileListenerRegistry.create<ChangeValue>(),
   ) {
-    return new FileHashStore(source, store, listners);
+    return new FileHashStore(source, store, listeners);
   }
 
   private constructor(
     private readonly source: FileHashSource,
     private readonly store: Map<string, string>,
-    private readonly listners: ListenerRegistry<ChangeValue>,
+    private readonly listeners: ListenerRegistry<ChangeValue>,
   ) {}
 
   has(descriptor: FileDescriptor): boolean {
@@ -31,7 +31,7 @@ export class FileHashStore {
     value = await this.source.download(descriptor);
 
     this.store.set(key, value);
-    this.listners.notify({ key, value });
+    this.listeners.notify({ key, value });
 
     return value;
   }
@@ -41,6 +41,6 @@ export class FileHashStore {
   }
 
   subscribe(listener: ListenerRegistry.Listener<ChangeValue>): ListenerRegistry.Unsubscribe {
-    return this.listners.subscribe(listener);
+    return this.listeners.subscribe(listener);
   }
 }

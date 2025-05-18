@@ -34,21 +34,21 @@ export class RemoteFileSystemClient {
 
   browse(params: { folder: string; prefix?: string; levels?: number }) {
     return ky.get(this.url + "/sync/db/browse", { searchParams: serializeSearchParams(params) }).json<
-      RemoteFileSystemClient.EntryDescriptor[]
+      RemoteFileSystemClientNs.EntryDescriptor[]
     >();
   }
   async list() {
     return await this.traverse([], "default", "");
   }
 
-  async info(path: string): Promise<RemoteFileSystemClient.InfoResponse | null> {
+  async info(path: string): Promise<RemoteFileSystemClientNs.InfoResponse | undefined> {
     const result = await ky.get(this.url + "/sync/db/file", {
       searchParams: serializeSearchParams({ folder: "default", file: path }),
     })
-      .json<{ global: RemoteFileSystemClient.InfoResponse }>()
-      .catch(() => null);
+      .json<{ global: RemoteFileSystemClientNs.InfoResponse }>()
+      .catch(() => undefined);
 
-    return result?.global ?? null;
+    return result?.global;
   }
 
   private async traverse(descriptors: FileDescriptor[], folder: string, root: string) {
@@ -57,7 +57,7 @@ export class RemoteFileSystemClient {
     for (const file of files) {
       const path = root ? `${root}/${file.name}` : file.name;
 
-      if (RemoteFileSystemClient.EntryTypeNs.isFile(file)) {
+      if (RemoteFileSystemClientNs.EntryTypeNs.isFile(file)) {
         descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime), type: "remote" });
         continue;
       }
@@ -69,7 +69,7 @@ export class RemoteFileSystemClient {
   }
 }
 
-export namespace RemoteFileSystemClient {
+export namespace RemoteFileSystemClientNs {
   export enum EntryType {
     File = "FILE_INFO_TYPE_FILE",
     Directory = "FILE_INFO_TYPE_DIRECTORY",

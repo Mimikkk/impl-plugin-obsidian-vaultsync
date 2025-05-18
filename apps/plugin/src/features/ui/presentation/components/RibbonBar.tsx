@@ -1,5 +1,5 @@
 import { withQueryClient } from "@plugin/core/infrastructure/queries/withQueryClient.tsx";
-import { Status } from "@plugin/core/infrastructure/types/Status.ts";
+import { Status, StatusNs } from "@plugin/core/infrastructure/types/Status.ts";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";
@@ -7,7 +7,7 @@ import { useHealthCheck } from "../../../health/presentation/queries/useHealthCh
 export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
 
 const RibbonServiceStatus = () => {
-  const status = Status.accessQuery(useHealthCheck());
+  const status = StatusNs.accessQuery(useHealthCheck());
 
   const color = createMemo(() => {
     switch (status()) {

@@ -8,14 +8,16 @@ export class SyncService {
     events: EventService = EventService.create(),
     changes: ChangeService = ChangeService.create(),
     detector: FileChangeDetector = FileChangeDetector.create(),
+    state: StateProvider = StateProvider.instance,
   ) {
-    return new SyncService(events, changes, detector);
+    return new SyncService(events, changes, detector, state);
   }
 
   private constructor(
     private readonly events: EventService,
     private readonly changes: ChangeService,
     private readonly detector: FileChangeDetector,
+    private readonly state: StateProvider,
   ) {}
 
   async synchronize() {
@@ -24,10 +26,11 @@ export class SyncService {
     await this.events.scan();
 
     const detected = await this.detector.detect();
+    console.log("detected:", detected);
 
     await this.changes.updates(detected);
 
-    StateProvider.instance.update((state) => {
+    await this.state.update((state) => {
       state.deleted.clear();
       state.lastSync.set(Date.now());
     });

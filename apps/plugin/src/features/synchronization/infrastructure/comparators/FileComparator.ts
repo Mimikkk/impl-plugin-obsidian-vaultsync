@@ -1,13 +1,16 @@
 import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
+import { FileHashStoreProvider } from "../providers/FileHashStoreProvider.ts";
 import type { FileHashStore } from "../stores/FileHashStore.ts";
-import { FileHashStoreWithState } from "../stores/FileHashStoreWithState.ts";
 
 export class FileComparator {
-  static create(
-    locals: FileHashStore = FileHashStoreWithState.local(),
-    remotes: FileHashStore = FileHashStoreWithState.remote(),
-  ) {
+  static create(locals?: FileHashStore, remotes?: FileHashStore) {
+    if (!locals || !remotes) {
+      const state = FileHashStoreProvider.create();
+      locals ??= state.local();
+      remotes ??= state.remote();
+    }
+
     return new FileComparator(locals, remotes);
   }
 
@@ -16,19 +19,19 @@ export class FileComparator {
     private readonly remotes: FileHashStore,
   ) {}
 
-  async compare(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
-    if (this.areTimestampsSimilar(local, remote)) return true;
-    return await this.areHashesEqual(local, remote);
+  async compare(a: FileDescriptor, b: FileDescriptor): Promise<boolean> {
+    if (this.areTimestampsSimilar(a, b)) return true;
+    return await this.areHashesEqual(a, b);
   }
 
-  areTimestampsSimilar(local: FileDescriptor, remote: FileDescriptor): boolean {
-    return DateTimeNs.within(local.updatedAt, remote.updatedAt, 1000);
+  areTimestampsSimilar(a: FileDescriptor, b: FileDescriptor): boolean {
+    return DateTimeNs.within(a.updatedAt, b.updatedAt, 1000);
   }
 
-  async areHashesEqual(local: FileDescriptor, remote: FileDescriptor): Promise<boolean> {
+  async areHashesEqual(a: FileDescriptor, b: FileDescriptor): Promise<boolean> {
     const [localHash, remoteHash] = await Promise.all([
-      this.locals.get(local),
-      this.remotes.get(remote),
+      this.locals.get(a),
+      this.remotes.get(b),
     ]);
 
     return localHash === remoteHash;

@@ -1,18 +1,18 @@
-import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
-import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
 import { type ChangeCommand, ChangeType } from "@plugin/features/synchronization/application/commands/ChangeCommand.ts";
+import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
+import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
 export class ChangeService {
   static create(
-    locals: LocalFileSystemClient = LocalFileSystemClient.create(),
-    remotes: RemoteFileSystemClient = RemoteFileSystemClient.create(),
+    locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
+    remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
   ) {
     return new ChangeService(locals, remotes);
   }
 
   private constructor(
-    private readonly locals: LocalFileSystemClient,
-    private readonly remotes: RemoteFileSystemClient,
+    private readonly locals: LocalFilesystemProvider,
+    private readonly remotes: RemoteFilesystemProvider,
   ) {}
 
   async updates(commands: ChangeCommand[]) {

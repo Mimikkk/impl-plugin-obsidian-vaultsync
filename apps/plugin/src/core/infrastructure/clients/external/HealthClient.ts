@@ -9,11 +9,11 @@ export class HealthClient {
   private constructor(private readonly url: string) {}
 
   check() {
-    return ky.get(this.url + "/health").json<HealthClient.HealthResponse>();
+    return ky.get(this.url + "/health").json<HealthClientNs.HealthResponse>();
   }
 }
 
-export namespace HealthClient {
+export namespace HealthClientNs {
   export interface HealthResponse {
     status: string;
     message: string;

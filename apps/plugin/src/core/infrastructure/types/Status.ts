@@ -8,7 +8,7 @@ export enum Status {
   Success = "success",
 }
 
-export namespace Status {
+export namespace StatusNs {
   export const fromQuery = (query: UseQueryResult): Status => {
     if (query.isPending) {
       return Status.Loading;

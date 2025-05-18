@@ -1,18 +1,20 @@
 import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
-import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
 import {
   type ChangeCommand,
   ChangeCommands,
 } from "@plugin/features/synchronization/application/commands/ChangeCommand.ts";
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
 import { FileGrouper } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
+import {
+  RemoteFilesystemProvider,
+} from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import { LocalFilesystemProvider } from "../providers/LocalFilesystemProvider.ts";
 
 export class FileChangeDetector {
   static create(
-    remotes: RemoteFileSystemClient = RemoteFileSystemClient.create(),
-    locals: LocalFileSystemClient = LocalFileSystemClient.create(),
+    remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
+    locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
     comparator: FileComparator = FileComparator.create(),
     grouper: FileGrouper = FileGrouper.create(),
   ) {
@@ -20,8 +22,8 @@ export class FileChangeDetector {
   }
 
   private constructor(
-    private readonly remotes: RemoteFileSystemClient,
-    private readonly locals: LocalFileSystemClient,
+    private readonly remotes: RemoteFilesystemProvider,
+    private readonly locals: LocalFilesystemProvider,
     private readonly comparator: FileComparator,
     private readonly grouper: FileGrouper,
   ) {}
@@ -34,8 +36,6 @@ export class FileChangeDetector {
       this.detectLocalOnly(localOnly),
       this.detectRemoteOnly(remoteOnly),
     ]);
-
-    console.log(commands);
 
     return commands.flat();
   }
@@ -50,7 +50,7 @@ export class FileChangeDetector {
         const wasDeleted = file.deleted;
 
         if (!wasDeleted) continue;
-        const deletedAt = file.modified;
+        const deletedAt = file.deletedAt;
         const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, deletedAt);
 
         if (isLocalNewer) {
@@ -70,7 +70,7 @@ export class FileChangeDetector {
     const commands: ChangeCommand[] = [];
 
     for (const remote of remotes) {
-      const info = this.locals.info(remote.path);
+      const info = await this.locals.info(remote.path);
 
       if (info) {
         const deletedAt = info.deletedAt;

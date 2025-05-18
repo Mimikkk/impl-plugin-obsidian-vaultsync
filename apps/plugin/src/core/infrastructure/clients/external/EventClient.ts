@@ -13,16 +13,16 @@ export class EventClient {
     return ky.post(this.url + "/db/scan", { json: { folder: "default" } });
   }
 
-  events(params?: EventClient.PoolOptions) {
+  events(params?: EventClientNs.PoolOptions) {
     return ky
-      .get<(EventClient.IndexUpdateEvent | EventClient.Event)[]>(this.url + "/events", {
+      .get<(EventClientNs.IndexUpdateEvent | EventClientNs.Event)[]>(this.url + "/events", {
         searchParams: serializeSearchParams(params),
       })
       .json();
   }
 }
 
-export namespace EventClient {
+export namespace EventClientNs {
   /** @see {@link https://docs.syncthing.net/dev/events.html#event-types | Syncthing event types} */
   export type EventType = "LocalIndexUpdated" | "LocalChangeDetected";
   export interface Event<E extends EventType = EventType, T = unknown> {

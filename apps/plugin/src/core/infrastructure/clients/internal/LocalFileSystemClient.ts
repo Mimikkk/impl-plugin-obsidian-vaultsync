@@ -1,5 +1,4 @@
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
 export class LocalFileSystemClient {
@@ -34,9 +33,9 @@ export class LocalFileSystemClient {
     return this.fs.getFolderByPath(path);
   }
 
-  async read(path: string): Promise<ArrayBuffer | null> {
+  async read(path: string): Promise<ArrayBuffer | undefined> {
     const file = this.getFile(path);
-    if (!file) return null;
+    if (!file) return undefined;
 
     return await this.fs.readBinary(file);
   }
@@ -87,13 +86,6 @@ export class LocalFileSystemClient {
     } else {
       return this.fs.createBinary(path, content);
     }
-  }
-
-  info(path: string): { deletedAt: number } | null {
-    const deletedAt = StateProvider.instance.get().deleted.get().get(path);
-    if (!deletedAt) return null;
-
-    return { deletedAt };
   }
 
   list(): FileDescriptor[] {
