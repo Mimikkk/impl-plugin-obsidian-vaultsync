@@ -1,12 +1,15 @@
+import { lazy } from "@nimir/shared";
 import { createUseQuery } from "@plugin/core/infrastructure/queries/createUseQuery.ts";
 import { EventService } from "../../services/EventService.ts";
 
+const events = lazy(EventService.create);
 export const useLatestEventId = createUseQuery({
   queryKey: ["latest-event-id"],
-  queryFn: async () => {
-    await EventService.create().scan();
+  async queryFn() {
+    const service = events();
 
-    const event = await EventService.create().latest();
+    await service.scan();
+    const event = await service.latest();
 
     return event?.id ?? 0;
   },

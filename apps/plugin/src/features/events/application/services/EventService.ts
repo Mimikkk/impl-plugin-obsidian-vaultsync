@@ -1,4 +1,4 @@
-import { EventClient } from "../../../../core/infrastructure/clients/external/EventClient.ts";
+import { EventClient } from "@plugin/core/infrastructure/clients/external/EventClient.ts";
 
 export class EventService {
   static create(client: EventClient = EventClient.create()) {
@@ -11,11 +11,11 @@ export class EventService {
     return await this.client.scan();
   }
 
-  async pool(options?: FileEventClient.PoolOptions): Promise<FileEventClient.Event[]> {
+  async pool(options?: EventClient.PoolOptions): Promise<EventClient.Event[]> {
     return await this.client.events(options);
   }
 
-  async latest(): Promise<FileEventClient.Event | undefined> {
+  async latest(): Promise<EventClient.Event | undefined> {
     return await this.pool({ since: 0, limit: 1 }).then((events) => events[events.length - 1]);
   }
 }

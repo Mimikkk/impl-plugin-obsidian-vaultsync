@@ -1,50 +1,12 @@
 import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
-import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
-import { StateProvider } from "../../../state/infrastructure/StateProvider.ts";
-import { FileHashSource } from "../sources/FileHashSource.ts";
-import { FileHashStore } from "../stores/FileHashStore.ts";
-
-export class FileHashStoreWithState {
-  static as(type: "remote" | "local") {
-    const provider = StateProvider.instance;
-    const state = provider.get();
-
-    if (type === "remote") {
-      const filesystem = RemoteFileSystemClient.create();
-
-      const store = FileHashStore.create(
-        FileHashSource.create(({ path }) => filesystem.read(path)),
-        state.remoteHashes.get(),
-      );
-
-      store.subscribe(({ key, value }) => {
-        state.remoteHashes.add(key, value);
-      });
-
-      return store;
-    } else {
-      const filesystem = LocalFileSystemClient.create();
-
-      const store = FileHashStore.create(
-        FileHashSource.create(({ path }) => filesystem.read(path)),
-        state.localHashes.get(),
-      );
-
-      store.subscribe(({ key, value }) => {
-        state.localHashes.add(key, value);
-      });
-
-      return store;
-    }
-  }
-}
+import type { FileHashStore } from "../stores/FileHashStore.ts";
+import { FileHashStoreWithState } from "../stores/FileHashStoreWithState.ts";
 
 export class FileComparator {
   static create(
-    locals: FileHashStore = FileHashStoreWithState.as("local"),
-    remotes: FileHashStore = FileHashStoreWithState.as("remote"),
+    locals: FileHashStore = FileHashStoreWithState.local(),
+    remotes: FileHashStore = FileHashStoreWithState.remote(),
   ) {
     return new FileComparator(locals, remotes);
   }
