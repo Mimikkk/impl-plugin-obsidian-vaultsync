@@ -2,28 +2,28 @@ import type { Prettify } from "@nimir/shared";
 
 type StateRecord = Record<never, State>;
 
-export class StateBuilder<T extends StateRecord> {
+export class StateRecordSchemaBuilder<T extends StateRecord> {
   static create() {
-    return new StateBuilder<StateRecord>(new Map());
+    return new StateRecordSchemaBuilder<StateRecord>(new Map());
   }
 
   private constructor(
     private readonly map: Map<unknown, unknown>,
   ) {}
 
-  with<K extends string, S extends State>(key: K, value: S): StateBuilder<T & { [key in K]: S }> {
+  with<K extends string, S extends State>(key: K, value: S): StateRecordSchemaBuilder<T & { [key in K]: S }> {
     this.map.set(key, value);
-    return this as unknown as StateBuilder<T & { [key in K]: S }>;
+    return this as unknown as StateRecordSchemaBuilder<T & { [key in K]: S }>;
   }
 
-  build(): StateRegistry<Prettify<T>> {
-    return StateRegistry.create(this.map as unknown as Map<keyof T, T[keyof T]>);
+  build(): StateSchema<Prettify<T>> {
+    return StateSchema.create(this.map as unknown as Map<keyof T, T[keyof T]>);
   }
 }
 
-export class StateRegistry<T extends StateRecord> {
+export class StateSchema<T extends StateRecord> {
   static create<T extends StateRecord>(state: Map<keyof T, T[keyof T]>) {
-    return new StateRegistry(state);
+    return new StateSchema(state);
   }
 
   private constructor(
@@ -65,7 +65,7 @@ class State<Encoded = any, Decoded = any> {
   ) {}
 }
 
-export namespace StateValues {
+export namespace StateSchemas {
   export interface NumberOptions extends StateOptions<number, number> {
   }
 
@@ -104,10 +104,10 @@ export namespace StateValues {
     });
 }
 
-const SyncRegistry = StateBuilder
+const SyncStateSchema = StateRecordSchemaBuilder
   .create()
-  .with("lastSyncTs", StateValues.number())
-  .with("deletedFiles", StateValues.map<string, string>())
-  .with("localFilesHashes", StateValues.map<string, string>())
-  .with("remoteFilesHashes", StateValues.map<string, string>())
+  .with("lastSyncTs", StateSchemas.number())
+  .with("deletedFiles", StateSchemas.map<string, string>())
+  .with("localFilesHashes", StateSchemas.map<string, string>())
+  .with("remoteFilesHashes", StateSchemas.map<string, string>())
   .build();
