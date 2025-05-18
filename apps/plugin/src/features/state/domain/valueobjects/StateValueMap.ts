@@ -1,27 +1,27 @@
-export class MapState<K, V> {
+export class StateValueMap<K, V> {
   static create<K, V>(value: Map<K, V> = new Map()) {
-    return new MapState<K, V>(value);
+    return new StateValueMap<K, V>(value);
   }
 
   private constructor(
     private value: Map<K, V>,
   ) {}
 
-  static from<K, V, I extends MapState<K, V> = MapState<K, V>>(
-    item: MapState<K, V>,
-    into: I = MapState.create<K, V>() as I,
+  static from<K, V, I extends StateValueMap<K, V> = StateValueMap<K, V>>(
+    item: StateValueMap<K, V>,
+    into: I = StateValueMap.create<K, V>() as I,
   ): I {
     return into.from(item);
   }
 
-  static fromParameters<K, V, I extends MapState<K, V> = MapState<K, V>>(
+  static fromParameters<K, V, I extends StateValueMap<K, V> = StateValueMap<K, V>>(
     map: Map<K, V>,
-    into: I = MapState.create<K, V>() as I,
+    into: I = StateValueMap.create<K, V>() as I,
   ): I {
     return into.fromParameters(map);
   }
 
-  from(item: MapState<K, V>): this {
+  from(item: StateValueMap<K, V>): this {
     return this.set(item.value);
   }
 

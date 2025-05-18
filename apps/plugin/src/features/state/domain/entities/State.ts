@@ -1,28 +1,28 @@
-import { MapState } from "../valueobjects/MapState.ts";
-import { ValueState } from "../valueobjects/ValueState.ts";
+import { StateValueItem } from "../valueobjects/StateValueItem.ts";
+import { StateValueMap } from "../valueobjects/StateValueMap.ts";
 
 export class State {
   static create(
-    lastSync: ValueState<number> = ValueState.create(),
-    deleted: MapState<string, number> = MapState.create(),
-    localHashes: MapState<string, string> = MapState.create(),
-    remoteHashes: MapState<string, string> = MapState.create(),
+    lastSync: StateValueItem<number> = StateValueItem.create(),
+    deleted: StateValueMap<string, number> = StateValueMap.create(),
+    localHashes: StateValueMap<string, string> = StateValueMap.create(),
+    remoteHashes: StateValueMap<string, string> = StateValueMap.create(),
   ) {
     return new State(lastSync, deleted, localHashes, remoteHashes);
   }
 
   private constructor(
-    public readonly lastSync: ValueState<number>,
-    public readonly deleted: MapState<string, number>,
-    public readonly localHashes: MapState<string, string>,
-    public readonly remoteHashes: MapState<string, string>,
+    public readonly lastSync: StateValueItem<number>,
+    public readonly deletedFiles: StateValueMap<string, number>,
+    public readonly localFilesHashes: StateValueMap<string, string>,
+    public readonly remoteFilesHashes: StateValueMap<string, string>,
   ) {}
 
   from(state: State): this {
     this.lastSync.from(state.lastSync);
-    this.deleted.from(state.deleted);
-    this.localHashes.from(state.localHashes);
-    this.remoteHashes.from(state.remoteHashes);
+    this.deletedFiles.from(state.deletedFiles);
+    this.localFilesHashes.from(state.localFilesHashes);
+    this.remoteFilesHashes.from(state.remoteFilesHashes);
     return this;
   }
 
@@ -33,9 +33,9 @@ export class State {
     remoteHashes: Map<string, string>,
   ): this {
     this.lastSync.fromParameters(lastSync);
-    this.deleted.fromParameters(deleted);
-    this.localHashes.fromParameters(localHashes);
-    this.remoteHashes.fromParameters(remoteHashes);
+    this.deletedFiles.fromParameters(deleted);
+    this.localFilesHashes.fromParameters(localHashes);
+    this.remoteFilesHashes.fromParameters(remoteHashes);
     return this;
   }
 }

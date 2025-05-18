@@ -1,23 +1,23 @@
-import { MapState } from "@plugin/features/state/domain/valueobjects/MapState.ts";
-import { ValueState } from "@plugin/features/state/domain/valueobjects/ValueState.ts";
-import type { ManagerUpdate } from "@plugin/features/state/infrastructure/Manager.ts";
 import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
+import { StateValueItem } from "../../../state/domain/valueobjects/StateValueItem.ts";
+import { StateValueMap } from "../../../state/domain/valueobjects/StateValueMap.ts";
+import type { StateManagerUpdate } from "../../../state/infrastructure/StateManager.ts";
 
 export class SyncState {
   static create(
-    lastSync: ValueState<number> = ValueState.create(),
-    deleted: MapState<string, number> = MapState.create(),
-    localHashes: MapState<string, string> = MapState.create(),
-    remoteHashes: MapState<string, string> = MapState.create(),
+    lastSync: StateValueItem<number> = StateValueItem.create(),
+    deleted: StateValueMap<string, number> = StateValueMap.create(),
+    localHashes: StateValueMap<string, string> = StateValueMap.create(),
+    remoteHashes: StateValueMap<string, string> = StateValueMap.create(),
   ) {
     return new SyncState(lastSync, deleted, localHashes, remoteHashes);
   }
 
   private constructor(
-    public readonly lastSync: ValueState<number>,
-    public readonly deleted: MapState<string, number>,
-    public readonly localHashes: MapState<string, string>,
-    public readonly remoteHashes: MapState<string, string>,
+    public readonly lastSync: StateValueItem<number>,
+    public readonly deleted: StateValueMap<string, number>,
+    public readonly localHashes: StateValueMap<string, string>,
+    public readonly remoteHashes: StateValueMap<string, string>,
   ) {}
 }
 
@@ -32,7 +32,7 @@ export class SyncStateProvider {
     readonly state: StateProvider,
   ) {}
 
-  public async update(callback: ManagerUpdate): Promise<void> {
+  public async update(callback: StateManagerUpdate): Promise<void> {
     await this.state.update(callback);
   }
 
@@ -41,9 +41,9 @@ export class SyncStateProvider {
 
     return SyncState.create(
       raw.lastSync,
-      raw.deleted,
-      raw.localHashes,
-      raw.remoteHashes,
+      raw.deletedFiles,
+      raw.localFilesHashes,
+      raw.remoteFilesHashes,
     );
   }
 }

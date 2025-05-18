@@ -1,27 +1,27 @@
-export class ValueState<T> {
+export class StateValueItem<T> {
   static create<T>(value: T | null = null) {
-    return new ValueState<T>(value);
+    return new StateValueItem<T>(value);
   }
 
   private constructor(
     private value: T | null,
   ) {}
 
-  static from<T, I extends ValueState<T> = ValueState<T>>(
-    item: ValueState<T>,
-    into: I = ValueState.create<T>() as I,
+  static from<T, I extends StateValueItem<T> = StateValueItem<T>>(
+    item: StateValueItem<T>,
+    into: I = StateValueItem.create<T>() as I,
   ): I {
     return into.from(item);
   }
 
-  static fromParameters<T, I extends ValueState<T> = ValueState<T>>(
+  static fromParameters<T, I extends StateValueItem<T> = StateValueItem<T>>(
     value: T | null,
-    into: I = ValueState.create<T>() as I,
+    into: I = StateValueItem.create<T>() as I,
   ): I {
     return into.fromParameters(value);
   }
 
-  from(item: ValueState<T>): this {
+  from(item: StateValueItem<T>): this {
     return this.set(item.value);
   }
 

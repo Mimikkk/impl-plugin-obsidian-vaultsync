@@ -3,18 +3,18 @@ import type { ListenerRegistry } from "@plugin/core/infrastructure/listeners/Lis
 import { VolatileListenerRegistry } from "@plugin/core/infrastructure/listeners/VolatileListenerRegistry.ts";
 import { State } from "../domain/entities/State.ts";
 
-export interface ManagerUpdate {
+export interface StateManagerUpdate {
   (state: State): Awaitable<void>;
 }
 
-export class Manager {
-  static instance = Manager.create();
+export class StateManager {
+  static instance = StateManager.create();
 
   static create(
     state: State = State.create(),
     listeners: ListenerRegistry<State> = VolatileListenerRegistry.create(),
   ) {
-    return new Manager(state, listeners);
+    return new StateManager(state, listeners);
   }
 
   private constructor(
@@ -22,7 +22,7 @@ export class Manager {
     private readonly listeners: ListenerRegistry<State>,
   ) {}
 
-  async update(callback: ManagerUpdate): Promise<void> {
+  async update(callback: StateManagerUpdate): Promise<void> {
     await callback(this.state);
     this.listeners.notify(this.state);
   }
