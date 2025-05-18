@@ -2,12 +2,12 @@ import { ChangeType, type FileChange } from "@plugin/features/synchronization/do
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
-export class ChangeManager {
+export class FileChangeManager {
   static create(
     locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
     remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
   ) {
-    return new ChangeManager(locals, remotes);
+    return new FileChangeManager(locals, remotes);
   }
 
   private constructor(
