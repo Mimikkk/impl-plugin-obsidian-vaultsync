@@ -1,9 +1,9 @@
-import { withState } from "@plugin/features/state/middlewares/withState.ts";
 import { definePlugin } from "./core/middlewares/definePlugin.ts";
+import { withSyncState } from "./features/state/middlewares/withSyncState.ts";
 import { withUI } from "./features/ui/middlewares/withUI.ts";
 import "./styles.css";
 
 export default definePlugin([
-  withState,
+  withSyncState,
   withUI,
 ]);

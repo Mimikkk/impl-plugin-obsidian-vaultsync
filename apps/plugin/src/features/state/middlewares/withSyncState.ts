@@ -1,8 +1,8 @@
 import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { ManagerAdapter } from "../adapters/obsidian/ObsidianManagerAdapter.ts";
-import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
+import { StateProvider } from "../infrastructure/SyncStateProvider.ts";
 
-export const withState = createMiddleware(async (plugin) => {
+export const withSyncState = createMiddleware(async (plugin) => {
   const manager = await ManagerAdapter.from(plugin);
 
   const state = StateProvider.from(manager);

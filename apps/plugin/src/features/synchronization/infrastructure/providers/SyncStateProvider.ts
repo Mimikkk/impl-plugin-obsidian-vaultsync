@@ -1,7 +1,7 @@
-import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
+import { StateProvider } from "../../../state/infrastructure/SyncStateProvider.ts";
 import { StateValueItem } from "../../../state/domain/valueobjects/StateValueItem.ts";
 import { StateValueMap } from "../../../state/domain/valueobjects/StateValueMap.ts";
-import type { StateManagerUpdate } from "../../../state/infrastructure/StateManager.ts";
+import type { StateManagerUpdate } from "../../../state/infrastructure/SyncStateManager.ts";
 
 export class SyncState {
   static create(
@@ -40,7 +40,7 @@ export class SyncStateProvider {
     const raw = this.state.get();
 
     return SyncState.create(
-      raw.lastSync,
+      raw.lastSyncTs,
       raw.deletedFiles,
       raw.localFilesHashes,
       raw.remoteFilesHashes,

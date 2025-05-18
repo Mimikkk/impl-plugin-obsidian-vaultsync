@@ -3,9 +3,9 @@ import type { ObsidianSerializedState } from "./ObsidianSerializedState.ts";
 export enum ObsidianStateValidationError {
   InvalidData = "invalid-data",
   InvalidLastSync = "invalid-last-sync",
-  InvalidDeleted = "invalid-deleted",
-  InvalidLocalHashes = "invalid-local-hashes",
-  InvalidRemoteHashes = "invalid-remote-hashes",
+  InvalidDeleted = "invalid-deleted-files",
+  InvalidLocalHashes = "invalid-local-files-hashes",
+  InvalidRemoteHashes = "invalid-remote-files-hashes",
 }
 
 export class ObsidianStateValidator {
@@ -27,12 +27,23 @@ export class ObsidianStateValidator {
       return errors;
     }
 
-    const { lastSyncTs, deleted, localHashes, remoteHashes } = data as ObsidianSerializedState;
+    const { lastSyncTs, deletedFiles, localFilesHashes, remoteFilesHashes } = data as ObsidianSerializedState;
 
-    if (lastSyncTs && typeof lastSyncTs !== "number") errors.push(ObsidianStateValidationError.InvalidLastSync);
-    if (deleted && !Array.isArray(deleted)) errors.push(ObsidianStateValidationError.InvalidDeleted);
-    if (localHashes && !Array.isArray(localHashes)) errors.push(ObsidianStateValidationError.InvalidLocalHashes);
-    if (remoteHashes && !Array.isArray(remoteHashes)) errors.push(ObsidianStateValidationError.InvalidRemoteHashes);
+    if (lastSyncTs && typeof lastSyncTs !== "number") {
+      errors.push(ObsidianStateValidationError.InvalidLastSync);
+    }
+
+    if (deletedFiles && !Array.isArray(deletedFiles)) {
+      errors.push(ObsidianStateValidationError.InvalidDeleted);
+    }
+
+    if (localFilesHashes && !Array.isArray(localFilesHashes)) {
+      errors.push(ObsidianStateValidationError.InvalidLocalHashes);
+    }
+
+    if (remoteFilesHashes && !Array.isArray(remoteFilesHashes)) {
+      errors.push(ObsidianStateValidationError.InvalidRemoteHashes);
+    }
 
     return errors.length > 0 ? errors : data as ObsidianSerializedState;
   }

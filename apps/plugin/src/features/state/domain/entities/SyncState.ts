@@ -1,25 +1,25 @@
 import { StateValueItem } from "../valueobjects/StateValueItem.ts";
 import { StateValueMap } from "../valueobjects/StateValueMap.ts";
 
-export class State {
+export class SyncState {
   static create(
-    lastSync: StateValueItem<number> = StateValueItem.create(),
-    deleted: StateValueMap<string, number> = StateValueMap.create(),
-    localHashes: StateValueMap<string, string> = StateValueMap.create(),
-    remoteHashes: StateValueMap<string, string> = StateValueMap.create(),
+    lastSyncTs: StateValueItem<number> = StateValueItem.create(),
+    deletedFiles: StateValueMap<string, number> = StateValueMap.create(),
+    localFilesHashes: StateValueMap<string, string> = StateValueMap.create(),
+    remoteFilesHashes: StateValueMap<string, string> = StateValueMap.create(),
   ) {
-    return new State(lastSync, deleted, localHashes, remoteHashes);
+    return new SyncState(lastSyncTs, deletedFiles, localFilesHashes, remoteFilesHashes);
   }
 
   private constructor(
-    public readonly lastSync: StateValueItem<number>,
+    public readonly lastSyncTs: StateValueItem<number>,
     public readonly deletedFiles: StateValueMap<string, number>,
     public readonly localFilesHashes: StateValueMap<string, string>,
     public readonly remoteFilesHashes: StateValueMap<string, string>,
   ) {}
 
-  from(state: State): this {
-    this.lastSync.from(state.lastSync);
+  from(state: SyncState): this {
+    this.lastSyncTs.from(state.lastSyncTs);
     this.deletedFiles.from(state.deletedFiles);
     this.localFilesHashes.from(state.localFilesHashes);
     this.remoteFilesHashes.from(state.remoteFilesHashes);
@@ -32,7 +32,7 @@ export class State {
     localHashes: Map<string, string>,
     remoteHashes: Map<string, string>,
   ): this {
-    this.lastSync.fromParameters(lastSync);
+    this.lastSyncTs.fromParameters(lastSync);
     this.deletedFiles.fromParameters(deleted);
     this.localFilesHashes.fromParameters(localHashes);
     this.remoteFilesHashes.fromParameters(remoteHashes);

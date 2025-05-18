@@ -1,5 +1,5 @@
-import type { State } from "@plugin/features/state/domain/entities/State.ts";
-import { StateManager, type StateManagerUpdate } from "./StateManager.ts";
+import type { SyncState } from "@plugin/features/state/domain/entities/SyncState.ts";
+import { StateManager, type StateManagerUpdate } from "./SyncStateManager.ts";
 
 export class StateProvider {
   static instance: StateProvider;
@@ -18,7 +18,7 @@ export class StateProvider {
     return StateProvider.instance;
   }
 
-  get(): State {
+  get(): SyncState {
     return this.manager.get();
   }
 

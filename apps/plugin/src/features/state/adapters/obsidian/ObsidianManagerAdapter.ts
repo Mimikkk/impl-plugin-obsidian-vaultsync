@@ -1,5 +1,5 @@
 import { type Plugin, TFolder } from "obsidian";
-import { StateManager } from "../../infrastructure/StateManager.ts";
+import { StateManager } from "../../infrastructure/SyncStateManager.ts";
 import { ObsidianStateSerializer } from "./ObsidianStateSerializer.ts";
 import { ObsidianStateValidator } from "./ObsidianStateValidator.ts";
 

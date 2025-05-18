@@ -1,4 +1,4 @@
-import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
+import { StateProvider } from "../../../state/infrastructure/SyncStateProvider.ts";
 import type { FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
 import { FileChangeManager } from "./FileChangeManager.ts";
@@ -25,7 +25,7 @@ export class SyncManager {
 
     await this.state.update((state) => {
       state.deletedFiles.clear();
-      state.lastSync.set(Date.now());
+      state.lastSyncTs.set(Date.now());
     });
 
     return changes;
