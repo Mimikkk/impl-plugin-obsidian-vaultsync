@@ -1,5 +1,5 @@
 import { EventService } from "@plugin/features/events/application/services/EventService.ts";
-import { SyncManager } from "@plugin/features/synchronization/application/managers/SyncManager.ts";
+import { SyncManager } from "../managers/FileSyncManager.ts";
 
 export class SyncService {
   static create(
@@ -18,9 +18,10 @@ export class SyncService {
     console.log("Synchronizing...");
 
     await this.events.scan();
-    await this.manager.synchronize();
+    const changes = await this.manager.synchronize();
 
-    console.log("Synchronized.");
+    console.log("Synchronized.", changes);
+
     return "OK";
   }
 }
