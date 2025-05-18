@@ -29,7 +29,7 @@ export class RemoteFileSystemClient {
   }
 
   remove(path: string, recursive = false) {
-    return ky.post(this.url + "/filesystem", { json: { path, recursive } });
+    return ky.delete(this.url + "/filesystem", { json: { path, recursive } });
   }
 
   browse(params: { folder: string; prefix?: string; levels?: number }) {
