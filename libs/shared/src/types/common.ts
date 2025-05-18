@@ -24,3 +24,5 @@ export type Some<T extends any[], V> = T extends [infer H, ...infer R] ? [H] ext
 
 export type Every<T extends any[], V> = T extends [infer H, ...infer R] ? [H] extends [V] ? Every<R, V> : false
   : true;
+
+export type Prettify<T> = { [K in keyof T]: T[K] } & {};
