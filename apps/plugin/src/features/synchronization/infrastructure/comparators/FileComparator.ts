@@ -21,11 +21,11 @@ export class FileComparator {
   }
 
   async areHashesEqual(a: FileDescriptor, b: FileDescriptor): Promise<boolean> {
-    const [localHash, remoteHash] = await Promise.all([
+    const [local, remote] = await Promise.all([
       this.hashes.get(a),
       this.hashes.get(b),
     ]);
 
-    return localHash === remoteHash;
+    return local === remote;
   }
 }

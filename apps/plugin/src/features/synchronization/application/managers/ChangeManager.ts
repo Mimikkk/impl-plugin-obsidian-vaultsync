@@ -1,13 +1,13 @@
-import { ChangeType, type FileChange } from "../../domain/FileChange.ts";
+import { ChangeType, type FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
-export class ChangeService {
+export class ChangeManager {
   static create(
     locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
     remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
   ) {
-    return new ChangeService(locals, remotes);
+    return new ChangeManager(locals, remotes);
   }
 
   private constructor(

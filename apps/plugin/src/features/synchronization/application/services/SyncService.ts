@@ -1,39 +1,24 @@
-import { StateProvider } from "@plugin/features/state/infrastructure/StateProvider.ts";
-import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
-import { EventService } from "../../../events/application/services/EventService.ts";
-import { ChangeService } from "./ChangeService.ts";
+import { EventService } from "@plugin/features/events/application/services/EventService.ts";
+import { SyncManager } from "@plugin/features/synchronization/application/managers/SyncManager.ts";
 
 export class SyncService {
   static create(
     events: EventService = EventService.create(),
-    changes: ChangeService = ChangeService.create(),
-    detector: FileChangeDetector = FileChangeDetector.create(),
-    state: StateProvider = StateProvider.instance,
+    manager: SyncManager = SyncManager.create(),
   ) {
-    return new SyncService(events, changes, detector, state);
+    return new SyncService(events, manager);
   }
 
   private constructor(
     private readonly events: EventService,
-    private readonly changes: ChangeService,
-    private readonly detector: FileChangeDetector,
-    private readonly state: StateProvider,
+    private readonly manager: SyncManager,
   ) {}
 
   async synchronize() {
     console.log("Synchronizing...");
 
     await this.events.scan();
-
-    const detected = await this.detector.detect();
-    console.log("detected:", detected);
-
-    await this.changes.updates(detected);
-
-    await this.state.update((state) => {
-      state.deleted.clear();
-      state.lastSync.set(Date.now());
-    });
+    await this.manager.synchronize();
 
     console.log("Synchronized.");
     return "OK";
