@@ -1,7 +1,7 @@
-import { type ISyncState, SyncState } from "../SyncState.ts";
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
+import { type ISyncState, SyncState } from "../SyncState.ts";
 
 enum FileHashStoreType {
   Local = "local",
@@ -18,6 +18,14 @@ export class FileHashStoreProvider {
   private constructor(
     private readonly state: ISyncState,
   ) {}
+
+  static local() {
+    return this.create().local();
+  }
+
+  static remote() {
+    return this.create().remote();
+  }
 
   local() {
     return this.type(FileHashStoreType.Local);

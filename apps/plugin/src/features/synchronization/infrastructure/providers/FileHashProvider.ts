@@ -4,8 +4,8 @@ import type { FileHashStore } from "@plugin/features/synchronization/infrastruct
 
 export class FileHashProvider {
   static create(
-    locals: FileHashStore = FileHashStoreProvider.create().local(),
-    remotes: FileHashStore = FileHashStoreProvider.create().remote(),
+    locals: FileHashStore = FileHashStoreProvider.local(),
+    remotes: FileHashStore = FileHashStoreProvider.remote(),
   ) {
     return new FileHashProvider(locals, remotes);
   }
