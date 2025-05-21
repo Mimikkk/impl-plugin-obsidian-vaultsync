@@ -41,10 +41,9 @@ export const withState = <M extends Record<string, StateConfiguration>>(configur
           state.set(key, value);
         }
       } else {
-        console.log("no content for:", name);
+        console.info("no content for:", name);
       }
 
-      console.log("setup:", name, state);
       setup?.(plugin);
       state.subscribe("change", debouncedPersist);
     }
