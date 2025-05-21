@@ -1,21 +1,21 @@
 import type { FileDescriptor, FileInfo } from "@plugin/core/domain/types/FileDescriptor.ts";
 import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
+import { type ISyncState, SyncState } from "../SyncState.ts";
 import type {
   FilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
-import { SyncStateProvider } from "@plugin/features/synchronization/infrastructure/providers/SyncStateProvider.ts";
 
 export class LocalFilesystemProvider implements FilesystemProvider {
   static create(
     client: LocalFileSystemClient = LocalFileSystemClient.create(),
-    state: SyncStateProvider = SyncStateProvider.create(),
+    state: ISyncState = SyncState,
   ) {
     return new LocalFilesystemProvider(client, state);
   }
 
   private constructor(
     private readonly client: LocalFileSystemClient,
-    private readonly state: SyncStateProvider,
+    private readonly state: ISyncState,
   ) {}
 
   list(): FileDescriptor[] {
@@ -35,7 +35,8 @@ export class LocalFilesystemProvider implements FilesystemProvider {
   }
 
   info(path: string): FileInfo | undefined {
-    const deletedAt = this.state.get().deleted.get().get(path);
+    const deletedAt = this.state.get("deletedFiles").get(path);
+
     if (deletedAt === undefined) return undefined;
 
     return { deleted: true, deletedAt };

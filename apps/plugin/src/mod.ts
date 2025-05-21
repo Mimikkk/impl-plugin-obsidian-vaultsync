@@ -1,9 +1,10 @@
+import { withState } from "@plugin/features/state/middlewares/withState.ts";
+import { syncStateConfiguration } from "./features/synchronization/middlewares/syncStateConfiguration.ts";
 import { definePlugin } from "./core/middlewares/definePlugin.ts";
-import { withSyncState } from "./features/state/middlewares/withSyncState.ts";
 import { withUI } from "./features/ui/middlewares/withUI.ts";
 import "./styles.css";
 
 export default definePlugin([
-  withSyncState,
+  withState({ sync: syncStateConfiguration }),
   withUI,
 ]);

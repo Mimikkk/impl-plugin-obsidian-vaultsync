@@ -4,14 +4,14 @@ import type { EventManager } from "./EventManager.ts";
 import { VolatileListenerManager } from "./VolatileListenerManager.ts";
 
 export class VolatileEventManager<EventMap extends Record<string, unknown>> implements EventManager<EventMap> {
-  static create<EventMap extends Record<string, unknown>>(names?: (keyof EventMap)[]): VolatileEventManager<EventMap> {
-    return new VolatileEventManager<EventMap>(
-      names ? new Map(names.map((name) => [name, VolatileListenerManager.create()])) : new Map(),
-    );
+  static create<EventMap extends Record<string, unknown>>(
+    listeners: Map<keyof EventMap, VolatileListenerManager<EventMap[keyof EventMap]>> = new Map(),
+  ): VolatileEventManager<EventMap> {
+    return new VolatileEventManager(listeners);
   }
 
   private constructor(
-    private readonly listeners = new Map<keyof EventMap, VolatileListenerManager<EventMap[keyof EventMap]>>(),
+    private readonly listeners: Map<keyof EventMap, VolatileListenerManager<EventMap[keyof EventMap]>>,
   ) {}
 
   notify<const E extends keyof EventMap>(event: E, value: EventMap[E]): Awaitable<void> {
@@ -28,8 +28,13 @@ export class VolatileEventManager<EventMap extends Record<string, unknown>> impl
     event: E,
     listener: ListenerManagerNs.Listener<EventMap[E]>,
   ): ListenerManagerNs.Unsubscribe {
-    const registry = this.listeners.get(event) as VolatileListenerManager<EventMap[E]> | undefined;
+    let registry = this.listeners.get(event) as VolatileListenerManager<EventMap[E]> | undefined;
 
-    return registry!.subscribe(listener);
+    if (registry === undefined) {
+      registry = VolatileListenerManager.create();
+      this.listeners.set(event, registry as never);
+    }
+
+    return registry.subscribe(listener);
   }
 }

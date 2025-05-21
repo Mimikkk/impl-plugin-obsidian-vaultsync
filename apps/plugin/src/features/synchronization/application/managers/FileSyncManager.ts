@@ -1,21 +1,21 @@
-import { StateProvider } from "../../../state/infrastructure/SyncStateProvider.ts";
 import type { FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
 import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
+import { type ISyncState, SyncState } from "../../infrastructure/SyncState.ts";
 import { FileChangeManager } from "./FileChangeManager.ts";
 
-export class SyncManager {
+export class FileSyncManager {
   static create(
     changes: FileChangeManager = FileChangeManager.create(),
     detector: FileChangeDetector = FileChangeDetector.create(),
-    state: StateProvider = StateProvider.instance,
+    state: ISyncState = SyncState,
   ) {
-    return new SyncManager(changes, detector, state);
+    return new FileSyncManager(changes, detector, state);
   }
 
   private constructor(
     private readonly changes: FileChangeManager,
     private readonly detector: FileChangeDetector,
-    private readonly state: StateProvider,
+    private readonly state: ISyncState,
   ) {}
 
   async synchronize(): Promise<FileChange[]> {
@@ -23,9 +23,12 @@ export class SyncManager {
 
     await this.changes.updates(changes);
 
-    await this.state.update((state) => {
-      state.deletedFiles.clear();
-      state.lastSyncTs.set(Date.now());
+    this.state.update({
+      deletedFiles(previous) {
+        previous.clear();
+        return previous;
+      },
+      lastSyncTs: Date.now(),
     });
 
     return changes;

@@ -1,6 +1,6 @@
+import { type ISyncState, SyncState } from "../SyncState.ts";
 import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
-import { SyncStateProvider } from "@plugin/features/synchronization/infrastructure/providers/SyncStateProvider.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
 
 enum FileHashStoreType {
@@ -10,13 +10,13 @@ enum FileHashStoreType {
 
 export class FileHashStoreProvider {
   static create(
-    state: SyncStateProvider = SyncStateProvider.create(),
+    state: ISyncState = SyncState,
   ) {
     return new FileHashStoreProvider(state);
   }
 
   private constructor(
-    private readonly state: SyncStateProvider,
+    private readonly state: ISyncState,
   ) {}
 
   local() {
@@ -28,19 +28,19 @@ export class FileHashStoreProvider {
   }
 
   type(type: FileHashStoreType) {
-    const state = this.state.get();
-
     const filesystem = type === FileHashStoreType.Remote
       ? RemoteFilesystemProvider.create()
       : LocalFilesystemProvider.create();
 
+    const key = type === FileHashStoreType.Remote ? "remoteFilesHashes" : "localFilesHashes";
+
     const store = FileHashStore.create(
       filesystem,
-      state.remoteHashes.get(),
+      this.state.get(key),
     );
 
-    store.subscribe(({ key, value }) => {
-      state.remoteHashes.add(key, value);
+    store.subscribe(({ key: storeKey, value }) => {
+      this.state.set(key, (previous) => previous.set(storeKey, value));
     });
 
     return store;

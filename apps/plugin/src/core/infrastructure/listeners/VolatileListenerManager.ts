@@ -1,8 +1,8 @@
 import type { ListenerManager, ListenerManagerNs } from "./ListenerManager.ts";
 
 export class VolatileListenerManager<V> implements ListenerManager<V> {
-  static create<V>(): VolatileListenerManager<V> {
-    return new VolatileListenerManager<V>([]);
+  static create<V>(listeners: ListenerManagerNs.Listener<V>[] = []): VolatileListenerManager<V> {
+    return new VolatileListenerManager<V>(listeners);
   }
 
   private constructor(
