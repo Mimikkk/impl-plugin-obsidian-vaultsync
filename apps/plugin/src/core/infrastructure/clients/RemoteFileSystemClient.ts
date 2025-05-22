@@ -1,4 +1,4 @@
-import { serializeSearchParams } from "@nimir/framework";
+import { di, serializeSearchParams } from "@nimir/framework";
 import { type DateInit, DateTimeStr } from "@nimir/shared";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import ky from "ky";
@@ -68,6 +68,8 @@ export class RemoteFileSystemClient {
     return descriptors;
   }
 }
+
+export const TRemoteFileSystemClient = di.singleton(RemoteFileSystemClient);
 
 export namespace RemoteFileSystemClientNs {
   export enum EntryType {

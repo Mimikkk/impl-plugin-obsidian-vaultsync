@@ -1,25 +1,34 @@
+import { di } from "@nimir/framework";
 import type { Awaitable } from "@nimir/shared";
 import { type FileDescriptor, type FileInfo, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import {
   FileGrouper,
   type FileGrouperNs,
+  TFileGrouper,
 } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
-import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
-import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import {
+  type LocalFilesystemProvider,
+  TLocalFilesystemProvider,
+} from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
+import {
+  type RemoteFilesystemProvider,
+  TRemoteFilesystemProvider,
+} from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
 export class FileProvider {
   static create(
-    locals: LocalFilesystemProvider = LocalFilesystemProvider.create(),
-    remotes: RemoteFilesystemProvider = RemoteFilesystemProvider.create(),
+    locals = di.of(TLocalFilesystemProvider),
+    remotes = di.of(TRemoteFilesystemProvider),
+    grouper = di.of(TFileGrouper),
   ) {
-    return new FileProvider(locals, remotes);
+    return new FileProvider(locals, remotes, grouper);
   }
 
   private constructor(
     private readonly locals: LocalFilesystemProvider,
     private readonly remotes: RemoteFilesystemProvider,
-    private readonly grouper: FileGrouper = FileGrouper.create(),
+    private readonly grouper: FileGrouper,
   ) {}
 
   async byLocation(): Promise<FileGrouperNs.LocationGroups> {
@@ -50,3 +59,5 @@ export class FileProvider {
     return this.remotes;
   }
 }
+
+export const TFileProvider = di.singleton(FileProvider);

@@ -1,10 +1,14 @@
-import { EventService } from "@plugin/features/events/application/services/EventService.ts";
-import { FileSyncManager } from "@plugin/features/synchronization/application/managers/FileSyncManager.ts";
+import { di } from "@nimir/framework";
+import { type EventService, TEventService } from "@plugin/features/events/application/services/EventService.ts";
+import {
+  type FileSyncManager,
+  TFileSyncManager,
+} from "@plugin/features/synchronization/application/managers/FileSyncManager.ts";
 
 export class SyncService {
   static create(
-    events: EventService = EventService.create(),
-    manager: FileSyncManager = FileSyncManager.create(),
+    events = di.of(TEventService),
+    manager = di.of(TFileSyncManager),
   ) {
     return new SyncService(events, manager);
   }
@@ -25,3 +29,5 @@ export class SyncService {
     return "OK";
   }
 }
+
+export const TSyncService = di.singleton(SyncService);

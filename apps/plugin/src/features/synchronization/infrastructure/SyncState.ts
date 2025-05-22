@@ -1,4 +1,4 @@
-import { State, StateCodec, StateFields, StateSchemaBuilder } from "@nimir/framework";
+import { di, State, StateCodec, StateFields, StateSchemaBuilder } from "@nimir/framework";
 
 export const SyncStateSchema = StateSchemaBuilder
   .create()
@@ -10,3 +10,5 @@ export const SyncStateSchema = StateSchemaBuilder
 
 export const SyncState = State.create(StateCodec.create(SyncStateSchema).initial());
 export type ISyncState = typeof SyncState;
+
+export const TSyncState = di.singleton({ create: () => SyncState });

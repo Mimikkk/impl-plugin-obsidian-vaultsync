@@ -1,5 +1,6 @@
-import { ExternalClientUrl } from "./ExternalClientUrl.ts";
+import { di } from "@nimir/framework";
 import ky from "ky";
+import { ExternalClientUrl } from "./ExternalClientUrl.ts";
 
 export class HealthClient {
   static create(url: string = ExternalClientUrl.sync) {
@@ -12,6 +13,8 @@ export class HealthClient {
     return ky.get(this.url + "/health").json<HealthClientNs.HealthResponse>();
   }
 }
+
+export const THealthClient = di.singleton(HealthClient);
 
 export namespace HealthClientNs {
   export interface HealthResponse {

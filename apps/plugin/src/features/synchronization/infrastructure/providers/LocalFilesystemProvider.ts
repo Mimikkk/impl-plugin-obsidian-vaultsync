@@ -1,13 +1,17 @@
+import { di } from "@nimir/framework";
 import type { FileDescriptor, FileInfo } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { LocalFileSystemClient } from "../../../../core/infrastructure/clients/LocalFileSystemClient.ts";
-import { type ISyncState, SyncState } from "../SyncState.ts";
 import type {
   FilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
+import {
+  type LocalFileSystemClient,
+  TLocalFileSystemClient,
+} from "../../../../core/infrastructure/clients/LocalFileSystemClient.ts";
+import { type ISyncState, SyncState } from "../SyncState.ts";
 
 export class LocalFilesystemProvider implements FilesystemProvider {
   static create(
-    client: LocalFileSystemClient = LocalFileSystemClient.create(),
+    client = di.of(TLocalFileSystemClient),
     state: ISyncState = SyncState,
   ) {
     return new LocalFilesystemProvider(client, state);
@@ -42,3 +46,5 @@ export class LocalFilesystemProvider implements FilesystemProvider {
     return { deleted: true, deletedAt };
   }
 }
+
+export const TLocalFilesystemProvider = di.singleton(LocalFilesystemProvider);

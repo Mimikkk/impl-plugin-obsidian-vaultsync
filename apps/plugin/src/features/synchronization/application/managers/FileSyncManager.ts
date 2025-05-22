@@ -1,13 +1,17 @@
+import { di } from "@nimir/framework";
 import type { FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
-import { FileChangeDetector } from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
-import { type ISyncState, SyncState } from "../../infrastructure/SyncState.ts";
-import { FileChangeManager } from "./FileChangeManager.ts";
+import {
+  type FileChangeDetector,
+  TFileChangeDetector,
+} from "@plugin/features/synchronization/infrastructure/detectors/FileChangeDetector.ts";
+import { type ISyncState, TSyncState } from "../../infrastructure/SyncState.ts";
+import { type FileChangeManager, TFileChangeManager } from "./FileChangeManager.ts";
 
 export class FileSyncManager {
   static create(
-    changes: FileChangeManager = FileChangeManager.create(),
-    detector: FileChangeDetector = FileChangeDetector.create(),
-    state: ISyncState = SyncState,
+    changes = di.of(TFileChangeManager),
+    detector = di.of(TFileChangeDetector),
+    state = di.of(TSyncState),
   ) {
     return new FileSyncManager(changes, detector, state);
   }
@@ -34,3 +38,5 @@ export class FileSyncManager {
     return changes;
   }
 }
+
+export const TFileSyncManager = di.singleton(FileSyncManager);

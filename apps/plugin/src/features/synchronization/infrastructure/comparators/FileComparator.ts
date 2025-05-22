@@ -1,9 +1,13 @@
+import { di } from "@nimir/framework";
 import { DateTimeNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { FileHashProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
+import {
+  type FileHashProvider,
+  TFileHashProvider,
+} from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
 
 export class FileComparator {
-  static create(hashes: FileHashProvider = FileHashProvider.create()) {
+  static create(hashes = di.of(TFileHashProvider)) {
     return new FileComparator(hashes);
   }
 
@@ -29,3 +33,5 @@ export class FileComparator {
     return local === remote;
   }
 }
+
+export const TFileComparator = di.singleton(FileComparator);

@@ -1,56 +1,34 @@
-import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
-import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import { di } from "@nimir/framework";
+import { TLocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
+import { TRemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
-import { type ISyncState, SyncState } from "../SyncState.ts";
+import { TSyncState } from "../SyncState.ts";
 
 enum FileHashStoreType {
   Local = "local",
   Remote = "remote",
 }
 
-export class FileHashStoreProvider {
-  static create(
-    state: ISyncState = SyncState,
-  ) {
-    return new FileHashStoreProvider(state);
-  }
+const create = (type: FileHashStoreType, state = di.of(TSyncState)) => {
+  const filesystem = type === FileHashStoreType.Remote
+    ? di.of(TRemoteFilesystemProvider)
+    : di.of(TLocalFilesystemProvider);
 
-  private constructor(
-    private readonly state: ISyncState,
-  ) {}
+  const key = type === FileHashStoreType.Remote ? "remoteFilesHashes" : "localFilesHashes";
 
-  static local() {
-    return this.create().local();
-  }
+  const store = FileHashStore.create(filesystem, state.get(key));
 
-  static remote() {
-    return this.create().remote();
-  }
+  store.subscribe(({ key: storeKey, value }) => {
+    state.set(key, (previous) => previous.set(storeKey, value));
+  });
 
-  local() {
-    return this.type(FileHashStoreType.Local);
-  }
+  return store;
+};
 
-  remote() {
-    return this.type(FileHashStoreType.Remote);
-  }
+export const TLocalFileHashProvider = di.singleton({
+  create: () => create(FileHashStoreType.Local),
+});
 
-  type(type: FileHashStoreType) {
-    const filesystem = type === FileHashStoreType.Remote
-      ? RemoteFilesystemProvider.create()
-      : LocalFilesystemProvider.create();
-
-    const key = type === FileHashStoreType.Remote ? "remoteFilesHashes" : "localFilesHashes";
-
-    const store = FileHashStore.create(
-      filesystem,
-      this.state.get(key),
-    );
-
-    store.subscribe(({ key: storeKey, value }) => {
-      this.state.set(key, (previous) => previous.set(storeKey, value));
-    });
-
-    return store;
-  }
-}
+export const TRemoteFileHashProvider = di.singleton({
+  create: () => create(FileHashStoreType.Remote),
+});

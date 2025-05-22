@@ -1,11 +1,15 @@
+import { di } from "@nimir/framework";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { FileHashStoreProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashStoreProvider.ts";
+import {
+  TLocalFileHashProvider,
+  TRemoteFileHashProvider,
+} from "@plugin/features/synchronization/infrastructure/providers/FileHashStoreProvider.ts";
 import type { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
 
 export class FileHashProvider {
   static create(
-    locals: FileHashStore = FileHashStoreProvider.local(),
-    remotes: FileHashStore = FileHashStoreProvider.remote(),
+    locals = di.of(TLocalFileHashProvider),
+    remotes = di.of(TRemoteFileHashProvider),
   ) {
     return new FileHashProvider(locals, remotes);
   }
@@ -23,3 +27,5 @@ export class FileHashProvider {
     return this.remotes.get(descriptor);
   }
 }
+
+export const TFileHashProvider = di.singleton(FileHashProvider);
