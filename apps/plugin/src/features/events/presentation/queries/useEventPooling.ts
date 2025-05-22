@@ -1,6 +1,6 @@
 import { lazy } from "@nimir/shared";
-import { useLatestEventId } from "@plugin/features/events/application/presentation/queries/useLatestEventId.ts";
-import { usePoolEvents } from "@plugin/features/events/application/presentation/queries/usePoolEvents.ts";
+import { useLatestEventId } from "@plugin/features/events/presentation/queries/useLatestEventId.ts";
+import { usePoolEvents } from "@plugin/features/events/presentation/queries/usePoolEvents.ts";
 import { EventService } from "@plugin/features/events/application/services/EventService.ts";
 
 const events = lazy(EventService.create);
