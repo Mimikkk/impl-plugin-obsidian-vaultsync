@@ -7,9 +7,11 @@ export type {
   Merge,
   Nil,
   Prettify,
+  RecordOf,
   RecordToObject,
   RecordToUnion,
   Some,
+  StrRecord,
 } from "./types/common.ts";
 export type { TypeKey } from "./types/typeKey.ts";
 export { BufferNs } from "./utils/BufferNs.ts";

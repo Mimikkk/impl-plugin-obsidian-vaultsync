@@ -1,3 +1,4 @@
+import type { StrRecord } from "@nimir/shared";
 import type { StateRuntime, StateSchema, StateStorage } from "./StateSchema.ts";
 
 export class StateCodec<T extends StateSchema = any> {
@@ -13,7 +14,7 @@ export class StateCodec<T extends StateSchema = any> {
     }
 
     for (const [key, field] of this.schema.entries()) {
-      if (!field.validate((data as Record<string, unknown>)[key as string])) {
+      if (!field.validate((data as StrRecord)[key as string])) {
         return false;
       }
     }

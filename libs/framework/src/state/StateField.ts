@@ -1,4 +1,6 @@
-export type StateRecord = Record<string, StateField>;
+import type { StrRecord } from "@nimir/shared";
+
+export type StateRecord = StrRecord<StateField>;
 
 export type StateRecordStorage<R extends StateRecord> = {
   [K in keyof R]: R[K] extends StateField<any, infer T> ? T : never;

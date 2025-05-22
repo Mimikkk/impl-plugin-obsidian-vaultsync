@@ -1,17 +1,18 @@
 import type { EventManager } from "@framework/listeners/EventManager.ts";
 import type { ListenerManagerNs } from "@framework/listeners/ListenerManager.ts";
-import { VolatileEventManager } from "@framework/listeners/VolatileEventManager.ts";
-import type { Prettify, RecordToObject, RecordToUnion } from "@nimir/shared";
+import { TEventManager } from "@framework/listeners/VolatileEventManager.ts";
+import { di } from "@framework/mod.ts";
+import type { Prettify, RecordToObject, RecordToUnion, StrRecord } from "@nimir/shared";
 
-export type StateEventMap<T extends Record<string, unknown>> = Prettify<
+export type StateEventMap<T extends StrRecord> = Prettify<
   { change: RecordToUnion<T> } & RecordToObject<T>
 >;
 
-export type StateUpdate<T extends Record<string, unknown>> = { [K in keyof T]: T[K] | ((previous: T[K]) => T[K]) };
-export class State<T extends Record<string, unknown> = any> {
-  static create<T extends Record<string, unknown>>(
+export type StateUpdate<T extends StrRecord> = { [K in keyof T]: T[K] | ((previous: T[K]) => T[K]) };
+export class State<T extends StrRecord = any> {
+  static create<T extends StrRecord>(
     state: T,
-    events: EventManager<StateEventMap<T>> = VolatileEventManager.create<StateEventMap<T>>(),
+    events: EventManager<StateEventMap<T>> = di.of(TEventManager),
   ) {
     return new State(state, events);
   }

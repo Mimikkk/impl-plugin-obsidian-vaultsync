@@ -384,7 +384,7 @@ describe("DependencyContainer", () => {
 
   describe("Global Container", () => {
     it("should work with the exported global container", async () => {
-      const { container: global } = await import("./DependencyContainer.ts");
+      const { di: global } = await import("./DependencyContainer.ts");
 
       const token = global.register(AServiceImpl);
       const service = global.of(token);

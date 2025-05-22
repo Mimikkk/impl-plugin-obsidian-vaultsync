@@ -70,4 +70,4 @@ export class DependencyContainer {
   }
 }
 
-export const container = DependencyContainer.create();
+export const di = DependencyContainer.create();
