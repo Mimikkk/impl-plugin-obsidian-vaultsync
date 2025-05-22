@@ -1,7 +1,7 @@
-import { State } from "../../state/infrastructure/State.ts";
-import { StateCodec } from "../../state/infrastructure/StateCodec.ts";
-import { StateFields } from "../../state/infrastructure/StateField.ts";
-import { StateSchemaBuilder } from "../../state/infrastructure/StateSchemaBuilder.ts";
+import { State } from "../../../core/infrastructure/state/State.ts";
+import { StateCodec } from "../../../core/infrastructure/state/StateCodec.ts";
+import { StateFields } from "../../../core/infrastructure/state/StateField.ts";
+import { StateSchemaBuilder } from "../../../core/infrastructure/state/StateSchemaBuilder.ts";
 
 export const SyncStateSchema = StateSchemaBuilder
   .create()

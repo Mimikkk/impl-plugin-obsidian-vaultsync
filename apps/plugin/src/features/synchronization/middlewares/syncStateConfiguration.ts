@@ -1,4 +1,4 @@
-import type { StateConfiguration } from "@plugin/features/state/middlewares/withState.ts";
+import type { StateConfiguration } from "../../../core/middlewares/presets/withState.ts";
 import { SyncState, SyncStateSchema } from "@plugin/features/synchronization/infrastructure/SyncState.ts";
 import { TFile } from "obsidian";
 

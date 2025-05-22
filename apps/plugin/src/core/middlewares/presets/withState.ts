@@ -1,8 +1,8 @@
 import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { debounce, type Plugin } from "obsidian";
-import type { State } from "../infrastructure/State.ts";
-import { StateCodec } from "../infrastructure/StateCodec.ts";
-import type { StateRuntime, StateSchema, StateStorage } from "../infrastructure/StateSchema.ts";
+import type { State } from "../../infrastructure/state/State.ts";
+import { StateCodec } from "../../infrastructure/state/StateCodec.ts";
+import type { StateRuntime, StateSchema, StateStorage } from "../../infrastructure/state/StateSchema.ts";
 
 export type StateConfiguration = { state: State; schema: StateSchema; setup?: (plugin: Plugin) => void };
 export const withState = <M extends Record<string, StateConfiguration>>(configuration: M) =>

@@ -4,7 +4,7 @@ import {
   type StateRecord,
   type StateRecordRuntime,
   type StateRecordStorage,
-} from "@plugin/features/state/infrastructure/StateField.ts";
+} from "../../../core/infrastructure/state/StateField.ts";
 
 export class StateSchema<T extends StateRecord = any> {
   static create<T extends StateRecord>(state: Map<keyof T, T[keyof T]>) {
