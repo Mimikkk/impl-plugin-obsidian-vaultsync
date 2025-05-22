@@ -1,3 +1,5 @@
+export { container as di } from "./dependencies/DependencyContainer.ts";
+
 export * from "./listeners/EventManager.ts";
 export * from "./listeners/ListenerManager.ts";
 export * from "./listeners/VolatileEventManager.ts";
