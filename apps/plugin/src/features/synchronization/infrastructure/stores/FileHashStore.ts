@@ -1,8 +1,8 @@
+import type { ListenerManager, ListenerManagerNs } from "@nimir/framework";
+import { VolatileListenerManager } from "@nimir/framework";
 import { BufferNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
-import type { ListenerManager, ListenerManagerNs } from "../../../../core/infrastructure/listeners/ListenerManager.ts";
-import { VolatileListenerManager } from "../../../../core/infrastructure/listeners/VolatileListenerManager.ts";
 
 type ChangeValue = { key: string; value: string };
 export class FileHashStore {

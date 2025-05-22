@@ -1,6 +1,6 @@
 import type { Prettify } from "@nimir/shared";
-import type { StateField, StateRecord } from "../../../core/infrastructure/state/StateField.ts";
-import { StateSchema } from "../../../core/infrastructure/state/StateSchema.ts";
+import type { StateField, StateRecord } from "./StateField.ts";
+import { StateSchema } from "./StateSchema.ts";
 
 export class StateSchemaBuilder<T extends StateRecord = StateRecord> {
   static create() {

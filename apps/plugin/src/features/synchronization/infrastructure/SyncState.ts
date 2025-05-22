@@ -1,7 +1,4 @@
-import { State } from "../../../core/infrastructure/state/State.ts";
-import { StateCodec } from "../../../core/infrastructure/state/StateCodec.ts";
-import { StateFields } from "../../../core/infrastructure/state/StateField.ts";
-import { StateSchemaBuilder } from "../../../core/infrastructure/state/StateSchemaBuilder.ts";
+import { State, StateCodec, StateFields, StateSchemaBuilder } from "@nimir/framework";
 
 export const SyncStateSchema = StateSchemaBuilder
   .create()

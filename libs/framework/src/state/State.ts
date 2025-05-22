@@ -1,7 +1,7 @@
+import type { EventManager } from "@framework/listeners/EventManager.ts";
+import type { ListenerManagerNs } from "@framework/listeners/ListenerManager.ts";
+import { VolatileEventManager } from "@framework/listeners/VolatileEventManager.ts";
 import type { Prettify, RecordToObject, RecordToUnion } from "@nimir/shared";
-import type { EventManager } from "@plugin/core/infrastructure/listeners/EventManager.ts";
-import type { ListenerManagerNs } from "@plugin/core/infrastructure/listeners/ListenerManager.ts";
-import { VolatileEventManager } from "@plugin/core/infrastructure/listeners/VolatileEventManager.ts";
 
 export type StateEventMap<T extends Record<string, unknown>> = Prettify<
   { change: RecordToUnion<T> } & RecordToObject<T>

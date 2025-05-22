@@ -1,8 +1,8 @@
+import { serializeSearchParams } from "@nimir/framework";
 import { type DateInit, DateTimeStr } from "@nimir/shared";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { ExternalClientUrl } from "./ExternalClientUrl.ts";
-import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
 import ky from "ky";
+import { ExternalClientUrl } from "./ExternalClientUrl.ts";
 
 export class RemoteFileSystemClient {
   static create(

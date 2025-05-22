@@ -1,5 +1,5 @@
 import { ExternalClientUrl } from "./ExternalClientUrl.ts";
-import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
+import { serializeSearchParams } from "@nimir/framework";
 import ky from "ky";
 
 export class EventClient {

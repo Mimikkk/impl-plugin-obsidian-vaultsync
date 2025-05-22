@@ -1,4 +1,4 @@
-import type { StateRuntime, StateSchema, StateStorage } from "../../../core/infrastructure/state/StateSchema.ts";
+import type { StateRuntime, StateSchema, StateStorage } from "./StateSchema.ts";
 
 export class StateCodec<T extends StateSchema = any> {
   static create<T extends StateSchema>(schema: T) {

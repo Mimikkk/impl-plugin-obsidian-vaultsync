@@ -1,4 +1,10 @@
-const transformers = [
+interface Transformer<T = any> {
+  name: string;
+  test: (value: any) => value is T;
+  transform: (value: T) => string;
+}
+
+const transformers: Transformer[] = [
   {
     name: "array",
     test: (value: any): value is any[] => Array.isArray(value),
@@ -25,7 +31,7 @@ export const serializeSearchParams = <P extends object | undefined>(params: P): 
     const handler = transformers.find((handler) => handler.test(value));
     if (!handler) continue;
 
-    result.set(key, handler.transform(value as never));
+    result.set(key, handler.transform(value));
   }
 
   return result;
