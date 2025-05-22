@@ -24,5 +24,4 @@ export class EventService {
     return await this.pool({ since: 0, limit: 1 }).then((events) => events[events.length - 1]);
   }
 }
-
 export const TEventService = di.singleton(EventService);
