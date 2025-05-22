@@ -1,5 +1,4 @@
-import { withQueryClient } from "@plugin/core/infrastructure/queries/withQueryClient.tsx";
-import { Status, StatusNs } from "@plugin/core/infrastructure/types/Status.ts";
+import { Status, StatusNs, withQueryClient } from "@nimir/interaction";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";

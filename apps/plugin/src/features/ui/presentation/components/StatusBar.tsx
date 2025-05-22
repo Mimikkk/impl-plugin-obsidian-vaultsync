@@ -1,5 +1,4 @@
-import { withQueryClient } from "@plugin/core/infrastructure/queries/withQueryClient.tsx";
-import { createTimeoutAccessor } from "@plugin/core/infrastructure/signals/createTimeoutAccessor.ts";
+import { createTimeoutAccessor, withQueryClient } from "@nimir/interaction";
 import { useSync } from "@plugin/features/synchronization/presentation/mutations/useSync.ts";
 import { Match, Switch } from "solid-js";
 

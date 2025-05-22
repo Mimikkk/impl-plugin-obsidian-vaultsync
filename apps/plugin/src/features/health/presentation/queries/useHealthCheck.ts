@@ -1,5 +1,5 @@
+import { createUseQuery } from "@nimir/interaction";
 import { lazy, TimeMs } from "@nimir/shared";
-import { createUseQuery } from "@plugin/core/infrastructure/queries/createUseQuery.ts";
 import { HealthService } from "@plugin/features/health/application/services/HealthService.ts";
 
 const health = lazy(HealthService.create);

@@ -1,5 +1,5 @@
 import type { FileDescriptor, FileInfo } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/internal/LocalFileSystemClient.ts";
+import { LocalFileSystemClient } from "../../../../core/infrastructure/clients/LocalFileSystemClient.ts";
 import { type ISyncState, SyncState } from "../SyncState.ts";
 import type {
   FilesystemProvider,

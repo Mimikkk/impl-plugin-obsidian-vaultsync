@@ -1,5 +1,5 @@
+import { createUseQuery } from "@nimir/interaction";
 import { lazy } from "@nimir/shared";
-import { createUseQuery } from "@plugin/core/infrastructure/queries/createUseQuery.ts";
 import { EventService } from "../../application/services/EventService.ts";
 
 const events = lazy(EventService.create);

@@ -1,5 +1,4 @@
-import { getQueryClient } from "@plugin/core/infrastructure/clients/internal/QueryClient.ts";
-import { isAnyMutating } from "@plugin/core/infrastructure/mutations/isAnyMutating.ts";
+import { QueryClientNs } from "@interaction/configurations/QueryClient.ts";
 import type {
   DefaultError,
   SolidMutationOptions,
@@ -9,6 +8,7 @@ import type {
 } from "@tanstack/solid-query";
 import { useMutation } from "@tanstack/solid-query";
 import type { Accessor } from "solid-js";
+import { isAnyMutating } from "./isAnyMutating.ts";
 
 export type CreateUseMutationOptions<T = unknown, E = DefaultError, V = void, C = unknown> =
   | UseMutationOptions<T, E, V, C>
@@ -30,7 +30,7 @@ export const createUseMutation = <T = unknown, E = DefaultError, V = void, C = u
   const getOptions = typeof options === "object" ? () => options : options;
 
   return (): CreateUseMutationResult<T, E, V, C> => {
-    const mutation = useMutation(getOptions, getQueryClient);
+    const mutation = useMutation(getOptions, QueryClientNs.get);
     const isMutating = isAnyMutating(getOptions);
 
     const result = [mutation.mutateAsync, mutation, isMutating] as CreateUseMutationResult<T, E, V, C>;

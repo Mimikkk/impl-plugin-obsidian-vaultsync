@@ -1,5 +1,5 @@
 import type { FileDescriptor, FileInfo } from "@plugin/core/domain/types/FileDescriptor.ts";
-import { RemoteFileSystemClient } from "@plugin/core/infrastructure/clients/external/RemoteFileSystemClient.ts";
+import { RemoteFileSystemClient } from "../../../../core/infrastructure/clients/RemoteFileSystemClient.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
 
 export class RemoteFilesystemProvider implements FilesystemProvider {

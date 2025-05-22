@@ -1,4 +1,4 @@
-import { createTimeout } from "@plugin/core/infrastructure/signals/createTimeout.ts";
+import { createTimeout } from "@interaction/signals/createTimeout.ts";
 import { createEffect, createSignal } from "solid-js";
 
 export const createTimeoutAccessor = (when: () => boolean, ms: number = 1000) => {

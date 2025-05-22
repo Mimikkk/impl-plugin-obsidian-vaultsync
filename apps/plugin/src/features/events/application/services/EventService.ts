@@ -1,4 +1,4 @@
-import { EventClient, type EventClientNs } from "@plugin/core/infrastructure/clients/external/EventClient.ts";
+import { EventClient, type EventClientNs } from "../../../../core/infrastructure/clients/EventClient.ts";
 
 export class EventService {
   static create(client: EventClient = EventClient.create()) {

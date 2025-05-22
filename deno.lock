@@ -2910,6 +2910,25 @@
           "npm:openapi3-ts@^4.4.0",
           "npm:swagger-ui-dist@^5.11.0"
         ]
+      },
+      "libs/framework": {
+        "dependencies": [
+          "jsr:@std/fs@1.0.9",
+          "jsr:@std/path@1.0.9",
+          "npm:@tanstack/solid-query@5.75.0",
+          "npm:clsx@^2.1.1",
+          "npm:ky@^1.8.1"
+        ]
+      },
+      "libs/interaction": {
+        "dependencies": [
+          "jsr:@std/fs@1.0.9",
+          "jsr:@std/path@1.0.9",
+          "npm:@tanstack/solid-query@5.75.0",
+          "npm:clsx@^2.1.1",
+          "npm:ky@^1.8.1",
+          "npm:solid-js@1.9.6"
+        ]
       }
     }
   }

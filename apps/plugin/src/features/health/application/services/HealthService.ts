@@ -1,4 +1,4 @@
-import { HealthClient } from "@plugin/core/infrastructure/clients/external/HealthClient.ts";
+import { HealthClient } from "../../../../core/infrastructure/clients/HealthClient.ts";
 
 export class HealthService {
   static create(client: HealthClient = HealthClient.create()) {

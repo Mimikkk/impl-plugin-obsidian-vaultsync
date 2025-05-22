@@ -1,4 +1,4 @@
-import { defer } from "@plugin/core/infrastructure/consts/conts.ts";
+import { defer } from "@nimir/interaction";
 import { createMiddleware } from "@plugin/core/middlewares/createMiddleware.ts";
 import { useSync } from "@plugin/features/synchronization/presentation/mutations/useSync.ts";
 import { RibbonBar } from "@plugin/features/ui/presentation/components/RibbonBar.tsx";

@@ -33,7 +33,9 @@
     "members": [
       "apps/plugin",
       "apps/server",
-      "libs/shared"
+      "libs/shared",
+      "libs/framework",
+      "libs/interaction"
     ]
   },
   "tasks": {

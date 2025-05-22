@@ -1,0 +1,19 @@
+{
+  "name": "@nimir/interaction",
+  "version": "0.0.1",
+  "exports": "./src/mod.ts",
+  "imports": {
+    "@std/path": "jsr:@std/path@1.0.9",
+    "@std/fs": "jsr:@std/fs@1.0.9",
+    "@tanstack/solid-query": "npm:@tanstack/solid-query@5.75.0",
+    "clsx": "npm:clsx@^2.1.1",
+    "ky": "npm:ky@^1.8.1",
+    "solid-js": "npm:solid-js@1.9.6",
+    "@interaction/": "./src/"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window", "deno.ns", "DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "precompile",
+    "jsxImportSource": "solid-js"
+  }
+}

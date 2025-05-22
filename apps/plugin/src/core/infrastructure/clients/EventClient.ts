@@ -1,4 +1,4 @@
-import { ExternalClientUrl } from "@plugin/core/infrastructure/clients/external/ExternalClientUrl.ts";
+import { ExternalClientUrl } from "./ExternalClientUrl.ts";
 import { serializeSearchParams } from "@plugin/core/infrastructure/serializers/serializeSearchParams.ts";
 import ky from "ky";
 
