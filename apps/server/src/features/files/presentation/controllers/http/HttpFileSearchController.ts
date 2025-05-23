@@ -5,7 +5,7 @@ import type { RouteRequestContext } from "@server/core/infrastructure/routing/ro
 import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/core/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { HttpFileQueryParameter } from "@server/features/filesystem/presentation/messaging/http/parameters/HttpFileQueryParameter.ts";
+import { HttpFileQueryParameter } from "@server/features/files/presentation/messaging/http/parameters/HttpFileQueryParameter.ts";
 import { FileSearchService } from "../../../application/services/FileSearchService.ts";
 import { HttpFileSearchResponse } from "../../messaging/http/responses/HttpFileSearchResponse.ts";
 

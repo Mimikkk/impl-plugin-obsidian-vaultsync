@@ -1,7 +1,7 @@
 import { resolve, singleton } from "@nimir/framework";
 import { EnvironmentConfiguration } from "@server/configurations/EnvironmentConfiguration.ts";
 import { FileSystemManager } from "@server/core/infrastructure/files/managers/FileSystemManager.ts";
-import { PathSanitizer } from "@server/features/filesystem/infrastructure/files/PathSanitizer.ts";
+import { PathSanitizer } from "@server/features/files/infrastructure/files/PathSanitizer.ts";
 
 @singleton
 export class FileOperationService {
