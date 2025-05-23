@@ -2,13 +2,14 @@ import {
   container,
   type InstanceOf,
   resolve,
+  singleton,
   State,
   StateCodec,
   StateFields,
   StateSchemaBuilder,
 } from "@nimir/framework";
 
-export const SyncStateSchema = container.singleton({
+export const SyncStateSchema = singleton({
   create: () =>
     StateSchemaBuilder
       .create()
@@ -21,7 +22,7 @@ export const SyncStateSchema = container.singleton({
 });
 export type ISyncStateSchema = InstanceOf<typeof SyncStateSchema>;
 
-export const SyncState = container.singleton({
+export const SyncState = singleton({
   create: () => State.create(StateCodec.create(resolve(SyncStateSchema)).initial()),
   name: "SyncState",
 });

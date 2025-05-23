@@ -6,18 +6,22 @@ export const resolve = <T>(item: Constructible<T>, from: DependencyContainer = c
 export const lazyResolve = <T>(item: Constructible<T>, from: DependencyContainer = container): () => T =>
   lazy(() => resolve(item, from));
 
-export const singleton = (target: Constructible) => {
+export const singleton = <T extends Constructible>(target: T) => {
   container.singleton(target);
+  return target;
 };
 
-export const singletonTo = (container: DependencyContainer) => (target: Constructible) => {
+export const singletonTo = (container: DependencyContainer) => <T extends Constructible>(target: T) => {
   container.singleton(target);
+  return target;
 };
 
-export const register = (target: Constructible) => {
+export const register = <T extends Constructible>(target: T) => {
   container.register(target);
+  return target;
 };
 
 export const registerTo = (container: DependencyContainer) => (target: Constructible) => {
   container.register(target);
+  return target;
 };
