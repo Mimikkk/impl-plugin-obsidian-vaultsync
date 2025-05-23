@@ -1,5 +1,5 @@
 import type { ListenerManager, ListenerManagerNs } from "@nimir/framework";
-import { resolve, VolatileListenerManager } from "@nimir/framework";
+import { VolatileListenerManager } from "@nimir/framework";
 import { BufferNs } from "@nimir/shared";
 import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
@@ -9,7 +9,7 @@ export class FileHashStore {
   static create(
     filesystem: FilesystemProvider,
     store: Map<string, string> = new Map(),
-    listeners: ListenerManager<ChangeValue> = resolve<VolatileListenerManager>(VolatileListenerManager),
+    listeners = VolatileListenerManager.create<ChangeValue>(),
   ) {
     return new FileHashStore(filesystem, store, listeners);
   }

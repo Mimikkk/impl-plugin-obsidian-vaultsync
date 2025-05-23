@@ -1,7 +1,5 @@
-import { register } from "@framework/dependencies/decorators.ts";
 import type { ListenerManager, ListenerManagerNs } from "./ListenerManager.ts";
 
-@register
 export class VolatileListenerManager<V = any> implements ListenerManager<V> {
   static create<V>(
     listeners: ListenerManagerNs.Listener<V>[] = [],

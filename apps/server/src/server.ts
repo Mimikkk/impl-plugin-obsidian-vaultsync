@@ -1,9 +1,9 @@
 import { EnvironmentConfiguration } from "@server/configurations/EnvironmentConfiguration.ts";
 import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
-import { HttpRouter } from "@server/infrastructure/routing/routes/HttpRouter.ts";
-import { WsRouter } from "@server/infrastructure/routing/routes/WsRouter.ts";
-import { ApplicationComposer } from "./infrastructure/middlewares/ApplicationComposer.ts";
-import { MiddlewareNs } from "./infrastructure/middlewares/MiddlewareNs.ts";
+import { ApplicationComposer } from "@server/core/infrastructure/middlewares/ApplicationComposer.ts";
+import { MiddlewareNs } from "@server/core/infrastructure/middlewares/MiddlewareNs.ts";
+import { HttpRouter } from "@server/core/infrastructure/routing/routes/HttpRouter.ts";
+import { WsRouter } from "@server/core/infrastructure/routing/routes/WsRouter.ts";
 
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
