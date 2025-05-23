@@ -1,8 +1,9 @@
-import { di } from "@nimir/framework";
-import { type HealthClient, THealthClient } from "../../../../core/infrastructure/clients/HealthClient.ts";
+import { resolve, singleton } from "@nimir/framework";
+import { HealthClient } from "../../../../core/infrastructure/clients/HealthClient.ts";
 
+@singleton
 export class HealthService {
-  static create(client = di.of(THealthClient)) {
+  static create(client = resolve(HealthClient)) {
     return new HealthService(client);
   }
 
@@ -12,5 +13,3 @@ export class HealthService {
     return await this.client.check();
   }
 }
-
-export const THealthService = di.singleton(HealthService);

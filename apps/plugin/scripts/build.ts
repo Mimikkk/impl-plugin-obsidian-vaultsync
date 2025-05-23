@@ -40,7 +40,12 @@ rspack({
         test: /\.ts$/,
         loader: "builtin:swc-loader",
         type: "javascript/auto",
-        options: { jsc: { parser: { syntax: "typescript" }, target: "esnext" } },
+        options: {
+          jsc: {
+            parser: { syntax: "typescript", decorators: true },
+            target: "esnext",
+          },
+        },
       },
       {
         test: /\\.env$/,

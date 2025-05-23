@@ -1,4 +1,5 @@
-export { di } from "./dependencies/DependencyContainer.ts";
+export { lazyResolve, register, registerTo, resolve, singleton, singletonTo } from "./dependencies/decorators.ts";
+export { container, DependencyContainer } from "./dependencies/DependencyContainer.ts";
 
 export * from "./listeners/EventManager.ts";
 export * from "./listeners/ListenerManager.ts";

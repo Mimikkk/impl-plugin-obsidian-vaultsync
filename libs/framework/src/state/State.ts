@@ -1,7 +1,7 @@
 import type { EventManager } from "@framework/listeners/EventManager.ts";
 import type { ListenerManagerNs } from "@framework/listeners/ListenerManager.ts";
-import { TEventManager } from "@framework/listeners/VolatileEventManager.ts";
-import { di } from "@framework/mod.ts";
+import { VolatileEventManager } from "@framework/listeners/VolatileEventManager.ts";
+import { resolve } from "@framework/mod.ts";
 import type { Prettify, RecordToObject, RecordToUnion, StrRecord } from "@nimir/shared";
 
 export type StateEventMap<T extends StrRecord> = Prettify<
@@ -9,10 +9,11 @@ export type StateEventMap<T extends StrRecord> = Prettify<
 >;
 
 export type StateUpdate<T extends StrRecord> = { [K in keyof T]: T[K] | ((previous: T[K]) => T[K]) };
-export class State<T extends StrRecord = any> {
+
+export class State<T extends StrRecord = StrRecord> {
   static create<T extends StrRecord>(
     state: T,
-    events: EventManager<StateEventMap<T>> = di.of(TEventManager),
+    events = resolve<VolatileEventManager<StateEventMap<T>>>(VolatileEventManager),
   ) {
     return new State(state, events);
   }

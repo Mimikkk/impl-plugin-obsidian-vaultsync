@@ -1,7 +1,8 @@
-import { di, serializeSearchParams } from "@nimir/framework";
+import { serializeSearchParams, singleton } from "@nimir/framework";
 import ky from "ky";
 import { ExternalClientUrl } from "./ExternalClientUrl.ts";
 
+@singleton
 export class EventClient {
   static create(url: string = ExternalClientUrl.sync + "/sync") {
     return new EventClient(url);
@@ -21,8 +22,6 @@ export class EventClient {
       .json();
   }
 }
-
-export const TEventClient = di.singleton(EventClient);
 
 export namespace EventClientNs {
   /** @see {@link https://docs.syncthing.net/dev/events.html#event-types | Syncthing event types} */

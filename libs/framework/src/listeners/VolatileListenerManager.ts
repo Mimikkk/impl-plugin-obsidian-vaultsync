@@ -1,6 +1,7 @@
-import { di } from "@framework/dependencies/DependencyContainer.ts";
+import { register } from "@framework/dependencies/decorators.ts";
 import type { ListenerManager, ListenerManagerNs } from "./ListenerManager.ts";
 
+@register
 export class VolatileListenerManager<V = any> implements ListenerManager<V> {
   static create<V>(
     listeners: ListenerManagerNs.Listener<V>[] = [],
@@ -24,5 +25,3 @@ export class VolatileListenerManager<V = any> implements ListenerManager<V> {
     return () => this.listeners.splice(this.listeners.indexOf(listener), 1);
   }
 }
-
-export const TListenerManager = di.register<VolatileListenerManager>(VolatileListenerManager);

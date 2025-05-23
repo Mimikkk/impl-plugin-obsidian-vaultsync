@@ -1,7 +1,6 @@
-import { di } from "@nimir/framework";
+import { lazyResolve } from "@nimir/framework";
 import { createUseMutation } from "@nimir/interaction";
-import { lazy } from "@nimir/shared";
-import { TSyncService } from "../../application/services/FileSyncService.ts";
+import { SyncService } from "../../application/services/FileSyncService.ts";
 
-const sync = lazy(() => di.of(TSyncService));
+const sync = lazyResolve(SyncService);
 export const useSync = createUseMutation({ mutationKey: ["key"], mutationFn: () => sync().synchronize() });

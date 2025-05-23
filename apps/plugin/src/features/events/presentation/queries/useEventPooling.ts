@@ -1,10 +1,9 @@
-import { di } from "@nimir/framework";
-import { lazy } from "@nimir/shared";
-import { TEventService } from "@plugin/features/events/application/services/EventService.ts";
+import { lazyResolve } from "@nimir/framework";
+import { EventService } from "@plugin/features/events/application/services/EventService.ts";
 import { useLatestEventId } from "@plugin/features/events/presentation/queries/useLatestEventId.ts";
 import { usePoolEvents } from "@plugin/features/events/presentation/queries/usePoolEvents.ts";
 
-const events = lazy(() => di.of(TEventService));
+const events = lazyResolve(EventService);
 export const useEventPooling = () => {
   const latestQuery = useLatestEventId();
 

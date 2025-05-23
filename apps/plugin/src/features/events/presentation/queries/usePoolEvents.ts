@@ -1,9 +1,9 @@
-import { di } from "@nimir/framework";
+import { lazyResolve } from "@nimir/framework";
 import { createUseQuery } from "@nimir/interaction";
-import { lazy, TimeMs } from "@nimir/shared";
-import { TEventService } from "@plugin/features/events/application/services/EventService.ts";
+import { TimeMs } from "@nimir/shared";
+import { EventService } from "@plugin/features/events/application/services/EventService.ts";
 
-const events = lazy(() => di.of(TEventService));
+const events = lazyResolve(EventService);
 export const usePoolEvents = createUseQuery({
   queryKey: ["pool-events"],
   queryFn: () => events().pool(),

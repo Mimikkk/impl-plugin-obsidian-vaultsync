@@ -1,9 +1,9 @@
-import { di } from "@nimir/framework";
+import { lazyResolve } from "@nimir/framework";
 import { createUseQuery } from "@nimir/interaction";
-import { lazy, TimeMs } from "@nimir/shared";
-import { THealthService } from "@plugin/features/health/application/services/HealthService.ts";
+import { TimeMs } from "@nimir/shared";
+import { HealthService } from "@plugin/features/health/application/services/HealthService.ts";
 
-const health = lazy(() => di.of(THealthService));
+const health = lazyResolve(HealthService);
 export const useHealthCheck = createUseQuery({
   queryKey: ["health-check"],
   queryFn: () => health().check(),

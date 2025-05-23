@@ -1,9 +1,10 @@
-import { di } from "@framework/dependencies/DependencyContainer.ts";
+import { register } from "@framework/dependencies/decorators.ts";
 import type { ListenerManager, ListenerManagerNs } from "@framework/listeners/ListenerManager.ts";
 import type { Awaitable, StrRecord } from "@nimir/shared";
 import type { EventManager } from "./EventManager.ts";
 import { VolatileListenerManager } from "./VolatileListenerManager.ts";
 
+@register
 export class VolatileEventManager<EventMap extends StrRecord> implements EventManager<EventMap> {
   static create<EventMap extends StrRecord>(
     listeners: Map<keyof EventMap, VolatileListenerManager<EventMap[keyof EventMap]>> = new Map(),
@@ -39,5 +40,3 @@ export class VolatileEventManager<EventMap extends StrRecord> implements EventMa
     return registry.subscribe(listener);
   }
 }
-
-export const TEventManager = di.register<VolatileEventManager<any>>(VolatileEventManager);

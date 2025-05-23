@@ -1,14 +1,12 @@
-import { di } from "@nimir/framework";
+import { resolve, singleton } from "@nimir/framework";
 import type { FileDescriptor, FileInfo } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
-import {
-  type RemoteFileSystemClient,
-  TRemoteFileSystemClient,
-} from "../../../../core/infrastructure/clients/RemoteFileSystemClient.ts";
+import { RemoteFileSystemClient } from "../../../../core/infrastructure/clients/RemoteFileSystemClient.ts";
 
+@singleton
 export class RemoteFilesystemProvider implements FilesystemProvider {
   static create(
-    client = di.of(TRemoteFileSystemClient),
+    client = resolve(RemoteFileSystemClient),
   ) {
     return new RemoteFilesystemProvider(client);
   }
@@ -40,5 +38,3 @@ export class RemoteFilesystemProvider implements FilesystemProvider {
     return { deleted: info.deleted, deletedAt: info.modified };
   }
 }
-
-export const TRemoteFilesystemProvider = di.singleton(RemoteFilesystemProvider);

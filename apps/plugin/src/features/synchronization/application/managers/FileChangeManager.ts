@@ -1,18 +1,17 @@
-import { di } from "@nimir/framework";
+import { resolve, singleton } from "@nimir/framework";
 import { ChangeType, type FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
 import {
-  type LocalFilesystemProvider,
-  TLocalFilesystemProvider,
+  LocalFilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import {
-  type RemoteFilesystemProvider,
-  TRemoteFilesystemProvider,
+  RemoteFilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
+@singleton
 export class FileChangeManager {
   static create(
-    locals = di.of(TLocalFilesystemProvider),
-    remotes = di.of(TRemoteFilesystemProvider),
+    locals = resolve(LocalFilesystemProvider),
+    remotes = resolve(RemoteFilesystemProvider),
   ) {
     return new FileChangeManager(locals, remotes);
   }
@@ -59,5 +58,3 @@ export class FileChangeManager {
     return await this.locals.remove(path);
   }
 }
-
-export const TFileChangeManager = di.singleton(FileChangeManager);

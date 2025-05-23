@@ -1,20 +1,15 @@
-import { di } from "@nimir/framework";
+import { resolve, singleton } from "@nimir/framework";
 import { DateTimeNs } from "@nimir/shared";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
-import {
-  type FileComparator,
-  TFileComparator,
-} from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
-import {
-  type FileProvider,
-  TFileProvider,
-} from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
+import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
+import { FileProvider } from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
 import { type FileChange, FileChanges } from "../../domain/FileChange.ts";
 
+@singleton
 export class FileChangeDetector {
   static create(
-    files = di.of(TFileProvider),
-    comparator = di.of(TFileComparator),
+    files = resolve(FileProvider),
+    comparator = resolve(FileComparator),
   ) {
     return new FileChangeDetector(files, comparator);
   }
@@ -114,5 +109,3 @@ export class FileChangeDetector {
     return commands;
   }
 }
-
-export const TFileChangeDetector = di.singleton(FileChangeDetector);

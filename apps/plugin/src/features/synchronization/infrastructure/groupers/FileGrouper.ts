@@ -1,6 +1,7 @@
-import { di } from "@nimir/framework";
+import { singleton } from "@nimir/framework";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 
+@singleton
 export class FileGrouper {
   static create() {
     return new FileGrouper();
@@ -34,8 +35,6 @@ export class FileGrouper {
     return { both, localOnly, remoteOnly };
   }
 }
-
-export const TFileGrouper = di.singleton(FileGrouper);
 
 export namespace FileGrouperNs {
   export interface LocationGroups {

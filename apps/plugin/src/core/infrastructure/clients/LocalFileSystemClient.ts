@@ -1,7 +1,9 @@
-import { di } from "@nimir/framework";
 import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
 
+import { singleton } from "@nimir/framework";
+
+@singleton
 export class LocalFileSystemClient {
   static create() {
     return new LocalFileSystemClient();
@@ -95,5 +97,3 @@ export class LocalFileSystemClient {
     return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime, type: FileType.Local }));
   }
 }
-
-export const TLocalFileSystemClient = di.singleton(LocalFileSystemClient);

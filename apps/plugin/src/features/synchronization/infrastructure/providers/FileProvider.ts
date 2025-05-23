@@ -1,26 +1,24 @@
-import { di } from "@nimir/framework";
+import { resolve, singleton } from "@nimir/framework";
 import type { Awaitable } from "@nimir/shared";
 import { type FileDescriptor, type FileInfo, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import {
   FileGrouper,
   type FileGrouperNs,
-  TFileGrouper,
 } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
 import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
 import {
-  type LocalFilesystemProvider,
-  TLocalFilesystemProvider,
+  LocalFilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
 import {
-  type RemoteFilesystemProvider,
-  TRemoteFilesystemProvider,
+  RemoteFilesystemProvider,
 } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 
+@singleton
 export class FileProvider {
   static create(
-    locals = di.of(TLocalFilesystemProvider),
-    remotes = di.of(TRemoteFilesystemProvider),
-    grouper = di.of(TFileGrouper),
+    locals = resolve(LocalFilesystemProvider),
+    remotes = resolve(RemoteFilesystemProvider),
+    grouper = resolve(FileGrouper),
   ) {
     return new FileProvider(locals, remotes, grouper);
   }
@@ -59,5 +57,3 @@ export class FileProvider {
     return this.remotes;
   }
 }
-
-export const TFileProvider = di.singleton(FileProvider);

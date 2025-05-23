@@ -1,18 +1,18 @@
-import { di } from "@nimir/framework";
-import { TLocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
-import { TRemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import { container, resolve } from "@nimir/framework";
+import { LocalFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
+import { RemoteFilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
-import { TSyncState } from "../SyncState.ts";
+import { SyncState } from "../SyncState.ts";
 
 enum FileHashStoreType {
   Local = "local",
   Remote = "remote",
 }
 
-const create = (type: FileHashStoreType, state = di.of(TSyncState)) => {
+const create = (type: FileHashStoreType, state = resolve(SyncState)) => {
   const filesystem = type === FileHashStoreType.Remote
-    ? di.of(TRemoteFilesystemProvider)
-    : di.of(TLocalFilesystemProvider);
+    ? resolve(RemoteFilesystemProvider)
+    : resolve(LocalFilesystemProvider);
 
   const key = type === FileHashStoreType.Remote ? "remoteFilesHashes" : "localFilesHashes";
 
@@ -25,10 +25,14 @@ const create = (type: FileHashStoreType, state = di.of(TSyncState)) => {
   return store;
 };
 
-export const TLocalFileHashProvider = di.singleton({
+export const LocalFileHashProvider = {
   create: () => create(FileHashStoreType.Local),
-});
+  name: "LocalFileHashProvider",
+};
+container.singleton(LocalFileHashProvider);
 
-export const TRemoteFileHashProvider = di.singleton({
+export const RemoteFileHashProvider = {
   create: () => create(FileHashStoreType.Remote),
-});
+  name: "RemoteFileHashProvider",
+};
+container.singleton(RemoteFileHashProvider);
