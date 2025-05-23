@@ -1,6 +1,6 @@
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
-export namespace HealthResponse {
+export namespace HttpHealthResponse {
   export const [Ok, ok] = HttpJsonResponse.custom({
     content: () => ({ status: "OK", message: "The service is running." }),
     description: "The health of the server",

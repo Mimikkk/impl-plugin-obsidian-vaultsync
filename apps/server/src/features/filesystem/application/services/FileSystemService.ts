@@ -4,12 +4,12 @@ import { FileSystemManager } from "@server/core/infrastructure/files/managers/Fi
 import { PathSanitizer } from "@server/features/filesystem/infrastructure/files/PathSanitizer.ts";
 
 @singleton
-export class HttpFileSystemService {
+export class FileSystemService {
   static create(
     manager = FileSystemManager.create(EnvironmentConfiguration.storageUrl),
     sanitizer = resolve(PathSanitizer),
   ) {
-    return new HttpFileSystemService(manager, sanitizer);
+    return new FileSystemService(manager, sanitizer);
   }
 
   private constructor(

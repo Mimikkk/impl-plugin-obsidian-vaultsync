@@ -3013,6 +3013,7 @@
       "apps/server": {
         "dependencies": [
           "jsr:@std/media-types@^1.1.0",
+          "npm:ky@^1.8.1",
           "npm:openapi3-ts@^4.4.0",
           "npm:swagger-ui-dist@^5.11.0"
         ]

@@ -2,12 +2,12 @@ import { OpenApiNs } from "@server/core/infrastructure/openapi/decorators/OpenAp
 import { OpenApiTag } from "@server/core/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/core/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { HealthResponse } from "../../messaging/http/responses/HealthResponse.ts";
+import { HttpHealthResponse } from "../../messaging/http/responses/HttpHealthResponse.ts";
 
 @ControllerNs.controller({ name: "Health", group: "health" })
-export class HealthController {
+export class HttpHealthController {
   static create() {
-    return new HealthController();
+    return new HttpHealthController();
   }
 
   private constructor() {}
@@ -17,9 +17,9 @@ export class HealthController {
     summary: "Get the health of the server",
     description: "Get the health of the server",
     tags: [OpenApiTag.Health],
-    responses: [HealthResponse.Ok],
+    responses: [HttpHealthResponse.Ok],
   })
   get() {
-    return HealthResponse.ok();
+    return HttpHealthResponse.ok();
   }
 }

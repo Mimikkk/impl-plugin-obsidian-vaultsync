@@ -1,18 +1,19 @@
 import ky from "ky";
-import { ExternalClientUrl } from "./ExternalClientUrl.ts";
+import { ClientUrl } from "./ClientUrl.ts";
 
 import { singleton } from "@nimir/framework";
 
 @singleton
 export class HealthClient {
-  static create(url: string = ExternalClientUrl.sync) {
+  static create(url: string = ClientUrl.sync + "/health") {
     return new HealthClient(url);
   }
 
   private constructor(private readonly url: string) {}
 
   check() {
-    return ky.get(this.url + "/health").json<HealthClientNs.HealthResponse>();
+    return ky.get(this.url)
+      .json<HealthClientNs.HealthResponse>();
   }
 }
 

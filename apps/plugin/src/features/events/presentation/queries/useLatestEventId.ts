@@ -6,11 +6,7 @@ const events = lazyResolve(EventService);
 export const useLatestEventId = createUseQuery({
   queryKey: ["latest-event-id"],
   async queryFn() {
-    const service = events();
-
-    await service.scan();
-    const event = await service.latest();
-
+    const event = await events().latest();
     return event?.id ?? 0;
   },
   refetchOnReconnect: true,

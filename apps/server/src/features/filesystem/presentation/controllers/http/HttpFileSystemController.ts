@@ -6,7 +6,7 @@ import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorat
 import { RouteNs } from "@server/core/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { RequestContent } from "@server/core/presentation/messaging/http/content/RequestContent.ts";
 import { HttpFileSystemRemoveResponse } from "@server/features/filesystem/presentation/messaging/http/responses/HttpFileSystemRemoveResponse.ts";
-import { HttpFileSystemService } from "../../../application/HttpFileSystemService.ts";
+import { FileSystemService } from "../../../application/services/FileSystemService.ts";
 import { HttpFileSystemParameter } from "../../messaging/http/parameters/HttpFileSystemParameter.ts";
 import { HttpFileSystemExistsResponse } from "../../messaging/http/responses/HttpFileSystemExistsResponse.ts";
 import { HttpFileSystemReadResponse } from "../../messaging/http/responses/HttpFileSystemReadResponse.ts";
@@ -16,13 +16,13 @@ import { HttpFileSystemUploadResponse } from "../../messaging/http/responses/Htt
 @ControllerNs.controller({ name: "FileSystem", group: "filesystem" })
 export class HttpFileSystemController {
   static create(
-    service = resolve(HttpFileSystemService),
+    service = resolve(FileSystemService),
   ) {
     return new HttpFileSystemController(service);
   }
 
   private constructor(
-    private readonly service: HttpFileSystemService,
+    private readonly service: FileSystemService,
   ) {}
 
   @RouteNs.get("")

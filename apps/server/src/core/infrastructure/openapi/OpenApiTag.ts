@@ -1,6 +1,8 @@
 import type { TagObject } from "openapi3-ts/oas31";
 
 export enum OpenApiTag {
+  Events = "Events",
+  Files = "Files",
   FileSystem = "FileSystem",
   Health = "Health",
   Documentation = "Documentation (internal)",
@@ -8,9 +10,17 @@ export enum OpenApiTag {
 }
 
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
+  [OpenApiTag.Events, {
+    name: OpenApiTag.Events,
+    description: "events of the server",
+  }],
+  [OpenApiTag.Files, {
+    name: OpenApiTag.Files,
+    description: "files of the server",
+  }],
   [OpenApiTag.FileSystem, {
     name: OpenApiTag.FileSystem,
-    description: "file system",
+    description: "filesystem",
   }],
   [OpenApiTag.Health, {
     name: OpenApiTag.Health,

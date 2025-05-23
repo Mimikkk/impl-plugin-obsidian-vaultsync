@@ -20,10 +20,6 @@ export class LocalFilesystemProvider implements FilesystemProvider {
     private readonly state: ISyncState,
   ) {}
 
-  list(): FileDescriptor[] {
-    return this.client.list();
-  }
-
   async read(path: string): Promise<ArrayBuffer | undefined> {
     return await this.client.read(path);
   }
@@ -34,6 +30,10 @@ export class LocalFilesystemProvider implements FilesystemProvider {
 
   async remove(path: string): Promise<void> {
     return await this.client.remove(path);
+  }
+
+  list(): FileDescriptor[] {
+    return this.client.list();
   }
 
   info(path: string): FileInfo | undefined {

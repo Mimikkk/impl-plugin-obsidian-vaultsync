@@ -1,7 +1,9 @@
 import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import "@server/features/documentation/presentation/controllers/http/HttpDocumentationController.ts";
+import "@server/features/events/presentation/controllers/http/HttpEventController.ts";
+import "@server/features/files/presentation/controllers/http/HttpFileController.ts";
 import "@server/features/filesystem/presentation/controllers/http/HttpFileSystemController.ts";
-import "@server/features/health/presentation/controllers/http/HealthController.ts";
+import "@server/features/health/presentation/controllers/http/HttpHealthController.ts";
 import "@server/features/static/presentation/controllers/http/HttpStaticController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 

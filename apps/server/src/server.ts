@@ -1,4 +1,4 @@
-import { EnvironmentConfiguration } from "@server/configurations/EnvironmentConfiguration.ts";
+import { TimeMs } from "@nimir/shared";
 import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
 import { ApplicationComposer } from "@server/core/infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "@server/core/infrastructure/middlewares/MiddlewareNs.ts";
@@ -7,17 +7,13 @@ import { WsRouter } from "@server/core/infrastructure/routing/routes/WsRouter.ts
 
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
-    redirects: [
-      { from: "/favicon.ico", to: "/static/favicon.ico" },
-      {
-        from: "/sync/*",
-        to: `${EnvironmentConfiguration.syncthingUrl}/rest/*`,
-        with: { "X-API-Key": EnvironmentConfiguration.syncthingApiKey },
-      },
-    ],
+    redirects: [{ from: "/favicon.ico", to: "/static/favicon.ico" }],
   }),
   MiddlewareNs.barrier(),
-  MiddlewareNs.timeout({ timeoutMs: 5000 }),
+  MiddlewareNs.timeout({
+    timeoutMs: TimeMs.seconds(5),
+    exceptions: [{ path: "/events/pool", timeoutMs: TimeMs.seconds(65) }],
+  }),
   MiddlewareNs.cors(),
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);

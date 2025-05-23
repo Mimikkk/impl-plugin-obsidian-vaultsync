@@ -7,7 +7,7 @@ const events = lazyResolve(EventService);
 export const usePoolEvents = createUseQuery({
   queryKey: ["pool-events"],
   queryFn: () => events().pool(),
-  refetchInterval: TimeMs.seconds(5),
+  refetchInterval: TimeMs.seconds(60),
   refetchIntervalInBackground: true,
   refetchOnWindowFocus: false,
   refetchOnReconnect: true,

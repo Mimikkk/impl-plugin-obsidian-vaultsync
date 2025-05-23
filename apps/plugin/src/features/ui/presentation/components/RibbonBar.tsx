@@ -1,4 +1,5 @@
 import { Status, StatusNs, withQueryClient } from "@nimir/interaction";
+import { useLatestEventId } from "@plugin/features/events/presentation/queries/useLatestEventId.ts";
 import cx from "clsx";
 import { createMemo } from "solid-js";
 import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";
@@ -7,6 +8,9 @@ export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
 
 const RibbonServiceStatus = () => {
   const status = StatusNs.accessQuery(useHealthCheck());
+  const latestEventId = useLatestEventId();
+
+  console.log({ latestEventId });
 
   const color = createMemo(() => {
     switch (status()) {

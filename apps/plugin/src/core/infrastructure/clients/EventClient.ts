@@ -1,25 +1,27 @@
 import { serializeSearchParams, singleton } from "@nimir/framework";
 import ky from "ky";
-import { ExternalClientUrl } from "./ExternalClientUrl.ts";
+import { ClientUrl } from "./ClientUrl.ts";
 
 @singleton
 export class EventClient {
-  static create(url: string = ExternalClientUrl.sync + "/sync") {
+  static create(url: string = ClientUrl.sync + "/events") {
     return new EventClient(url);
   }
 
   private constructor(private readonly url: string) {}
 
   scan() {
-    return ky.post(this.url + "/db/scan", { json: { folder: "default" } });
+    return ky.post(this.url + "/scan");
   }
 
-  events(params?: EventClientNs.PoolOptions) {
+  events(params?: EventClientNs.PoolParams) {
     return ky
-      .get<(EventClientNs.IndexUpdateEvent | EventClientNs.Event)[]>(this.url + "/events", {
-        searchParams: serializeSearchParams(params),
-      })
-      .json();
+      .get(this.url + "/pool", { searchParams: serializeSearchParams(params) })
+      .json<EventClientNs.Event[]>();
+  }
+
+  async latest() {
+    return await ky.get(this.url + "/latest").json<EventClientNs.Event>().catch(() => undefined);
   }
 }
 
@@ -42,7 +44,7 @@ export namespace EventClientNs {
     sequence: number;
   }>;
 
-  export interface PoolOptions {
+  export interface PoolParams {
     events?: EventType[];
     since?: number;
     limit?: number;
