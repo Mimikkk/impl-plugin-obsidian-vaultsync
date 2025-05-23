@@ -1,6 +1,14 @@
-import { container, resolve, State, StateCodec, StateFields, StateSchemaBuilder } from "@nimir/framework";
+import {
+  container,
+  type InstanceOf,
+  resolve,
+  State,
+  StateCodec,
+  StateFields,
+  StateSchemaBuilder,
+} from "@nimir/framework";
 
-export const SyncStateSchema = {
+export const SyncStateSchema = container.singleton({
   create: () =>
     StateSchemaBuilder
       .create()
@@ -10,14 +18,12 @@ export const SyncStateSchema = {
       .with("remoteFilesHashes", StateFields.map<string, string>())
       .build(),
   name: "SyncStateSchema",
-};
-container.singleton(SyncStateSchema);
-export type ISyncStateSchema = typeof SyncStateSchema;
+});
+export type ISyncStateSchema = InstanceOf<typeof SyncStateSchema>;
 
-export const SyncState = {
+export const SyncState = container.singleton({
   create: () => State.create(StateCodec.create(resolve(SyncStateSchema)).initial()),
   name: "SyncState",
-};
-container.singleton(SyncState);
+});
 
-export type ISyncState = ReturnType<typeof SyncState.create>;
+export type ISyncState = InstanceOf<typeof SyncState>;

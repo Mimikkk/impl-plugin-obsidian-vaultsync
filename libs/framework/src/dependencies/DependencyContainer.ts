@@ -1,6 +1,6 @@
 export type Create<T> = (...args: any[]) => T;
-export type Token<T = any> = symbol & { __type?: T };
 export type Constructible<T = any> = { create: Create<T>; name?: string };
+export type InstanceOf<C extends Constructible> = C extends { create: Create<infer T> } ? T : never;
 
 export interface Registration<T = any> extends RegistrationOptions {
   create: Create<T>;
@@ -24,17 +24,17 @@ export class DependencyContainer {
     private readonly instances: Map<Constructible, any>,
   ) {}
 
-  register<T>(item: Constructible<T>, options?: RegistrationOptions): this {
+  register<T extends Constructible>(item: T, options?: RegistrationOptions): T {
     const createFn = (item?.create instanceof Function ? item.create : item) as Create<T>;
     const singleton = options?.singleton ?? false;
 
     this.registrations.set(item, { create: createFn, singleton });
 
-    return this;
+    return item;
   }
 
-  singleton<T>(create: Constructible<T>): this {
-    return this.register(create, Singleton);
+  singleton<T extends Constructible>(item: T): T {
+    return this.register(item, Singleton);
   }
 
   get<T>(item: Constructible<T>): T {

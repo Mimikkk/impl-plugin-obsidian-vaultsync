@@ -25,14 +25,12 @@ const create = (type: FileHashStoreType, state = resolve(SyncState)) => {
   return store;
 };
 
-export const LocalFileHashProvider = {
+export const LocalFileHashProvider = container.singleton({
   create: () => create(FileHashStoreType.Local),
   name: "LocalFileHashProvider",
-};
-container.singleton(LocalFileHashProvider);
+});
 
-export const RemoteFileHashProvider = {
+export const RemoteFileHashProvider = container.singleton({
   create: () => create(FileHashStoreType.Remote),
   name: "RemoteFileHashProvider",
-};
-container.singleton(RemoteFileHashProvider);
+});
