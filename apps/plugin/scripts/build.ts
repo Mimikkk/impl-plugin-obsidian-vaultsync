@@ -27,7 +27,7 @@ rspack({
       "@framework": resolve("../../libs/framework/src"),
     },
   },
-  experiments: { css: true },
+  experiments: { css: true, cache: { type: "persistent" } },
   externals: ["obsidian"],
   module: {
     rules: [
