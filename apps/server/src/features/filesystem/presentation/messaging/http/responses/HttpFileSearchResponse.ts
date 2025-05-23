@@ -1,14 +1,14 @@
-import { FileType } from "@server/core/domain/types/FileDescriptor.ts";
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { HttpFileResourceNs } from "@server/features/files/presentation/messaging/http/resource/HttpFileResource.ts";
+import { HttpFileResourceNs } from "@server/features/filesystem/presentation/messaging/http/resource/HttpFileResource.ts";
+import { FileType } from "../../../../../../core/domain/types/FileTypes.ts";
 
-export namespace HttpFileResponse {
+export namespace HttpFileSearchResponse {
   export const [Info, info] = HttpJsonResponse.custom({
     content: HttpFileResourceNs.fromInfo,
     example: { deleted: false, deletedAt: "2025-05-24T00:00:00.000Z" },
     schema: {},
     name: "FileInfo",
-    description: "The meta information of about the file",
+    description: "The metadata of the file",
     status: 200,
   });
 

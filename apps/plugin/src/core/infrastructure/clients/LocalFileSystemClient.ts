@@ -1,5 +1,5 @@
-import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
+import { type FileInfo, FileType } from "../../domain/types/FileTypes.ts";
 
 import { singleton } from "@nimir/framework";
 
@@ -12,10 +12,6 @@ export class LocalFileSystemClient {
   private constructor(
     private readonly fs = globalThis.app.vault,
   ) {}
-
-  isEntry(path: string): boolean {
-    return this.getEntry(path) !== null;
-  }
 
   isFile(path: string): boolean {
     return this.getFile(path) !== null;
@@ -34,20 +30,6 @@ export class LocalFileSystemClient {
 
   getFolder(path: string): TFolder | null {
     return this.fs.getFolderByPath(path);
-  }
-
-  async read(path: string): Promise<ArrayBuffer | undefined> {
-    const file = this.getFile(path);
-    if (!file) return undefined;
-
-    return await this.fs.readBinary(file);
-  }
-
-  async remove(path: string) {
-    const file = this.getFile(path);
-    if (!file) return;
-
-    return await this.fs.delete(file);
   }
 
   /** @see {@link https://help.obsidian.md/file-formats | Obsidian File Formats (www)} */
@@ -72,15 +54,29 @@ export class LocalFileSystemClient {
     return this.fs.createFolder(path);
   }
 
-  maybeCreateFolder(path: string) {
+  async maybeCreateFolder(path: string) {
     if (!path) return;
     if (this.isFolder(path)) return;
 
-    return this.createFolder(path);
+    return await this.createFolder(path);
   }
 
-  update(path: string, content: ArrayBuffer) {
-    this.maybeCreateFolder(this.folderOf(path));
+  async read(path: string): Promise<ArrayBuffer | undefined> {
+    const file = this.getFile(path);
+    if (!file) return undefined;
+
+    return await this.fs.readBinary(file);
+  }
+
+  async remove(path: string) {
+    const file = this.getFile(path);
+    if (!file) return;
+
+    return await this.fs.delete(file);
+  }
+
+  async update(path: string, content: ArrayBuffer) {
+    await this.maybeCreateFolder(this.folderOf(path));
 
     const file = this.getFile(path);
     if (file) {
@@ -91,7 +87,7 @@ export class LocalFileSystemClient {
     }
   }
 
-  list(): FileDescriptor[] {
+  list(): FileInfo[] {
     const files = this.fs.getFiles();
 
     return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime, type: FileType.Local }));

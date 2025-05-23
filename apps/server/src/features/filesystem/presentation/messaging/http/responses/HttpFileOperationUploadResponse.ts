@@ -1,20 +1,20 @@
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
-export namespace HttpFileSystemRemoveResponse {
+export namespace HttpFileOperationUploadResponse {
   export const [Failure, failure] = HttpJsonResponse.custom({
-    content: () => ({ error: "Failed to remove file" }),
-    name: "RemoveFailure",
-    description: "Failed to remove file",
-    example: { error: "Failed to remove file" },
+    content: () => ({ error: "Failed to upload file" }),
+    name: "UploadFailure",
+    description: "Failed to upload file",
+    example: { error: "Failed to upload file" },
     status: 500,
     schema: { type: "object", properties: { error: { type: "string" } } },
   });
 
   export const [Success, success] = HttpJsonResponse.custom({
-    content: () => ({ success: "File removed successfully" }),
-    name: "RemoveSuccess",
-    description: "File removed successfully",
-    example: { success: "File removed successfully" },
+    content: () => ({ success: "File uploaded successfully" }),
+    name: "UploadSuccess",
+    description: "File uploaded successfully",
+    example: { success: "File uploaded successfully" },
     status: 200,
     schema: { type: "object", properties: { success: { type: "string" } } },
   });

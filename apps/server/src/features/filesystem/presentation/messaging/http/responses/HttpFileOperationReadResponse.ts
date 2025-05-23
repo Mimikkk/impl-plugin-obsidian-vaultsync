@@ -1,7 +1,7 @@
 import { HttpFileResponse } from "@server/core/presentation/messaging/http/responses/HttpFileResponse.ts";
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
-export namespace HttpFileSystemReadResponse {
+export namespace HttpFileOperationReadResponse {
   export const [File, file] = HttpFileResponse.custom({
     name: "File",
     description: "File",

@@ -1,6 +1,6 @@
 import { QueryParameter } from "@server/core/presentation/messaging/http/parameters/QueryParameter.ts";
 
-export namespace HttpFileSystemParameter {
+export namespace HttpFileQueryParameter {
   export const Path = QueryParameter.string({
     name: "path",
     description: "The path to the file",

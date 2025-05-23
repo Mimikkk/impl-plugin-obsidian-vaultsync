@@ -1,16 +1,13 @@
 import { resolve, singleton } from "@nimir/framework";
-import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
-import {
-  LocalFileHashProvider,
-  RemoteFileHashProvider,
-} from "@plugin/features/synchronization/infrastructure/providers/FileHashStoreProvider.ts";
 import type { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
+import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
+import { LocalFileHashStore, RemoteFileHashStore } from "../stores/FileHashStores.ts";
 
 @singleton
 export class FileHashProvider {
   static create(
-    locals = resolve(LocalFileHashProvider),
-    remotes = resolve(RemoteFileHashProvider),
+    locals = resolve(LocalFileHashStore),
+    remotes = resolve(RemoteFileHashStore),
   ) {
     return new FileHashProvider(locals, remotes);
   }
@@ -20,7 +17,7 @@ export class FileHashProvider {
     private readonly remotes: FileHashStore,
   ) {}
 
-  get(descriptor: FileDescriptor): Promise<string> {
+  get(descriptor: FileInfo): Promise<string> {
     if (descriptor.type === FileType.Local) {
       return this.locals.get(descriptor);
     }

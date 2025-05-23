@@ -1,35 +1,35 @@
 import type { ListenerManager, ListenerManagerNs } from "@nimir/framework";
 import { VolatileListenerManager } from "@nimir/framework";
 import { BufferNs } from "@nimir/shared";
-import type { FileDescriptor } from "@plugin/core/domain/types/FileDescriptor.ts";
-import type { FilesystemProvider } from "@plugin/features/synchronization/infrastructure/providers/FilesystemProvider.ts";
+import type { FileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
+import type { FileInfo } from "../../../../core/domain/types/FileTypes.ts";
 
 type ChangeValue = { key: string; value: string };
 export class FileHashStore {
   static create(
-    filesystem: FilesystemProvider,
+    operations: FileOperations,
     store: Map<string, string> = new Map(),
     listeners = VolatileListenerManager.create<ChangeValue>(),
   ) {
-    return new FileHashStore(filesystem, store, listeners);
+    return new FileHashStore(operations, store, listeners);
   }
 
   private constructor(
-    private readonly filesystem: FilesystemProvider,
+    private readonly operations: FileOperations,
     private readonly store: Map<string, string>,
     private readonly listeners: ListenerManager<ChangeValue>,
   ) {}
 
-  has(descriptor: FileDescriptor): boolean {
+  has(descriptor: FileInfo): boolean {
     return this.store.has(this.key(descriptor));
   }
 
-  async get(descriptor: FileDescriptor): Promise<string> {
+  async get(descriptor: FileInfo): Promise<string> {
     const key = this.key(descriptor);
     let value = this.store.get(key);
     if (value !== undefined) return value;
 
-    const buffer = await this.filesystem.read(descriptor.path);
+    const buffer = await this.operations.download(descriptor.path);
     value = BufferNs.toString(buffer!);
 
     this.store.set(key, value);
@@ -38,7 +38,7 @@ export class FileHashStore {
     return value;
   }
 
-  private key(descriptor: FileDescriptor): string {
+  private key(descriptor: FileInfo): string {
     return descriptor.path + "-" + descriptor.updatedAt;
   }
 

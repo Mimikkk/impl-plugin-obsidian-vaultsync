@@ -1,24 +1,21 @@
 import { resolve, singleton } from "@nimir/framework";
 import { ChangeType, type FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
-import {
-  LocalFilesystemProvider,
-} from "@plugin/features/synchronization/infrastructure/providers/LocalFilesystemProvider.ts";
-import {
-  RemoteFilesystemProvider,
-} from "@plugin/features/synchronization/infrastructure/providers/RemoteFilesystemProvider.ts";
+import type { FileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
+import { RemoteFileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/RemoteFileOperations.ts";
+import { LocalFileOperations } from "@plugin/features/synchronization/infrastructure/LocalFileOperations.ts";
 
 @singleton
 export class FileChangeManager {
   static create(
-    locals = resolve(LocalFilesystemProvider),
-    remotes = resolve(RemoteFilesystemProvider),
+    locals = resolve(LocalFileOperations),
+    remotes = resolve(RemoteFileOperations),
   ) {
     return new FileChangeManager(locals, remotes);
   }
 
   private constructor(
-    private readonly locals: LocalFilesystemProvider,
-    private readonly remotes: RemoteFilesystemProvider,
+    private readonly locals: FileOperations,
+    private readonly remotes: FileOperations,
   ) {}
 
   async updates(changes: FileChange[]) {
@@ -39,22 +36,22 @@ export class FileChangeManager {
   }
 
   async updateRemote(path: string) {
-    const content = await this.locals.read(path);
+    const content = await this.locals.download(path);
 
-    return this.remotes.update(path, content!);
+    return this.remotes.upload(path, content!);
   }
 
   async removeRemote(path: string) {
-    return await this.remotes.remove(path);
+    return await this.remotes.delete(path);
   }
 
   async updateLocal(path: string) {
-    const content = await this.remotes.read(path);
+    const content = await this.remotes.download(path);
 
-    return this.locals.update(path, content!);
+    return this.locals.upload(path, content!);
   }
 
   async removeLocal(path: string) {
-    return await this.locals.remove(path);
+    return await this.locals.delete(path);
   }
 }

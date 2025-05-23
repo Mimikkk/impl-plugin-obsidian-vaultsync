@@ -4,12 +4,12 @@ import { FileSystemManager } from "@server/core/infrastructure/files/managers/Fi
 import { PathSanitizer } from "@server/features/filesystem/infrastructure/files/PathSanitizer.ts";
 
 @singleton
-export class FileSystemService {
+export class FileOperationService {
   static create(
     manager = FileSystemManager.create(EnvironmentConfiguration.storageUrl),
     sanitizer = resolve(PathSanitizer),
   ) {
-    return new FileSystemService(manager, sanitizer);
+    return new FileOperationService(manager, sanitizer);
   }
 
   private constructor(
@@ -67,7 +67,7 @@ export class FileSystemService {
     return "success";
   }
 
-  mime(path: string) {
+  private mime(path: string) {
     const result = this.sanitizer.sanitize(path);
 
     if ("error" in result) {
@@ -75,41 +75,5 @@ export class FileSystemService {
     }
 
     return this.manager.mime(result.value);
-  }
-
-  async exists(path: string) {
-    const result = this.sanitizer.sanitize(path);
-
-    if ("error" in result) {
-      return result.error;
-    }
-
-    return await this.manager.exists(result.value);
-  }
-
-  async list(path: string) {
-    const result = this.sanitizer.sanitize(path);
-
-    if ("error" in result) {
-      return result.error;
-    }
-
-    return await this.manager.list({ path: result.value });
-  }
-
-  async stats(path: string) {
-    const result = this.sanitizer.sanitize(path);
-
-    if ("error" in result) {
-      return result.error;
-    }
-
-    const stats = await this.manager.stats(result.value);
-
-    if (stats === null) {
-      return "missing";
-    }
-
-    return stats;
   }
 }

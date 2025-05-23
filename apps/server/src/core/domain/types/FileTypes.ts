@@ -5,13 +5,13 @@ export enum FileType {
   Local = "local",
 }
 
-export interface FileDescriptor {
+export interface FileInfo {
   path: string;
   updatedAt: number;
   type: FileType;
 }
 
-export interface FileInfo {
+export interface FileMeta {
   deleted: boolean;
   deletedAt: DateInit;
 }

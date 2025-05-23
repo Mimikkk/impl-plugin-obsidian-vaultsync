@@ -1,8 +1,8 @@
 import { resolve, singleton } from "@nimir/framework";
 import { DateTimeNs } from "@nimir/shared";
-import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
 import { FileProvider } from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
+import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
 import { type FileChange, FileChanges } from "../../domain/FileChange.ts";
 
 @singleton
@@ -31,7 +31,7 @@ export class FileChangeDetector {
     return changes.flat();
   }
 
-  async detectLocalOnly(locals: FileDescriptor[]): Promise<FileChange[]> {
+  async detectLocalOnly(locals: FileInfo[]): Promise<FileChange[]> {
     const commands: FileChange[] = [];
 
     for (const local of locals) {
@@ -61,7 +61,7 @@ export class FileChangeDetector {
     return commands;
   }
 
-  async detectRemoteOnly(remotes: FileDescriptor[]): Promise<FileChange[]> {
+  async detectRemoteOnly(remotes: FileInfo[]): Promise<FileChange[]> {
     const commands: FileChange[] = [];
 
     for (const remote of remotes) {
@@ -89,7 +89,7 @@ export class FileChangeDetector {
   }
 
   async detectConflicts(
-    conflicts: { local: FileDescriptor; remote: FileDescriptor }[],
+    conflicts: { local: FileInfo; remote: FileInfo }[],
   ): Promise<FileChange[]> {
     const commands: FileChange[] = [];
 

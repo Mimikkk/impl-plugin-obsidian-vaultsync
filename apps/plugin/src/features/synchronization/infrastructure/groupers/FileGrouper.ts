@@ -1,5 +1,5 @@
 import { singleton } from "@nimir/framework";
-import { type FileDescriptor, FileType } from "@plugin/core/domain/types/FileDescriptor.ts";
+import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
 
 @singleton
 export class FileGrouper {
@@ -9,7 +9,7 @@ export class FileGrouper {
 
   private constructor() {}
 
-  byLocation(files: FileDescriptor[]): FileGrouperNs.LocationGroups {
+  byLocation(files: FileInfo[]): FileGrouperNs.LocationGroups {
     const locals = files.filter((f) => f.type === FileType.Local);
     const remotes = files.filter((f) => f.type === FileType.Remote);
 
@@ -38,8 +38,8 @@ export class FileGrouper {
 
 export namespace FileGrouperNs {
   export interface LocationGroups {
-    both: { local: FileDescriptor; remote: FileDescriptor }[];
-    localOnly: FileDescriptor[];
-    remoteOnly: FileDescriptor[];
+    both: { local: FileInfo; remote: FileInfo }[];
+    localOnly: FileInfo[];
+    remoteOnly: FileInfo[];
   }
 }

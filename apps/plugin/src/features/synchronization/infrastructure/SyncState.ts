@@ -1,5 +1,4 @@
 import {
-  container,
   type InstanceOf,
   resolve,
   singleton,
