@@ -17,13 +17,9 @@ export class SyncService {
   ) {}
 
   async synchronize() {
-    console.log("Synchronizing...");
-
     await this.events.scan();
     const changes = await this.manager.synchronize();
 
-    console.log("Synchronized.", changes);
-
-    return "OK";
+    return changes;
   }
 }
