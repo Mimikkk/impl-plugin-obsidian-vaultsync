@@ -42,5 +42,10 @@ export const createUseQuery = <
   const extendedOptions = (options?: Partial<QueryOptions<R, E, T, K>>) =>
     options ? ({ ...getOptions(), ...options }) : getOptions();
 
-  return (options) => useQuery<R, E, T, K>(() => extendedOptions(options), QueryClientNs.get);
+  return (options) =>
+    useQuery<R, E, T, K>(() => {
+      const result = extendedOptions(options);
+      console.log({ result });
+      return result;
+    }, QueryClientNs.get);
 };

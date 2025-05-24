@@ -9,7 +9,7 @@ export const useEventPooling = () => {
 
   const eventsQuery = usePoolEvents({
     queryFn: () => events().pool({ since: latestQuery.data }),
-    enabled: () => !latestQuery.isLoading,
+    enabled: () => latestQuery.isSuccess,
   });
 
   return { events: eventsQuery, latest: latestQuery };

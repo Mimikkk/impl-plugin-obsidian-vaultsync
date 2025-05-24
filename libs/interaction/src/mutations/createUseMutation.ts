@@ -14,15 +14,15 @@ export type CreateUseMutationOptions<T = unknown, E = DefaultError, V = void, C 
   | UseMutationOptions<T, E, V, C>
   | SolidMutationOptions<T, E, V, C>;
 
-export type CreateUseMutationResult<T, E, V, C> = [
-  mutate: UseMutateAsyncFunction<T, E, V, C>,
-  mutation: UseMutationResult<T, E, V, C>,
-  isMutating: Accessor<boolean>,
-] & {
+export type CreateUseMutationResult<T, E, V, C> = {
   mutate: UseMutateAsyncFunction<T, E, V, C>;
   mutation: UseMutationResult<T, E, V, C>;
   isMutating: Accessor<boolean>;
-};
+} & [
+  mutate: UseMutateAsyncFunction<T, E, V, C>,
+  mutation: UseMutationResult<T, E, V, C>,
+  isMutating: Accessor<boolean>,
+];
 
 export const createUseMutation = <T = unknown, E = DefaultError, V = void, C = unknown>(
   options: CreateUseMutationOptions<T, E, V, C>,

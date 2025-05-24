@@ -13,5 +13,5 @@ export const usePoolEvents = createUseQuery({
   refetchOnReconnect: true,
   gcTime: 0,
   staleTime: 0,
-  retry: 0,
+  retry: false,
 });

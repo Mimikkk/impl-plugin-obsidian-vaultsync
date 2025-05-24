@@ -1,5 +1,5 @@
 import { lazyResolve } from "@nimir/framework";
-import { createUseQuery } from "@nimir/interaction";
+import { createUseQuery, QueryClientNs } from "@nimir/interaction";
 import { TimeMs } from "@nimir/shared";
 import { HealthService } from "@plugin/features/health/application/services/HealthService.ts";
 
@@ -9,5 +9,9 @@ export const useHealthCheck = createUseQuery({
   queryFn: () => health().check(),
   staleTime: TimeMs.m5,
   refetchInterval: TimeMs.m5,
-  retry: 0,
+  retry: false,
 });
+
+export const invalidateHealthCheck = () => {
+  QueryClientNs.get().invalidateQueries({ queryKey: ["health-check"] });
+};

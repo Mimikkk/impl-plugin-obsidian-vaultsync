@@ -1,7 +1,7 @@
 import { resolve, singleton } from "@nimir/framework";
-import { DateTimeNs } from "@nimir/shared";
-import { FileHashProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
 import type { FileInfo } from "@nimir/shared";
+import { DateTimeNs, TimeMs } from "@nimir/shared";
+import { FileHashProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
 
 @singleton
 export class FileComparator {
@@ -19,7 +19,7 @@ export class FileComparator {
   }
 
   areTimestampsSimilar(a: FileInfo, b: FileInfo): boolean {
-    return DateTimeNs.within(a.updatedAt, b.updatedAt, 1000);
+    return DateTimeNs.within(a.updatedAt, b.updatedAt, TimeMs.s1);
   }
 
   async areHashesEqual(a: FileInfo, b: FileInfo): Promise<boolean> {

@@ -12,5 +12,5 @@ export const useLatestEventId = createUseQuery({
   refetchOnReconnect: true,
   refetchOnMount: false,
   refetchOnWindowFocus: false,
-  retry: 0,
+  retry: false,
 });

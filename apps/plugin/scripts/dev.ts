@@ -1,6 +1,7 @@
 import { colors } from "@cliffy/ansi/colors";
 import * as fs from "@std/fs";
 import * as path from "@std/path";
+import { resolve } from "node:path";
 import "../../../scripts/read-env.ts";
 
 const nextlineRe = /\r?\n/;
@@ -112,7 +113,8 @@ if (urls === "obsidian-location-does-not-exist") {
 await synchronize(urls);
 if (!Deno.args.includes("--watch")) Deno.exit(0);
 
-const watcher = Deno.watchFs(".");
+const paths = [resolve("."), resolve("../../libs/interaction"), resolve("../../libs/shared")];
+const watcher = Deno.watchFs(paths);
 const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
 for await (const event of watcher) {
   handleEvent(event);

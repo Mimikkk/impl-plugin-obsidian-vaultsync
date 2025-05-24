@@ -1,8 +1,8 @@
 import { resolve, singleton } from "@nimir/framework";
 import { ChangeType, type FileChange } from "@plugin/features/synchronization/domain/FileChange.ts";
 import type { FileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
+import { LocalFileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/LocalFileOperations.ts";
 import { RemoteFileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/RemoteFileOperations.ts";
-import { LocalFileOperations } from "@plugin/features/synchronization/infrastructure/LocalFileOperations.ts";
 
 @singleton
 export class FileChangeManager {

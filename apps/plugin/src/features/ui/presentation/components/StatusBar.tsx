@@ -4,8 +4,7 @@ import { Match, Switch } from "solid-js";
 
 export const StatusBar = withQueryClient(() => {
   const { isMutating } = useSync();
-
-  const isSynced = createTimeoutAccessor(isMutating, 1000);
+  const isSynced = createTimeoutAccessor(isMutating);
 
   return (
     <Switch>

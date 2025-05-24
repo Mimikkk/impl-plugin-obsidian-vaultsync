@@ -1,6 +1,6 @@
 import { container, resolve } from "@nimir/framework";
+import { LocalFileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/LocalFileOperations.ts";
 import { RemoteFileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/RemoteFileOperations.ts";
-import { LocalFileOperations } from "@plugin/features/synchronization/infrastructure/LocalFileOperations.ts";
 import { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
 import { SyncState } from "../SyncState.ts";
 
