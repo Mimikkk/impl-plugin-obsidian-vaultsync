@@ -34,11 +34,7 @@ export class FileChangeDetector {
     const commands: FileChange[] = [];
 
     for (const local of locals) {
-      const info = await this.files.info({
-        path: local.path,
-        updatedAt: undefined!,
-        type: FileType.Remote,
-      });
+      const info = await this.files.info({ path: local.path, updatedAt: undefined!, type: FileType.Remote });
 
       if (info) {
         const wasDeleted = info.deleted;
@@ -64,11 +60,7 @@ export class FileChangeDetector {
     const commands: FileChange[] = [];
 
     for (const remote of remotes) {
-      const info = await this.files.info({
-        path: remote.path,
-        updatedAt: undefined!,
-        type: FileType.Local,
-      });
+      const info = await this.files.info({ path: remote.path, updatedAt: undefined!, type: FileType.Local });
 
       if (info) {
         const deletedAt = info.deletedAt;

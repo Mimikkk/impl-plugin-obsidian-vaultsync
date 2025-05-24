@@ -20,7 +20,7 @@ export class SyncService {
     await this.events.scan();
     const changes = await this.manager.synchronize();
 
-    console.log({ changes });
+    console.log("changes:", changes);
 
     return changes;
   }

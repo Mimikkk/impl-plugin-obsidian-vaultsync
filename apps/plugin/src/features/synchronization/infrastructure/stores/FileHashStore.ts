@@ -1,8 +1,8 @@
 import type { ListenerManager, ListenerManagerNs } from "@nimir/framework";
-import { VolatileListenerManager } from "@nimir/framework";
+import { resolve, VolatileListenerManager } from "@nimir/framework";
 import type { FileInfo } from "@nimir/shared";
-import { BufferNs } from "@nimir/shared";
 import type { FileOperations } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
+import { FileHasher } from "../hashes/FileHasher.ts";
 
 type ChangeValue = { key: string; value: string };
 export class FileHashStore {
@@ -10,14 +10,16 @@ export class FileHashStore {
     operations: FileOperations,
     store: Map<string, string> = new Map(),
     listeners = VolatileListenerManager.create<ChangeValue>(),
+    hasher = resolve(FileHasher),
   ) {
-    return new FileHashStore(operations, store, listeners);
+    return new FileHashStore(operations, store, listeners, hasher);
   }
 
   private constructor(
     private readonly operations: FileOperations,
     private readonly store: Map<string, string>,
     private readonly listeners: ListenerManager<ChangeValue>,
+    private readonly hasher: FileHasher,
   ) {}
 
   has(descriptor: FileInfo): boolean {
@@ -30,7 +32,7 @@ export class FileHashStore {
     if (value !== undefined) return value;
 
     const buffer = await this.operations.download(descriptor.path);
-    value = BufferNs.toString(buffer!);
+    value = await this.hasher.hash(buffer!);
 
     this.store.set(key, value);
     this.listeners.notify({ key, value });

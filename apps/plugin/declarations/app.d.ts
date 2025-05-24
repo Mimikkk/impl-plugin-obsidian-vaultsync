@@ -1,4 +1,4 @@
-import type { App } from "../dist/main.js";
+import type { App } from "obsidian";
 
 declare global {
   var app: App;
