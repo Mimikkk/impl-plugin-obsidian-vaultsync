@@ -12,6 +12,7 @@ export class HealthClient {
   private constructor(private readonly url: string) {}
 
   check() {
+    console.log(ClientUrl);
     return ky.get(this.url)
       .json<HealthClientNs.HealthResponse>();
   }

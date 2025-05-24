@@ -1,10 +1,10 @@
 import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import "@server/features/documentation/presentation/controllers/http/HttpDocumentationController.ts";
 import "@server/features/events/presentation/controllers/http/HttpEventController.ts";
+import "@server/features/files/presentation/controllers/http/HttpFileOperationsController.ts";
+import "@server/features/files/presentation/controllers/http/HttpFileSearchController.ts";
 import "@server/features/health/presentation/controllers/http/HttpHealthController.ts";
 import "@server/features/static/presentation/controllers/http/HttpStaticController.ts";
-import "../../../../features/files/presentation/controllers/http/HttpFileOperationsController.ts";
-import "../../../../features/files/presentation/controllers/http/HttpFileSearchController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 
 const builder = HttpRouterBuilder.create();

@@ -14,7 +14,7 @@ export const syncStateConfiguration: StateConfiguration = {
       if (!(file instanceof TFile)) return;
 
       state.set("deletedFiles", (previous) => {
-        previous.set(file.path, performance.now());
+        previous.set(file.path, Date.now());
         return previous;
       });
     }));

@@ -21,7 +21,7 @@ export class RemoteFileSearchClient {
   }
 
   async meta(path: string): Promise<FileMeta | undefined> {
-    return await ky.get(this.url + "/info", { searchParams: serializeSearchParams({ file: path }) })
+    return await ky.get(this.url + "/meta", { searchParams: serializeSearchParams({ file: path }) })
       .json<FileMeta>().catch(() => undefined);
   }
 }

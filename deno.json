@@ -47,6 +47,10 @@
       "description": "Run the plugin and server in development mode.",
       "dependencies": ["dev:external", "dev:plugin", "dev:server"]
     },
+    "server": {
+      "description": "Run the server in development mode.",
+      "dependencies": ["dev:external", "dev:server"]
+    },
     "dev:plugin": {
       "description": "Run the plugin in development mode.",
       "command": "deno task -f plugin dev"
