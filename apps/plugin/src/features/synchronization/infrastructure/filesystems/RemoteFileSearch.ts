@@ -1,5 +1,5 @@
 import { resolve, singleton } from "@nimir/framework";
-import type { FileInfo, FileMeta } from "@plugin/core/domain/types/FileTypes.ts";
+import type { FileInfo, FileMeta } from "@nimir/shared";
 import { RemoteFileSearchClient } from "@plugin/core/infrastructure/clients/RemoteFileSearchClient.ts";
 import type { FileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
 

@@ -1,6 +1,6 @@
+import { FileType } from "@nimir/shared";
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { HttpFileResourceNs } from "@server/features/files/presentation/messaging/http/resource/HttpFileResource.ts";
-import { FileType } from "../../../../../../core/domain/types/FileTypes.ts";
 
 export namespace HttpFileSearchResponse {
   export const [Info, info] = HttpJsonResponse.custom({

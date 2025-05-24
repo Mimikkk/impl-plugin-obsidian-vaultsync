@@ -1,4 +1,4 @@
-import type { FileInfo, FileMeta } from "../../../../../../core/domain/types/FileTypes.ts";
+import type { FileInfo, FileMeta } from "@nimir/shared";
 
 export interface HttpFileInfoResource extends FileInfo {}
 export interface HttpFileMetaResource extends FileMeta {}

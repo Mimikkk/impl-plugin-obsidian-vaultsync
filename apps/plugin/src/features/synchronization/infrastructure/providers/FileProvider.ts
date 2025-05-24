@@ -1,5 +1,6 @@
 import { resolve, singleton } from "@nimir/framework";
 import type { Awaitable } from "@nimir/shared";
+import { type FileInfo, type FileMeta, FileType } from "@nimir/shared";
 import type { FileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
 import { LocalFileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/LocalFileSearch.ts";
 import { RemoteFileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/RemoteFileSearch.ts";
@@ -7,7 +8,6 @@ import {
   FileGrouper,
   type FileGrouperNs,
 } from "@plugin/features/synchronization/infrastructure/groupers/FileGrouper.ts";
-import { type FileInfo, type FileMeta, FileType } from "../../../../core/domain/types/FileTypes.ts";
 
 @singleton
 export class FileProvider {

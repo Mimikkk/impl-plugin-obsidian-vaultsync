@@ -1,6 +1,6 @@
 import { serializeSearchParams, singleton } from "@nimir/framework";
+import type { FileInfo, FileMeta } from "@nimir/shared";
 import ky from "ky";
-import type { FileInfo, FileMeta } from "../../domain/types/FileTypes.ts";
 import { ClientUrl } from "./ClientUrl.ts";
 
 @singleton

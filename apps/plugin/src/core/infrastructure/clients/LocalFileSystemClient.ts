@@ -1,5 +1,5 @@
+import { type FileInfo, FileType } from "@nimir/shared";
 import type { TAbstractFile, TFile, TFolder } from "obsidian";
-import { type FileInfo, FileType } from "../../domain/types/FileTypes.ts";
 
 import { singleton } from "@nimir/framework";
 

@@ -1,5 +1,4 @@
-import type { Awaitable } from "@nimir/shared";
-import type { FileInfo, FileMeta } from "@plugin/core/domain/types/FileTypes.ts";
+import type { Awaitable, FileInfo, FileMeta } from "@nimir/shared";
 
 export interface FileSearch {
   list(): Awaitable<FileInfo[]>;

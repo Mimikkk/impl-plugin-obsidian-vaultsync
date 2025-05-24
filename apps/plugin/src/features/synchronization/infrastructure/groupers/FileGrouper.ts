@@ -1,5 +1,5 @@
 import { singleton } from "@nimir/framework";
-import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
+import { type FileInfo, FileType } from "@nimir/shared";
 
 @singleton
 export class FileGrouper {

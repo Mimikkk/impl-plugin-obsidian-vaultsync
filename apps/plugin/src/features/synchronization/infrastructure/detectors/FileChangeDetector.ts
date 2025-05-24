@@ -1,8 +1,7 @@
 import { resolve, singleton } from "@nimir/framework";
-import { DateTimeNs } from "@nimir/shared";
+import { DateTimeNs, type FileInfo, FileType } from "@nimir/shared";
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
 import { FileProvider } from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
-import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
 import { type FileChange, FileChanges } from "../../domain/FileChange.ts";
 
 @singleton

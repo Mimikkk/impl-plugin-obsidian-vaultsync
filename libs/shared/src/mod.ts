@@ -19,3 +19,5 @@ export { type DateInit, DateTimeNs, DateTimeStr } from "./utils/DateTimeStr.ts";
 export { lazy } from "./utils/lazy.ts";
 export { Str } from "./utils/strings.ts";
 export { TimeMs } from "./utils/TimeMs.ts";
+
+export { type FileInfo, type FileMeta, FileType } from "./domain/types/FileTypes.ts";

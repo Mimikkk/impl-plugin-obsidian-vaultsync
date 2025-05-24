@@ -1,10 +1,9 @@
 import { resolve, singleton } from "@nimir/framework";
-import { DateTimeStr } from "@nimir/shared";
+import { DateTimeStr, type FileInfo, FileType } from "@nimir/shared";
 import {
   SyncthingDatabaseClient,
   SyncthingDatabaseClientNs,
 } from "@server/core/infrastructure/clients/SyncthingDatabaseClient.ts";
-import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
 
 @singleton
 export class FileSearchService {

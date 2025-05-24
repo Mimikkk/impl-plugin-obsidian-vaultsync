@@ -2,12 +2,11 @@ import { resolve, singleton } from "@nimir/framework";
 import type { FileInfo, FileMeta } from "@nimir/shared";
 import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/LocalFileSystemClient.ts";
 import { type ISyncState, SyncState } from "@plugin/features/synchronization/infrastructure/SyncState.ts";
-import type { FileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
 
 @singleton
-export class LocalFileSearch implements FileSearch {
+export class LocalFileOperations {
   static create(client = resolve(LocalFileSystemClient), state = resolve(SyncState)) {
-    return new LocalFileSearch(client, state);
+    return new LocalFileOperations(client, state);
   }
 
   private constructor(

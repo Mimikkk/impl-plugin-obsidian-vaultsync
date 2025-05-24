@@ -1,6 +1,6 @@
 import { resolve, singleton } from "@nimir/framework";
+import { type FileInfo, FileType } from "@nimir/shared";
 import type { FileHashStore } from "@plugin/features/synchronization/infrastructure/stores/FileHashStore.ts";
-import { type FileInfo, FileType } from "../../../../core/domain/types/FileTypes.ts";
 import { LocalFileHashStore, RemoteFileHashStore } from "../stores/FileHashStores.ts";
 
 @singleton
