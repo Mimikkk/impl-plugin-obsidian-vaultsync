@@ -3,9 +3,9 @@ import cx from "clsx";
 import { createMemo } from "solid-js";
 import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";
 
-export const RibbonBar = withQueryClient(() => <RibbonServiceStatus />);
+export const StatusMiniIndicator = withQueryClient(() => <Indicator />);
 
-const RibbonServiceStatus = () => {
+const Indicator = () => {
   const status = StatusNs.accessQuery(useHealthCheck());
 
   const color = createMemo(() => {
@@ -38,7 +38,7 @@ const RibbonServiceStatus = () => {
     <div
       aria-label={label()}
       data-tooltip-position="right"
-      class={cx("absolute top-0.5 right-0.5 w-2 h-2 rounded-full", color())}
+      class={cx("absolute top-0 right-0 w-1.5 h-1.5 rounded-full", color())}
     />
   );
 };
