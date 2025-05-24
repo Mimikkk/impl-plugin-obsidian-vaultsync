@@ -61,7 +61,7 @@ rspack({
     ],
   },
   stats: "normal",
-  mode: "development",
+  mode: "production",
 }).run(async (error, stats) => {
   if (error) {
     console.error("Build failed:", error);
