@@ -1,3 +1,4 @@
+import type { StateField } from "@framework/state/StateField.ts";
 import type { StrRecord } from "@nimir/shared";
 import type { StateRuntime, StateSchema, StateStorage } from "./StateSchema.ts";
 
@@ -50,5 +51,9 @@ export class StateCodec<T extends StateSchema = any> {
     }
 
     return Object.fromEntries(encoded) as StateRuntime<T>;
+  }
+
+  field<K extends keyof T>(key: K): StateField<T[K]> {
+    return this.schema.get(key);
   }
 }

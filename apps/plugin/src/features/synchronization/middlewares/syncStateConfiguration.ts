@@ -18,5 +18,14 @@ export const syncStateConfiguration: StateConfiguration = {
         return previous;
       });
     }));
+
+    plugin.registerEvent(plugin.app.vault.on("rename", (file, previousPath) => {
+      if (!(file instanceof TFile)) return;
+
+      state.set("deletedFiles", (previous) => {
+        previous.set(previousPath, Date.now());
+        return previous;
+      });
+    }));
   },
 };
