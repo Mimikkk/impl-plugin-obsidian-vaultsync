@@ -14,7 +14,7 @@ VaultSync enables file synchronization between Obsidian vaults.
 - **[Deno](https://deno.land/)** v1.40+ (JavaScript/TypeScript runtime)
 - **[Docker](https://www.docker.com/)** v20+ (for containerization)
 - **[Git](https://git-scm.com/)** (for development hot-reload functionality)
-- **Obsidian** v1.8.10+
+- **[Obsidian](https://obsidian.md/)** v1.8.10+
 
 ### Setup
 
