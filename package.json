@@ -1,0 +1,24 @@
+{
+  "name": "obsidian-vault-sync",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/plugin",
+    "apps/server",
+    "libs/shared",
+    "libs/framework",
+    "libs/interaction"
+  ],
+  "scripts": {
+    "dev:enable": "bun --watch scripts/enable-dev.ts",
+    "dev": "bun run --parallel dev:external dev:plugin dev:server",
+    "server": "bun run --parallel dev:external dev:server",
+    "dev:plugin": "bun run --filter \"@nimir/obsidian-vault-sync-plugin\" dev",
+    "dev:server": "bun --env-file=apps/server/.env --watch apps/server/src/server.ts",
+    "dev:external": "docker compose -f apps/external/docker-compose.yml up",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

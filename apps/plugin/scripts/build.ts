@@ -1,9 +1,7 @@
+import { copyFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import { rspack } from "@rspack/core";
-import { load } from "@std/dotenv";
-import { resolve } from "@std/path";
-
-await load({ envPath: resolve(".env"), export: true });
-await load({ envPath: resolve(".env.local"), export: true });
+import "../../../scripts/read-env.ts";
 
 rspack({
   entry: "./src/mod.ts",
@@ -65,18 +63,18 @@ rspack({
 }).run(async (error, stats) => {
   if (error) {
     console.error("Build failed:", error);
-    Deno.exit(1);
+    process.exit(1);
   }
 
   if (stats?.hasErrors()) {
     console.error("Build completed with errors:", stats.toString({ colors: true }));
-    Deno.exit(1);
+    process.exit(1);
   }
 
   const files = ["manifest.json", "versions.json", ".hotreload"];
   console.info("Moving static files...");
   await Promise.all(
-    files.map((file) => Deno.copyFile(resolve("assets", file), resolve("dist", file))),
+    files.map((file) => copyFile(resolve("assets", file), resolve("dist", file))),
   );
   console.info(files.map((file) => `- asset ${file}`).join("\n"));
   console.info("Static files moved successfully!");

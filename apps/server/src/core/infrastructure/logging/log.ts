@@ -1,19 +1,19 @@
-import { colors } from "@cliffy/ansi/colors";
+import { styleText } from "node:util";
 
 export namespace Log {
   export const info: typeof console.info = (...message) => {
-    console.info(colors.bold.blue("[info]"), ...message);
+    console.info(styleText(["bold", "blue"], "[info]"), ...message);
   };
 
   export const error: typeof console.error = (...message) => {
-    console.error(colors.bold.red("[error]"), ...message);
+    console.error(styleText(["bold", "red"], "[error]"), ...message);
   };
 
   export const warn: typeof console.warn = (...message) => {
-    console.warn(colors.bold.yellow("[warn]"), ...message);
+    console.warn(styleText(["bold", "yellow"], "[warn]"), ...message);
   };
 
   export const event: typeof console.info = (...message) => {
-    console.info(colors.bold.green("[event]"), ...message);
+    console.info(styleText(["bold", "green"], "[event]"), ...message);
   };
 }

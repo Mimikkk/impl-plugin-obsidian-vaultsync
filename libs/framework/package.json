@@ -1,0 +1,9 @@
+{
+  "name": "@nimir/framework",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./src/mod.ts",
+  "dependencies": {
+    "@nimir/shared": "workspace:*"
+  }
+}

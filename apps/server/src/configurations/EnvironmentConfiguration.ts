@@ -1,8 +1,8 @@
 export namespace EnvironmentConfiguration {
-  export const port = +(Deno.env.get("SERVER_PORT") || "8080");
-  export const hostname = Deno.env.get("SERVER_HOST") || "127.0.0.1";
+  export const port = +(process.env.SERVER_PORT || "8080");
+  export const hostname = process.env.SERVER_HOST || "127.0.0.1";
 
-  export const syncthingUrl = Deno.env.get("SYNCTHING_SERVICE_URL")!;
-  export const syncthingApiKey = Deno.env.get("SYNCTHING_SERVICE_API_KEY")!;
-  export const storageUrl = Deno.env.get("STORAGE_URL")!;
+  export const syncthingUrl = process.env.SYNCTHING_SERVICE_URL!;
+  export const syncthingApiKey = process.env.SYNCTHING_SERVICE_API_KEY!;
+  export const storageUrl = process.env.STORAGE_URL!;
 }

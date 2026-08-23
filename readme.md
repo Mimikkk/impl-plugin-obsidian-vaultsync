@@ -11,7 +11,7 @@ VaultSync enables file synchronization between Obsidian vaults.
 
 ### Prerequisites
 
-- **[Deno](https://deno.land/)** v1.40+ (JavaScript/TypeScript runtime)
+- **[Bun](https://bun.sh/)** (JavaScript/TypeScript runtime)
 - **[Docker](https://www.docker.com/)** v20+ (for containerization)
 - **[Git](https://git-scm.com/)** (for development hot-reload functionality)
 - **[Obsidian](https://obsidian.md/)** v1.8.10+
@@ -74,7 +74,7 @@ VaultSync enables file synchronization between Obsidian vaults.
 
    **Step 1:** Start external services first
    ```bash
-   deno task dev:external
+   bun run dev:external
    ```
 
    **Step 2:** Get Syncthing API key
@@ -85,7 +85,7 @@ VaultSync enables file synchronization between Obsidian vaults.
 
    **Step 3:** Start remaining services
    ```bash
-   deno task dev
+   bun run dev
    ```
 
    Or host them somewhere - the Docker setup is ready to serve.
@@ -129,7 +129,7 @@ Check that all services are running:
 
 ### Common Issues
 
-- **"deno: command not found"** → Install Deno from https://deno.land/
+- **"bun: command not found"** → Install Bun from https://bun.sh/
 - **"Docker not running"** → Start Docker Desktop
 - **"Plugin not appearing"** → Check `VAULT_PATH` points to correct Obsidian vault root
 - **"Sync not working"** → Verify API key in `server/.env` matches Syncthing UI

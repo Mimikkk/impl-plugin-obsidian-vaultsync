@@ -1,18 +1,23 @@
-import { colors } from "@cliffy/ansi/colors";
-import * as fs from "@std/fs";
-import * as path from "@std/path";
-import { resolve } from "node:path";
+import { watch } from "node:fs";
+import { join, resolve } from "node:path";
+import { colors } from "../../../scripts/ansi.ts";
+import { copyTree, ensureDir, exists, removeDir } from "../../../scripts/fs.ts";
 import "../../../scripts/read-env.ts";
 
+interface FsEvent {
+  paths: string[];
+}
+
 const nextlineRe = /\r?\n/;
-const lines = (text: Uint8Array) => new TextDecoder().decode(text).trim().split(nextlineRe);
+const lines = (text: string) => text.trim().split(nextlineRe);
 
 const rebuild = async () => {
-  const { stderr, stdout, success } = await new Deno.Command("deno", {
-    args: ["task", "-f", "plugin", "build"],
-    stdout: "piped",
-    stderr: "piped",
-  }).output();
+  const process = Bun.spawn(["bun", "run", "build"], { stdout: "pipe", stderr: "pipe" });
+  const [exitCode, stdout, stderr] = await Promise.all([
+    process.exited,
+    new Response(process.stdout).text(),
+    new Response(process.stderr).text(),
+  ]);
 
   const outputLines = lines(stdout);
   const errorLines = lines(stderr);
@@ -21,15 +26,15 @@ const rebuild = async () => {
   console.info(errorLines.map((line) => `  - ${line}`).join("\n"));
   console.info(outputLines.map((line) => `  - ${line}`).join("\n"));
 
-  if (!success) return "build-failed";
+  if (exitCode !== 0) return "build-failed";
   return "build-success";
 };
 
 const createDebouncedEventHandler = (
-  { onEvent, debounceMs = 200 }: { onEvent: (event: Deno.FsEvent) => Promise<void> | void; debounceMs?: number },
+  { onEvent, debounceMs = 200 }: { onEvent: (event: FsEvent) => Promise<void> | void; debounceMs?: number },
 ) => {
-  let timeout: number | undefined;
-  let lastEvent: Deno.FsEvent | undefined;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  let lastEvent: FsEvent | undefined;
   const handle = async () => {
     if (lastEvent) {
       await onEvent(lastEvent);
@@ -39,7 +44,7 @@ const createDebouncedEventHandler = (
     timeout = undefined;
   };
 
-  return (event: Deno.FsEvent) => {
+  return (event: FsEvent) => {
     lastEvent = event;
 
     if (timeout !== undefined) {
@@ -50,6 +55,8 @@ const createDebouncedEventHandler = (
   };
 };
 
+const watching = process.argv.includes("--watch");
+
 const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUrl: string }) => {
   console.info(`${colors.blue("[event]")} Syncing plugin to vault...`);
   const result = await rebuild();
@@ -58,40 +65,31 @@ const synchronize = async ({ localUrl, remoteUrl }: { localUrl: string; remoteUr
     return;
   }
 
-  await fs.ensureDir(remoteUrl);
-  await Deno.remove(remoteUrl, { recursive: true });
-  await fs.ensureDir(remoteUrl);
-
-  for await (const entry of fs.walk(localUrl, { includeDirs: false })) {
-    if (entry.isFile) {
-      const relativePath = path.relative(localUrl, entry.path);
-      const targetPath = path.join(remoteUrl, relativePath);
-
-      await fs.ensureDir(path.dirname(targetPath));
-      await fs.copy(entry.path, targetPath, { overwrite: true });
-    }
-  }
+  await ensureDir(remoteUrl);
+  await removeDir(remoteUrl);
+  await ensureDir(remoteUrl);
+  await copyTree(localUrl, remoteUrl);
 
   console.info(`${colors.blue("[event]")} Plugin synced to vault successfully!`);
 
-  if (Deno.args.includes("--watch")) {
+  if (watching) {
     console.info(`${colors.gray("[info]")} Watching for changes...`);
   }
 };
 
-const vaultPath = Deno.env.get("VAULT_PATH");
+const vaultPath = process.env.VAULT_PATH;
 const parseUrls = async (vaultUrl?: string) => {
-  if (vaultUrl === undefined) {
+  if (!vaultUrl) {
     return "vault-path-not-set";
   }
-  if (!(await fs.exists(vaultUrl))) {
+  if (!(await exists(vaultUrl))) {
     return "obsidian-location-does-not-exist";
   }
 
   const pluginLocalUrl = `dist`;
-  const obsidianUrl = path.join(vaultUrl, ".obsidian");
-  const pluginsUrl = path.join(obsidianUrl, "plugins");
-  const pluginRemoteUrl = path.join(pluginsUrl, "vault-sync");
+  const obsidianUrl = join(vaultUrl, ".obsidian");
+  const pluginsUrl = join(obsidianUrl, "plugins");
+  const pluginRemoteUrl = join(pluginsUrl, "vault-sync");
 
   return { localUrl: pluginLocalUrl, remoteUrl: pluginRemoteUrl };
 };
@@ -101,21 +99,22 @@ const urls = await parseUrls(vaultPath);
 if (urls === "vault-path-not-set") {
   console.error(`${colors.red("[error]")} VAULT_PATH is not set.`);
   console.error("- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.");
-  Deno.exit(1);
+  process.exit(1);
 }
 
 if (urls === "obsidian-location-does-not-exist") {
   console.error(`${colors.red("[error]")} Obsidian location does not exist.`);
   console.error("- Please check your vault path.");
-  Deno.exit(1);
+  process.exit(1);
 }
 
 await synchronize(urls);
-if (!Deno.args.includes("--watch")) Deno.exit(0);
+if (!watching) process.exit(0);
 
 const paths = [resolve("."), resolve("../../libs/interaction"), resolve("../../libs/shared")];
-const watcher = Deno.watchFs(paths);
 const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
-for await (const event of watcher) {
-  handleEvent(event);
+for (const path of paths) {
+  watch(path, { recursive: true }, (_event, filename) => {
+    handleEvent({ paths: [filename ? join(path, filename) : path] });
+  });
 }

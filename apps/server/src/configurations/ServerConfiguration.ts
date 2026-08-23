@@ -1,18 +1,20 @@
-import { colors } from "@cliffy/ansi/colors";
+import { styleText } from "node:util";
 import { Log } from "@server/core/infrastructure/logging/log.ts";
 import { HttpJsonResponse } from "@server/core/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { EnvironmentConfiguration } from "./EnvironmentConfiguration.ts";
 
-const c = colors.yellow;
-export const ServerConfiguration: Deno.ServeTcpOptions = {
+const c = (s: string) => styleText("yellow", s);
+
+export const ServerConfiguration = {
   port: EnvironmentConfiguration.port,
   hostname: EnvironmentConfiguration.hostname,
-  onListen({ hostname, port, transport }) {
-    Log.info(`Current working directory: ${c(Deno.cwd())}.`);
-    Log.info(`Server is running on ${c(`http://${hostname}`)}:${c(port.toString())} using ${c(transport)}.`);
-  },
-  onError(error) {
+  error(error: unknown) {
     Log.error("Server failed to start:", error);
     return HttpJsonResponse.internal(error);
   },
 };
+
+export function logListen(hostname: string, port: number) {
+  Log.info(`Current working directory: ${c(process.cwd())}.`);
+  Log.info(`Server is running on ${c(`http://${hostname}`)}:${c(port.toString())}.`);
+}

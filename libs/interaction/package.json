@@ -1,0 +1,11 @@
+{
+  "name": "@nimir/interaction",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./src/mod.ts",
+  "dependencies": {
+    "@nimir/shared": "workspace:*",
+    "@tanstack/solid-query": "5.75.0",
+    "solid-js": "1.9.6"
+  }
+}

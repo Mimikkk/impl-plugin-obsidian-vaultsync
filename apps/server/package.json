@@ -1,0 +1,17 @@
+{
+  "name": "@nimir/obsidian-vault-sync-server",
+  "private": true,
+  "type": "module",
+  "exports": "./src/server.ts",
+  "scripts": {
+    "dev": "bun --env-file=.env --watch ./src/server.ts",
+    "serve": "bun --env-file=.env ./src/server.ts"
+  },
+  "dependencies": {
+    "@nimir/framework": "workspace:*",
+    "@nimir/shared": "workspace:*",
+    "ky": "^1.8.1",
+    "openapi3-ts": "^4.4.0",
+    "swagger-ui-dist": "^5.11.0"
+  }
+}

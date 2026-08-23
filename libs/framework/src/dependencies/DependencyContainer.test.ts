@@ -1,5 +1,4 @@
-import { expect } from "@std/expect";
-import { beforeEach, describe, it } from "@std/testing/bdd";
+import { beforeEach, describe, expect, it } from "bun:test";
 import { type Constructible, DependencyContainer } from "./DependencyContainer.ts";
 import { resolve, singletonTo } from "./decorators.ts";
 

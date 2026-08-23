@@ -1,5 +1,5 @@
 import { singleton } from "@nimir/framework";
-import { isAbsolute, normalize } from "@std/path";
+import { isAbsolute, normalize } from "node:path/posix";
 
 const regexes = {
   specialChars: /:|\$|!|'|"|@|\+|`|\||=/g,

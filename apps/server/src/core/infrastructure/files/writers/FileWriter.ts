@@ -1,4 +1,5 @@
-import { dirname } from "@std/path";
+import { mkdir, rm, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 
 export class FileWriter {
   static create(): FileWriter {
@@ -11,16 +12,16 @@ export class FileWriter {
 
       if (directory) {
         try {
-          await Deno.mkdir(directory, { recursive: true });
+          await mkdir(directory, { recursive: true });
         } catch {
           return false;
         }
       }
 
       if (typeof content === "string") {
-        await Deno.writeTextFile(path, content);
+        await writeFile(path, content, "utf8");
       } else {
-        await Deno.writeFile(path, content);
+        await writeFile(path, content);
       }
 
       return true;
@@ -39,7 +40,7 @@ export class FileWriter {
 
   async remove(path: string, recursive = false): Promise<boolean> {
     try {
-      await Deno.remove(path, { recursive });
+      await rm(path, { recursive, force: true });
 
       return true;
     } catch {

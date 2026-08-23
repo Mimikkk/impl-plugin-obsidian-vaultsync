@@ -1,8 +1,26 @@
+import { readdir, stat } from "node:fs/promises";
+import type { Stats } from "node:fs";
+import { extname, resolve } from "node:path";
 import { FileReader } from "@server/core/infrastructure/files/readers/FileReader.ts";
 import { StaticFileNs } from "@server/features/static/domain/StaticFile.ts";
-import { extname, resolve } from "@std/path";
 
-export interface FileInfo extends Deno.FileInfo {}
+export interface FileInfo {
+  isFile: boolean;
+  isDirectory: boolean;
+  size: number;
+  mtime: Date | null;
+  birthtime: Date | null;
+}
+
+function toFileInfo(stats: Stats): FileInfo {
+  return {
+    isFile: stats.isFile(),
+    isDirectory: stats.isDirectory(),
+    size: stats.size,
+    mtime: stats.mtime,
+    birthtime: stats.birthtime,
+  };
+}
 
 export class FileSystemReader {
   static create(path: string = "."): FileSystemReader {
@@ -46,14 +64,13 @@ export class FileSystemReader {
 
   async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
     async function traverse(paths: string[], path: string, recursive: boolean): Promise<string[]> {
-      for await (const entry of Deno.readDir(path)) {
+      const entries = await readdir(path, { withFileTypes: true });
+      for (const entry of entries) {
         const next = resolve(path, entry.name);
         paths.push(next);
 
-        if (recursive && entry.isDirectory) {
-          const subPaths = await traverse(paths, next, recursive);
-
-          paths.push(...subPaths);
+        if (recursive && entry.isDirectory()) {
+          await traverse(paths, next, recursive);
         }
       }
 
@@ -64,8 +81,8 @@ export class FileSystemReader {
     const exists = await this.exists(start);
     if (!exists) return [];
 
-    const stat = await Deno.stat(start);
-    if (!stat.isDirectory) return [];
+    const stats = await stat(start);
+    if (!stats.isDirectory()) return [];
 
     const paths = await traverse([], start, options.recursive ?? false);
 
@@ -74,9 +91,9 @@ export class FileSystemReader {
 
   async exists(path: string): Promise<boolean> {
     try {
-      const stat = await Deno.stat(this.path(path));
+      const stats = await stat(this.path(path));
 
-      return stat.isFile || stat.isDirectory;
+      return stats.isFile() || stats.isDirectory();
     } catch {
       return false;
     }
@@ -84,9 +101,7 @@ export class FileSystemReader {
 
   async stats(path: string): Promise<FileInfo | null> {
     try {
-      const stat = await Deno.stat(this.path(path));
-
-      return stat;
+      return toFileInfo(await stat(this.path(path)));
     } catch {
       return null;
     }

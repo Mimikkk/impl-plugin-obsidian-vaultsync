@@ -1,5 +1,5 @@
 import { FileWriter } from "@server/core/infrastructure/files/writers/FileWriter.ts";
-import { resolve } from "@std/path";
+import { resolve } from "node:path";
 
 export class FileSystemWriter {
   static create(path: string = "."): FileSystemWriter {

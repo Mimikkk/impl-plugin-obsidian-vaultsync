@@ -1,5 +1,5 @@
 import { TimeMs } from "@nimir/shared";
-import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
+import { logListen, ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
 import { ApplicationComposer } from "@server/core/infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "@server/core/infrastructure/middlewares/MiddlewareNs.ts";
 import { HttpRouter } from "@server/core/infrastructure/routing/routes/HttpRouter.ts";
@@ -18,4 +18,8 @@ export const server = ApplicationComposer.of([
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);
 
-Deno.serve(ServerConfiguration, server);
+const bunServer = Bun.serve({
+  ...ServerConfiguration,
+  fetch: server,
+});
+logListen(bunServer.hostname!, bunServer.port!);

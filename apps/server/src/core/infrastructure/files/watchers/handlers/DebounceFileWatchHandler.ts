@@ -2,10 +2,11 @@ import type {
   FileWatchHandle,
   FileWatchHandler,
 } from "@server/core/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
+import type { FsEvent } from "@server/core/infrastructure/files/watchers/FsEvent.ts";
 
 export class DebounceFileWatchHandler implements FileWatchHandler {
   static create({ onEvent, debounceMs = 200 }: {
-    onEvent: (event: Deno.FsEvent) => void;
+    onEvent: (event: FsEvent) => void;
     debounceMs?: number;
   }) {
     return new DebounceFileWatchHandler(onEvent, debounceMs, new Map(), new Map());
@@ -14,12 +15,12 @@ export class DebounceFileWatchHandler implements FileWatchHandler {
   private constructor(
     private readonly onEvent: FileWatchHandle,
     private readonly debounceMs: number,
-    private readonly timeouts: Map<string, number>,
-    private readonly events: Map<string, Deno.FsEvent>,
+    private readonly timeouts: Map<string, ReturnType<typeof setTimeout>>,
+    private readonly events: Map<string, FsEvent>,
   ) {
   }
 
-  handle(event: Deno.FsEvent) {
+  handle(event: FsEvent) {
     const path = event.paths[0];
     this.events.set(path, event);
 
