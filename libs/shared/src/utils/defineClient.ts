@@ -47,16 +47,25 @@ function joinUrl(base: string, path: string): string {
 
 type RequestPayloadOptions = Pick<KyOptions, "json" | "body">;
 
+function isBodyInit(payload: unknown): payload is BodyInit {
+  return (
+    typeof payload === "string" ||
+    payload instanceof ArrayBuffer ||
+    ArrayBuffer.isView(payload) ||
+    payload instanceof Blob ||
+    payload instanceof FormData ||
+    payload instanceof URLSearchParams ||
+    Object.prototype.toString.call(payload) === "[object FormData]"
+  );
+}
+
 function payloadOptions(payload: unknown): RequestPayloadOptions {
   if (payload === undefined || payload === null) {
     return {};
   }
 
-  if (
-    payload instanceof FormData ||
-    Object.prototype.toString.call(payload) === "[object FormData]"
-  ) {
-    return { body: payload as BodyInit };
+  if (isBodyInit(payload)) {
+    return { body: payload };
   }
 
   return { json: payload };

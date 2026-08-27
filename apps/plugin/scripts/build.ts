@@ -15,6 +15,7 @@ rspack({
     extensions: [".ts", ".js", ".json"],
     alias: {
       "@env": resolve(".env"),
+      "@nimir/shared": resolve("../../libs/shared/src/mod.ts"),
     },
   },
   cache: true,

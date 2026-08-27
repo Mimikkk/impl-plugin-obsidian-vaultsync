@@ -3,8 +3,9 @@ import { lineDiff } from "./diff.ts";
 
 export type ConflictResult =
   | { action: "skip" }
+  | { action: "local" }
   | { action: "remote" }
-  | { action: "send"; bytes: ArrayBuffer };
+  | { action: "apply"; bytes: ArrayBuffer };
 
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
@@ -13,9 +14,9 @@ function isMarkdown(path: string) {
   return path.toLowerCase().endsWith(".md");
 }
 
-export function resolveConflict(path: string, local: ArrayBuffer, remote: ArrayBuffer) {
+export function resolveConflict(localPath: string, remotePath: string, local: ArrayBuffer, remote: ArrayBuffer) {
   return new Promise<ConflictResult>((resolve) => {
-    const modal = new ConflictModal(path, local, remote, resolve);
+    const modal = new ConflictModal(localPath, remotePath, local, remote, resolve);
     modal.open();
   });
 }
@@ -25,7 +26,8 @@ class ConflictModal extends Modal {
   private editor: HTMLTextAreaElement | undefined;
 
   constructor(
-    private readonly file: string,
+    private readonly localPath: string,
+    private readonly remotePath: string,
     private readonly local: ArrayBuffer,
     private readonly remote: ArrayBuffer,
     private readonly finish: (result: ConflictResult) => void,
@@ -36,10 +38,15 @@ class ConflictModal extends Modal {
   override onOpen() {
     const localText = decoder.decode(this.local);
     const remoteText = decoder.decode(this.remote);
-    const markdown = isMarkdown(this.file);
+    const markdown = isMarkdown(this.localPath) || isMarkdown(this.remotePath);
 
     this.titleEl.setText("Conflict");
-    this.contentEl.createEl("p", { text: this.file, cls: "mod-muted" });
+    if (this.localPath === this.remotePath) {
+      this.contentEl.createEl("p", { text: this.localPath, cls: "mod-muted" });
+    } else {
+      this.contentEl.createEl("p", { text: `Local: ${this.localPath}`, cls: "mod-muted" });
+      this.contentEl.createEl("p", { text: `Remote: ${this.remotePath}`, cls: "mod-muted" });
+    }
 
     if (markdown) {
       const pre = this.contentEl.createEl("pre", { cls: "vault-sync-diff" });
@@ -51,27 +58,27 @@ class ConflictModal extends Modal {
       this.editor = this.contentEl.createEl("textarea", { cls: "vault-sync-editor" });
       this.editor.value = localText;
     } else {
-      this.contentEl.createEl("p", { text: "Not markdown. Send local, take remote, or skip." });
+      this.contentEl.createEl("p", { text: "Not markdown. Accept a side or apply local bytes." });
     }
 
     const buttons = this.contentEl.createDiv({ cls: "modal-button-container" });
-    buttons.createEl("button", { text: "Send", cls: "mod-cta" }).addEventListener("click", () => {
+    buttons.createEl("button", { text: "Accept local" }).addEventListener("click", () => {
+      this.done({ action: "local" });
+    });
+    buttons.createEl("button", { text: "Accept remote" }).addEventListener("click", () => {
+      this.done({ action: "remote" });
+    });
+    buttons.createEl("button", { text: "Apply", cls: "mod-cta" }).addEventListener("click", () => {
       if (!this.editor) {
-        this.done({ action: "send", bytes: this.local });
+        this.done({ action: "apply", bytes: this.local });
         return;
       }
       const encoded = encoder.encode(this.editor.value);
       const bytes = encoded.buffer.slice(
         encoded.byteOffset,
         encoded.byteOffset + encoded.byteLength,
-      );
-      this.done({ action: "send", bytes });
-    });
-    buttons.createEl("button", { text: "Take remote" }).addEventListener("click", () => {
-      this.done({ action: "remote" });
-    });
-    buttons.createEl("button", { text: "Skip" }).addEventListener("click", () => {
-      this.done({ action: "skip" });
+      ) as ArrayBuffer;
+      this.done({ action: "apply", bytes });
     });
   }
 

@@ -13,6 +13,7 @@
     "apps/plugin": {
       "name": "@nimir/obsidian-vault-sync-plugin",
       "dependencies": {
+        "@nimir/shared": "workspace:*",
         "@rspack/core": "2.2.0",
         "obsidian": "1.8.7",
       },

@@ -117,7 +117,7 @@ if (urls === "obsidian-location-does-not-exist") {
 await synchronize(urls);
 if (!watching) process.exit(0);
 
-const paths = [resolve(".")];
+const paths = [resolve("."), resolve("../../libs/shared")];
 const handleEvent = createDebouncedEventHandler({
   onEvent: () => synchronize(urls),
   debounceMs: 500,
