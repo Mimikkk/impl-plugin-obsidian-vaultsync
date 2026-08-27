@@ -4,9 +4,7 @@
   "workspaces": [
     "apps/plugin",
     "apps/server",
-    "libs/shared",
-    "libs/framework",
-    "libs/interaction"
+    "libs/shared"
   ],
   "type": "module",
   "scripts": {
