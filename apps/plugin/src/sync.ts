@@ -94,7 +94,8 @@ export async function synchronize(vault: Vault, bases: Record<string, string>) {
   }
 
   for (const { localPath, remotePath } of conflicts) {
-    const local = localBytes.get(localPath) ?? (await api.get.fetch({ params: { path: localPath } }));
+    const local =
+      localBytes.get(localPath) ?? (await api.get.fetch({ params: { path: localPath } }));
     const remote = await api.get.fetch({ params: { path: remotePath } });
     if (!local || !remote) continue;
 

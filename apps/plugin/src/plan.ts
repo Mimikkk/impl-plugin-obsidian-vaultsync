@@ -35,7 +35,7 @@ export function plan(
     else ops.push({ type: "conflict", localPath: path, remotePath: path });
   }
 
-  for (const [localPath, localHash] of [...pendingLocal]) {
+  for (const [localPath, localHash] of pendingLocal) {
     let remotePath: string | undefined;
     for (const [path, hash] of pendingRemote) {
       if (hash === localHash) {
@@ -51,9 +51,17 @@ export function plan(
     const baseLocal = bases[localPath];
     const baseRemote = bases[remotePath];
     if (baseRemote === localHash && baseLocal !== localHash) {
-      ops.push({ type: "removeRemote", path: remotePath }, { type: "upload", path: localPath }, { type: "forget", path: remotePath });
+      ops.push(
+        { type: "removeRemote", path: remotePath },
+        { type: "upload", path: localPath },
+        { type: "forget", path: remotePath },
+      );
     } else if (baseLocal === localHash && baseRemote !== localHash) {
-      ops.push({ type: "removeLocal", path: localPath }, { type: "download", path: remotePath }, { type: "forget", path: localPath });
+      ops.push(
+        { type: "removeLocal", path: localPath },
+        { type: "download", path: remotePath },
+        { type: "forget", path: localPath },
+      );
     } else {
       ops.push({ type: "conflict", localPath, remotePath });
       for (const [path, hash] of Object.entries(bases)) {

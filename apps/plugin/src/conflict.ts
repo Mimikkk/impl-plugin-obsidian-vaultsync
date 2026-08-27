@@ -14,7 +14,12 @@ function isMarkdown(path: string) {
   return path.toLowerCase().endsWith(".md");
 }
 
-export function resolveConflict(localPath: string, remotePath: string, local: ArrayBuffer, remote: ArrayBuffer) {
+export function resolveConflict(
+  localPath: string,
+  remotePath: string,
+  local: ArrayBuffer,
+  remote: ArrayBuffer,
+) {
   return new Promise<ConflictResult>((resolve) => {
     const modal = new ConflictModal(localPath, remotePath, local, remote, resolve);
     modal.open();
