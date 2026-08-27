@@ -9,14 +9,14 @@ export const lazyResolve = <T>(
   from: DependencyContainer = container,
 ): (() => T) => lazy(() => resolve(item, from));
 
-export const singleton = <T extends Constructible>(target: T, _: any) => {
+export const singleton = <T extends Constructible>(target: T, __: any) => {
   container.singleton(target);
   return target;
 };
 
 export const singletonTo =
   (container: DependencyContainer) =>
-  <T extends Constructible>(target: T, _: any) => {
+  <T extends Constructible>(target: T, __: any) => {
     container.singleton(target);
     return target;
   };

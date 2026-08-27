@@ -1,10 +1,9 @@
 import { rspack } from "@rspack/core";
 import { copyFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import "../../../scripts/read-env.ts";
 
 rspack({
-  entry: "./src/mod.ts",
+  entry: "./src/main.ts",
   output: {
     path: resolve("dist"),
     clean: true,
@@ -13,48 +12,31 @@ rspack({
     library: { type: "commonjs-static" },
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".json"],
+    extensions: [".ts", ".js", ".json"],
     alias: {
-      "@plugin": resolve("src"),
       "@env": resolve(".env"),
-      "@nimir/shared": resolve("../../libs/shared/src/mod.ts"),
-      "@nimir/interaction": resolve("../../libs/interaction/src/mod.ts"),
-      "@nimir/framework": resolve("../../libs/framework/src/mod.ts"),
-      "@shared": resolve("../../libs/shared/src"),
-      "@interaction": resolve("../../libs/interaction/src"),
-      "@framework": resolve("../../libs/framework/src"),
     },
   },
   cache: true,
   externals: ["obsidian"],
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        loader: "postcss-loader",
-        type: "css",
-      },
+      { test: /\.css$/, type: "css" },
       {
         test: /\.ts$/,
         loader: "builtin:swc-loader",
         type: "javascript/auto",
         options: {
           jsc: {
-            parser: { syntax: "typescript", decorators: true },
+            parser: { syntax: "typescript" },
             target: "esnext",
           },
         },
       },
       {
-        test: /\\.env$/,
+        test: /\.env$/,
         loader: "./scripts/env-loader.ts",
         type: "json",
-      },
-      {
-        test: /\.tsx$/,
-        loader: "babel-loader",
-        type: "javascript/auto",
-        options: { presets: ["@babel/preset-typescript", "solid"] },
       },
     ],
   },
@@ -72,11 +54,7 @@ rspack({
   }
 
   const files = ["manifest.json", "versions.json", ".hotreload"];
-  console.info("Moving static files...");
   await Promise.all(files.map((file) => copyFile(resolve("assets", file), resolve("dist", file))));
-  console.info(files.map((file) => `- asset ${file}`).join("\n"));
-  console.info("Static files moved successfully!");
-
   console.info("Build completed successfully!");
   console.info(stats?.toString({ colors: true }));
 });

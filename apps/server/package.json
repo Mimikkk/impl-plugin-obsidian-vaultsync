@@ -8,9 +8,6 @@
     "serve": "bun --env-file=.env ./src/server.ts"
   },
   "dependencies": {
-    "@nimir/framework": "workspace:*",
-    "@nimir/shared": "workspace:*",
-    "ky": "2.0.2",
-    "openapi3-ts": "^4.4.0"
+    "hono": "^4.13.5"
   }
 }

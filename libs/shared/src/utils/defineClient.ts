@@ -52,8 +52,11 @@ function payloadOptions(payload: unknown): RequestPayloadOptions {
     return {};
   }
 
-  if (payload instanceof FormData) {
-    return { body: payload };
+  if (
+    payload instanceof FormData ||
+    Object.prototype.toString.call(payload) === "[object FormData]"
+  ) {
+    return { body: payload as BodyInit };
   }
 
   return { json: payload };

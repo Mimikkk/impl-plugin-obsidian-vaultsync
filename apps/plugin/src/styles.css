@@ -1,7 +1,5 @@
-@import "tailwindcss";
-
 .vault-sync-diff {
-  max-height: 50vh;
+  max-height: 30vh;
   overflow: auto;
   font-size: 12px;
   line-height: 1.4;
@@ -14,4 +12,12 @@
 
 .vault-sync-diff-add {
   background: rgba(var(--color-green-rgb), 0.15);
+}
+
+.vault-sync-editor {
+  width: 100%;
+  min-height: 12rem;
+  margin-top: 0.75rem;
+  font-family: var(--font-monospace);
+  font-size: 12px;
 }
