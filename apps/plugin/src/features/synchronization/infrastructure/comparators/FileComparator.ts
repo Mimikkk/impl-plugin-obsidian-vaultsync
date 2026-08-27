@@ -9,9 +9,7 @@ export class FileComparator {
     return new FileComparator(hashes);
   }
 
-  private constructor(
-    private readonly hashes: FileHashProvider,
-  ) {}
+  private constructor(private readonly hashes: FileHashProvider) {}
 
   async compare(a: FileInfo, b: FileInfo): Promise<boolean> {
     if (this.areTimestampsSimilar(a, b)) return true;
@@ -23,10 +21,7 @@ export class FileComparator {
   }
 
   async areHashesEqual(a: FileInfo, b: FileInfo): Promise<boolean> {
-    const [local, remote] = await Promise.all([
-      this.hashes.get(a),
-      this.hashes.get(b),
-    ]);
+    const [local, remote] = await Promise.all([this.hashes.get(a), this.hashes.get(b)]);
 
     return local === remote;
   }

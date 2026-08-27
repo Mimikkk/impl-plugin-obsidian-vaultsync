@@ -27,10 +27,11 @@ export namespace StaticFileNs {
   type InferExtension<P extends string> = P extends `${string}.${infer E}` ? E : never;
 
   // @ts-expect-error - type inference is not deep enough
-  export type MimeFromPath<P extends Path> = InferExtension<P> extends infer E ? typeof MimeMap[E] : never;
+  export type MimeFromPath<P extends Path> =
+    InferExtension<P> extends infer E ? (typeof MimeMap)[E] : never;
   // @ts-expect-error - type inference is not deep enough
-  export type TypeFromPath<P extends Path> = InferExtension<P> extends infer E ? FileReader.FileMap[typeof TypeMap[E]]
-    : never;
+  export type TypeFromPath<P extends Path> =
+    InferExtension<P> extends infer E ? FileReader.FileMap[(typeof TypeMap)[E]] : never;
 
   // @ts-expect-error - type inference is not deep enough
   export type FromPath<P extends Path> = StaticFile<TypeFromPath<P>, MimeFromPath<P>>;

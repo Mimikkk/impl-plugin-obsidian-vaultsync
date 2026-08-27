@@ -2,5 +2,12 @@
   "name": "@nimir/shared",
   "version": "0.0.1",
   "type": "module",
-  "exports": "./src/mod.ts"
+  "exports": "./src/mod.ts",
+  "dependencies": {
+    "ky": "^2.0.2",
+    "qs": "^6.15.3"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.15.1"
+  }
 }

@@ -5,9 +5,7 @@ export class RouteRequestContent<P extends object | null> {
     return new RouteRequestContent(values);
   }
 
-  private constructor(
-    public readonly values: P,
-  ) {}
+  private constructor(public readonly values: P) {}
 
   static async fromRequestContext<P extends Record<string, any>>(
     request: RequestContext,

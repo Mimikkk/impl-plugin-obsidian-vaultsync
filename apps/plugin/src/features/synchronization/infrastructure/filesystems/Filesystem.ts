@@ -12,10 +12,7 @@ export interface FileOperations {
 }
 
 export class Filesystem implements FileSearch, FileOperations {
-  static create(
-    search: FileSearch,
-    operations: FileOperations,
-  ) {
+  static create(search: FileSearch, operations: FileOperations) {
     return new Filesystem(search, operations);
   }
 

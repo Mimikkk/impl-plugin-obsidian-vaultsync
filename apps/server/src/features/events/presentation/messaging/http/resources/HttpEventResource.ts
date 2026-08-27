@@ -13,7 +13,8 @@ export namespace HttpEventResource {
     createdAt: event.createdAt,
   });
 
-  export const fromEvents = (events: EventServiceNs.Event[]): HttpEventResource[] => events.map(fromEvent);
+  export const fromEvents = (events: EventServiceNs.Event[]): HttpEventResource[] =>
+    events.map(fromEvent);
 
   export const example = {
     id: 1,

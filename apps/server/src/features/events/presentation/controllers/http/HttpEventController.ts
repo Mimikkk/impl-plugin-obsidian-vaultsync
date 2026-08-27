@@ -25,7 +25,7 @@ export class HttpEventController {
     responses: [HttpEventResponse.Ok],
   })
   async scan() {
-    await this.service.scan({ folder: "default" });
+    await this.service.scan();
     return HttpEventResponse.ok();
   }
 
@@ -35,16 +35,18 @@ export class HttpEventController {
     description: "Get the pool of events of the server (60 seconds)",
     tags: [OpenApiTag.Events],
     responses: [HttpEventResponse.Events],
-    queryParameters: [HttpEventQueryParameter.Since, HttpEventQueryParameter.Limit, HttpEventQueryParameter.Type],
+    queryParameters: [
+      HttpEventQueryParameter.Since,
+      HttpEventQueryParameter.Limit,
+      HttpEventQueryParameter.Type,
+    ],
   })
-  async pool(
-    { queryParameters: { values } }: RouteRequestContext<
-      { since: string; limit: string; type: string }
-    >,
-  ) {
+  async pool({
+    queryParameters: { values },
+  }: RouteRequestContext<{ since: string; limit: string; type: string }>) {
     const since = +values?.since;
     const limit = +values?.limit;
-    const events = values?.type.split(",");
+    const events = typeof values?.type === "string" ? values.type.split(",") : undefined;
 
     const result = await this.service.pool({ since, limit, events });
 

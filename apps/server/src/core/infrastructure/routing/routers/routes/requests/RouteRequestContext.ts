@@ -39,12 +39,16 @@ export class RouteRequestContext<
     );
   }
 
-  withRouteParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<Merge<RP, P>, SP, T> {
+  withRouteParameters<P extends Record<string, any>>(
+    parameters: P,
+  ): RouteRequestContext<Merge<RP, P>, SP, T> {
     Object.assign(this.routeParameters.values, parameters);
     return this as RouteRequestContext<Merge<RP, P>, SP, T>;
   }
 
-  withQueryParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<RP, Merge<SP, P>, T> {
+  withQueryParameters<P extends Record<string, any>>(
+    parameters: P,
+  ): RouteRequestContext<RP, Merge<SP, P>, T> {
     Object.assign(this.queryParameters.values, parameters);
     return this as RouteRequestContext<RP, Merge<SP, P>, T>;
   }

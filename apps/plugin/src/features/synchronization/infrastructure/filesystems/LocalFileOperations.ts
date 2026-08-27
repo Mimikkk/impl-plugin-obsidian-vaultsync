@@ -8,9 +8,7 @@ export class LocalFileOperations implements FileOperations {
     return new LocalFileOperations(client);
   }
 
-  private constructor(
-    private readonly client: LocalFileSystemClient,
-  ) {}
+  private constructor(private readonly client: LocalFileSystemClient) {}
 
   async download(path: string): Promise<ArrayBuffer | undefined> {
     return await this.client.read(path);

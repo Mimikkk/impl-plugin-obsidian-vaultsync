@@ -12,7 +12,5 @@ export class CallbackFileWatchHandler implements FileWatchHandler {
     return new CallbackFileWatchHandler(onEvent);
   }
 
-  private constructor(
-    public readonly handle: FileWatchHandle,
-  ) {}
+  private constructor(public readonly handle: FileWatchHandle) {}
 }

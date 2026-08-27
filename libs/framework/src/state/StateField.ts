@@ -18,9 +18,12 @@ export interface StateFieldOptions<Runtime, Storage> {
 }
 
 export class StateField<Runtime = any, Storage = any> {
-  static create<Runtime, Storage>(
-    { fallback, decode, encode, validate }: StateFieldOptions<Runtime, Storage>,
-  ) {
+  static create<Runtime, Storage>({
+    fallback,
+    decode,
+    encode,
+    validate,
+  }: StateFieldOptions<Runtime, Storage>) {
     return new StateField(validate, encode, decode, fallback);
   }
 
@@ -33,8 +36,7 @@ export class StateField<Runtime = any, Storage = any> {
 }
 
 export namespace StateFields {
-  export interface NumberOptions extends StateFieldOptions<number, number> {
-  }
+  export interface NumberOptions extends StateFieldOptions<number, number> {}
 
   const numberOptions: NumberOptions = {
     fallback: () => 0,
@@ -51,8 +53,10 @@ export namespace StateFields {
       decode: options?.decode ?? numberOptions.decode,
     });
 
-  export interface MapOptions<K = any, V = any> extends StateFieldOptions<Map<K, V>, [key: K, value: V][]> {
-  }
+  export interface MapOptions<K = any, V = any> extends StateFieldOptions<
+    Map<K, V>,
+    [key: K, value: V][]
+  > {}
 
   const mapOptions: MapOptions = {
     fallback: () => new Map(),

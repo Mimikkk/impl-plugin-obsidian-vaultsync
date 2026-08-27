@@ -4,7 +4,4 @@ import { syncStateConfiguration } from "./features/synchronization/middlewares/s
 import { withUI } from "./features/ui/middlewares/withUI.ts";
 import "./styles.css";
 
-export default definePlugin([
-  withState({ sync: syncStateConfiguration }),
-  withUI,
-]);
+export default definePlugin([withState({ sync: syncStateConfiguration }), withUI]);

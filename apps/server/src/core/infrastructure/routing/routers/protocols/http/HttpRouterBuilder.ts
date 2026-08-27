@@ -6,7 +6,11 @@ import { Router } from "@server/core/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/core/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/core/infrastructure/routing/routers/routes/RouteUrl.ts";
 import { ControllerStore } from "../../../controllers/ControllerStore.ts";
-import type { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
+import type {
+  Controller,
+  ControllerClass,
+  ControllerKey,
+} from "../../../controllers/ControllerTypes.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create<R extends Route[] = []>(
@@ -26,9 +30,17 @@ export class HttpRouterBuilder<R extends Route[] = Route[]> {
     P extends string,
     C extends ControllerClass,
     H extends ControllerKey<Controller<C>>,
-  >(
-    { method, path, Controller, handler }: { method: M; path: P; Controller: C; handler: H },
-  ): HttpRouterBuilder<[...R, Route]> {
+  >({
+    method,
+    path,
+    Controller,
+    handler,
+  }: {
+    method: M;
+    path: P;
+    Controller: C;
+    handler: H;
+  }): HttpRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
 
     const controller = this.controllers.get(Controller);

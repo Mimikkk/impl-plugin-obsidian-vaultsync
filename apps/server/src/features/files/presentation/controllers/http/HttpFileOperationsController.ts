@@ -13,15 +13,11 @@ import { HttpFileOperationUploadResponse } from "../../messaging/http/responses/
 
 @ControllerNs.controller({ name: "FileOperations", group: "files/operations" })
 export class HttpFileOperationsController {
-  static create(
-    service = resolve(FileOperationService),
-  ) {
+  static create(service = resolve(FileOperationService)) {
     return new HttpFileOperationsController(service);
   }
 
-  private constructor(
-    private readonly service: FileOperationService,
-  ) {}
+  private constructor(private readonly service: FileOperationService) {}
 
   @RouteNs.get("download")
   @OpenApiNs.route({

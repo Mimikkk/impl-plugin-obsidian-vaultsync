@@ -7,7 +7,10 @@ export namespace HttpEventResponse {
     description: "The events of the server",
     example: { status: "OK", message: "The scan is done." },
     name: "Events",
-    schema: { type: "object", properties: { status: { type: "string" }, message: { type: "string" } } },
+    schema: {
+      type: "object",
+      properties: { status: { type: "string" }, message: { type: "string" } },
+    },
     status: 200,
   });
 

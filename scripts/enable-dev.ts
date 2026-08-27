@@ -7,7 +7,10 @@ import "./read-env.ts";
 
 const command = async ({ args, cwd }: { args: string[]; cwd?: string }) => {
   const process = Bun.spawn(["git", ...args], { cwd, stdout: "pipe", stderr: "pipe" });
-  const [exitCode, stdout] = await Promise.all([process.exited, new Response(process.stdout).text()]);
+  const [exitCode, stdout] = await Promise.all([
+    process.exited,
+    new Response(process.stdout).text(),
+  ]);
 
   if (exitCode !== 0) {
     return "command-failure";
@@ -86,7 +89,9 @@ export async function main({ remoteUrl, localUrl }: HotReloadRepoUrls) {
 
     await copyTree(tempUrl, localUrl);
 
-    console.info(`${colors.gray("[info]")} Hot-reload plugin installed successfully to ${localUrl}`);
+    console.info(
+      `${colors.gray("[info]")} Hot-reload plugin installed successfully to ${localUrl}`,
+    );
   } catch {
     return "install-failure";
   } finally {
@@ -119,7 +124,9 @@ const parseRepoUrls = async (vaultUrl?: string) => {
 const urls = await parseRepoUrls(process.env.VAULT_PATH);
 if (urls === "vault-env-not-set") {
   console.error(`${colors.red("[error]")} VAULT_PATH is not set.`);
-  console.error("- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.");
+  console.error(
+    "- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.",
+  );
   process.exit(1);
 }
 
@@ -142,7 +149,9 @@ if (result === "invalid-local-hash") {
 }
 
 if (result === "invalid-remote-hash") {
-  console.error(`${colors.red("[error]")} Invalid remote hash. Please check your internet connection.`);
+  console.error(
+    `${colors.red("[error]")} Invalid remote hash. Please check your internet connection.`,
+  );
   console.error("- Please check your internet connection.");
   console.error("- Please check the remote URL.");
   process.exit(1);

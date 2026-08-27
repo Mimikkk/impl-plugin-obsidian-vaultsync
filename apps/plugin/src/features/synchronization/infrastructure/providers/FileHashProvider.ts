@@ -5,10 +5,7 @@ import { LocalFileHashStore, RemoteFileHashStore } from "../stores/FileHashStore
 
 @singleton
 export class FileHashProvider {
-  static create(
-    locals = resolve(LocalFileHashStore),
-    remotes = resolve(RemoteFileHashStore),
-  ) {
+  static create(locals = resolve(LocalFileHashStore), remotes = resolve(RemoteFileHashStore)) {
     return new FileHashProvider(locals, remotes);
   }
 

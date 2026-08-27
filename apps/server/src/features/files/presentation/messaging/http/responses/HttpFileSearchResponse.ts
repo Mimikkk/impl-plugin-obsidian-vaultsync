@@ -14,11 +14,13 @@ export namespace HttpFileSearchResponse {
 
   export const [List, list] = HttpJsonResponse.custom({
     content: HttpFileResourceNs.fromDescriptors,
-    example: [{
-      path: "abc/abc.ts",
-      updatedAt: 1747583346675,
-      type: FileType.Remote,
-    }],
+    example: [
+      {
+        path: "abc/abc.ts",
+        updatedAt: 1747583346675,
+        type: FileType.Remote,
+      },
+    ],
     schema: {},
     name: "FileList",
     description: "The list of files",

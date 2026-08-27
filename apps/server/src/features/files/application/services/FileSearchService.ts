@@ -1,43 +1,40 @@
 import { resolve, singleton } from "@nimir/framework";
-import { DateTimeStr, type FileInfo, FileType } from "@nimir/shared";
-import {
-  SyncthingDatabaseClient,
-  SyncthingDatabaseClientNs,
-} from "@server/core/infrastructure/clients/SyncthingDatabaseClient.ts";
+import { FileType } from "@nimir/shared";
+import { EnvironmentConfiguration } from "@server/configurations/EnvironmentConfiguration.ts";
+import { FileSystemManager } from "@server/core/infrastructure/files/managers/FileSystemManager.ts";
+import { PathSanitizer } from "@server/features/files/infrastructure/files/PathSanitizer.ts";
 
 @singleton
 export class FileSearchService {
-  static create(client = resolve(SyncthingDatabaseClient)) {
-    return new FileSearchService(client);
+  static create(
+    manager = FileSystemManager.create(EnvironmentConfiguration.storageUrl),
+    sanitizer = resolve(PathSanitizer),
+  ) {
+    return new FileSearchService(manager, sanitizer);
   }
 
   private constructor(
-    private readonly client: SyncthingDatabaseClient,
+    private readonly manager: FileSystemManager,
+    private readonly sanitizer: PathSanitizer,
   ) {}
 
   async info(params: FileServiceNs.InfoParams) {
-    return await this.client.info(params);
+    const result = this.sanitizer.sanitize(params.file);
+    if ("error" in result) return undefined;
+
+    const stats = await this.manager.stats(result.value);
+    if (!stats?.isFile) return undefined;
+
+    return { deleted: false, modified: stats.mtime ?? new Date(0) };
   }
 
-  async list(params: FileServiceNs.ListParams) {
-    return await this.traverse([], params.folder, params.prefix ?? "");
-  }
-
-  private async traverse(descriptors: FileInfo[], folder: string, root: string) {
-    const files = await this.client.browse({ folder, prefix: root, levels: 0 });
-
-    for (const file of files) {
-      const path = root ? `${root}/${file.name}` : file.name;
-
-      if (SyncthingDatabaseClientNs.EntryTypeNs.isFile(file)) {
-        descriptors.push({ path, updatedAt: DateTimeStr.asTimestamp(file.modTime), type: FileType.Remote });
-        continue;
-      }
-
-      await this.traverse(descriptors, folder, path);
-    }
-
-    return descriptors;
+  async list(_params: FileServiceNs.ListParams) {
+    const files = await this.manager.listFiles({ recursive: true });
+    return files.map((file) => ({
+      path: file.path,
+      updatedAt: file.updatedAt,
+      type: FileType.Remote,
+    }));
   }
 }
 

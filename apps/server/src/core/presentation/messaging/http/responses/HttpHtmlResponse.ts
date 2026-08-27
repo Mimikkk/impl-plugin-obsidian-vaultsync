@@ -19,10 +19,12 @@ export namespace HttpHtmlResponse {
     example,
     description,
     status,
+    name,
   }: CustomOptions<Fn>) =>
     HttpResponse.custom({
       content,
       headers,
+      name,
       spec: { status, description, content: { "text/html": { schema, example } } },
     });
 

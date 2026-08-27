@@ -1,5 +1,5 @@
 import { createTimeoutAccessor, withQueryClient } from "@nimir/interaction";
-import { useSync } from "@plugin/features/synchronization/presentation/mutations/useSync.ts";
+import { useSync } from "@plugin/features/synchronization/useSync";
 import { Match, Switch } from "solid-js";
 
 export const StatusBar = withQueryClient(() => {

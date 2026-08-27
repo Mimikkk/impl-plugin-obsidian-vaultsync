@@ -16,5 +16,5 @@ export const ServerConfiguration = {
 
 export function logListen(hostname: string, port: number) {
   Log.info(`Current working directory: ${c(process.cwd())}.`);
-  Log.info(`Server is running on ${c(`http://${hostname}`)}:${c(port.toString())}.`);
+  Log.info(`Listening on ${c(`${hostname}:${port}`)} (http://127.0.0.1:${port} and LAN).`);
 }

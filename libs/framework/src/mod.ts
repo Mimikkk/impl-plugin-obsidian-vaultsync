@@ -1,5 +1,16 @@
-export { lazyResolve, register, registerTo, resolve, singleton, singletonTo } from "./dependencies/decorators.ts";
-export { container, DependencyContainer, type InstanceOf } from "./dependencies/DependencyContainer.ts";
+export {
+  lazyResolve,
+  register,
+  registerTo,
+  resolve,
+  singleton,
+  singletonTo,
+} from "./dependencies/decorators.ts";
+export {
+  container,
+  DependencyContainer,
+  type InstanceOf,
+} from "./dependencies/DependencyContainer.ts";
 
 export * from "./persistence/entities/Entity.ts";
 export * from "./persistence/entities/factories/EntityFactory.ts";

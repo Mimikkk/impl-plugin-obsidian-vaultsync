@@ -1,52 +1,52 @@
-import { serializeSearchParams, singleton } from "@nimir/framework";
-import ky from "ky";
+import { defineClient, TimeMs } from "@nimir/shared";
 import { ClientUrl } from "./ClientUrl.ts";
 
-@singleton
-export class EventClient {
-  static create(url: string = ClientUrl.sync + "/events") {
-    return new EventClient(url);
-  }
-
-  private constructor(private readonly url: string) {}
-
-  scan() {
-    return ky.post(this.url + "/scan");
-  }
-
-  events(params?: EventClientNs.PoolParams) {
-    return ky
-      .get(this.url + "/pool", { searchParams: serializeSearchParams(params) })
-      .json<EventClientNs.Event[]>();
-  }
-
-  async latest() {
-    return await ky.get(this.url + "/latest").json<EventClientNs.Event>().catch(() => undefined);
-  }
+export type EventType = "LocalIndexUpdated" | "LocalChangeDetected";
+export interface Event<E extends EventType = EventType, T = unknown> {
+  id: number;
+  globalID: string;
+  createdAt: string;
+  type: E;
+  data: T;
 }
 
-export namespace EventClientNs {
-  /** @see {@link https://docs.syncthing.net/dev/events.html#event-types | Syncthing event types} */
-  export type EventType = "LocalIndexUpdated" | "LocalChangeDetected";
-  export interface Event<E extends EventType = EventType, T = unknown> {
-    id: number;
-    globalID: string;
-    createdAt: string;
-    type: E;
-    data: T;
-  }
-
-  /** @see {@link https://docs.syncthing.net/events/localindexupdated.html | Syncthing event: LocalIndexUpdated (www)} */
-  export type IndexUpdateEvent = Event<"LocalIndexUpdated", {
+export type IndexUpdateEvent = Event<
+  "LocalIndexUpdated",
+  {
     folder: string;
     filenames: string[];
     items: number;
     sequence: number;
-  }>;
-
-  export interface PoolParams {
-    events?: EventType[];
-    since?: number;
-    limit?: number;
   }
+>;
+
+export interface PoolParams {
+  events?: EventType[];
+  since?: number;
+  limit?: number;
 }
+
+export const EventClient = defineClient({
+  service: ClientUrl.sync,
+  methods: ({ methods, types }) => ({
+    scan: methods.post({
+      path: "/events/scan",
+      result: types.shape<{ message: string; status: number }>,
+    }),
+    events: methods.get({
+      path: "/events/pool",
+      params: (params: PoolParams) => ({
+        since: params.since,
+        limit: params.limit,
+        type: params.events?.join(","),
+      }),
+      result: types.shape<Event[]>,
+      ky: () => ({ timeout: TimeMs.seconds(65) }),
+    }),
+    latest: methods.get({
+      path: "/events/latest",
+      result: types.shape<Event | undefined>,
+      onError: () => undefined,
+    }),
+  }),
+});

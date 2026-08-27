@@ -5,11 +5,11 @@ export class RouteRequestQueryParameters<P extends Record<string, any>> {
     return new RouteRequestQueryParameters(values);
   }
 
-  private constructor(
-    public readonly values: P,
-  ) {}
+  private constructor(public readonly values: P) {}
 
-  static fromRequestContext<P extends Record<string, any>>(request: RequestContext): RouteRequestQueryParameters<P> {
+  static fromRequestContext<P extends Record<string, any>>(
+    request: RequestContext,
+  ): RouteRequestQueryParameters<P> {
     const values = Object.fromEntries(request.parameters.entries()) as P;
     return RouteRequestQueryParameters.create(values);
   }

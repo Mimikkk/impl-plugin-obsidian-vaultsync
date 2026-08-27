@@ -1,15 +1,11 @@
 import type { ListenerManager, ListenerManagerNs } from "./ListenerManager.ts";
 
 export class VolatileListenerManager<V = any> implements ListenerManager<V> {
-  static create<V>(
-    listeners: ListenerManagerNs.Listener<V>[] = [],
-  ): VolatileListenerManager<V> {
+  static create<V>(listeners: ListenerManagerNs.Listener<V>[] = []): VolatileListenerManager<V> {
     return new VolatileListenerManager<V>(listeners);
   }
 
-  private constructor(
-    public readonly listeners: ListenerManagerNs.Listener<V>[],
-  ) {}
+  private constructor(public readonly listeners: ListenerManagerNs.Listener<V>[]) {}
 
   async notify(value: V): Promise<void> {
     for (let i = 0; i < this.listeners.length; ++i) {

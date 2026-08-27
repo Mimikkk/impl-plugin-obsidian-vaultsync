@@ -7,7 +7,9 @@ export type StateEventMap<T extends StrRecord> = Prettify<
   { change: RecordToUnion<T> } & RecordToObject<T>
 >;
 
-export type StateUpdate<T extends StrRecord> = { [K in keyof T]: T[K] | ((previous: T[K]) => T[K]) };
+export type StateUpdate<T extends StrRecord> = {
+  [K in keyof T]: T[K] | ((previous: T[K]) => T[K]);
+};
 
 export class State<T extends StrRecord = StrRecord> {
   static create<T extends StrRecord>(

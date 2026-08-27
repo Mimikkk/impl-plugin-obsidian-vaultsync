@@ -6,7 +6,10 @@ export namespace HttpHealthResponse {
     description: "The health of the server",
     example: { status: "OK", message: "The service is running." },
     name: "Health",
-    schema: { type: "object", properties: { status: { type: "string" }, message: { type: "string" } } },
+    schema: {
+      type: "object",
+      properties: { status: { type: "string" }, message: { type: "string" } },
+    },
     status: 200,
   });
 }

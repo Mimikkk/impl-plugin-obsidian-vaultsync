@@ -15,9 +15,7 @@ export class HttpStaticController {
     return new HttpStaticController(service);
   }
 
-  private constructor(
-    private readonly service: StaticService,
-  ) {}
+  private constructor(private readonly service: StaticService) {}
 
   @RouteNs.get(HttpStaticParameter.Path)
   @OpenApiNs.route({
@@ -27,7 +25,11 @@ export class HttpStaticController {
     responses: [HttpStaticFileResponse.Missing],
     routeParameters: [HttpStaticParameter.Path],
   })
-  file({ routeParameters: { values: { path } } }: RouteRequestContext<{ path: StaticAssetUrl }>) {
+  file({
+    routeParameters: {
+      values: { path },
+    },
+  }: RouteRequestContext<{ path: StaticAssetUrl }>) {
     path = decodeURIComponent(path).replace(/:/g, "/") as StaticAssetUrl;
     return this.read(path);
   }

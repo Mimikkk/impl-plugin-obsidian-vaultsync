@@ -2,7 +2,11 @@ import { resolve, singleton } from "@nimir/framework";
 import { Str } from "@nimir/shared";
 import { OpenApiResponseNs } from "@server/core/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
 import { OpenApiRouteNs } from "@server/core/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
-import { type OpenApiTag, OpenApiTagOrder, OpenApiTags } from "@server/core/infrastructure/openapi/OpenApiTag.ts";
+import {
+  type OpenApiTag,
+  OpenApiTagOrder,
+  OpenApiTags,
+} from "@server/core/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/core/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { OpenApiBuilder, type OpenAPIObject, type ResponseObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../../../core/infrastructure/routing/controllers/ControllerStore.ts";
@@ -20,20 +24,18 @@ export class DocumentationGenerator {
     openapi: "3.1.1",
   };
 
-  static create(
-    controllers = resolve(ControllerStore),
-  ): DocumentationGenerator {
+  static create(controllers = resolve(ControllerStore)): DocumentationGenerator {
     return new DocumentationGenerator(controllers);
   }
 
-  private constructor(
-    private readonly controllers: ControllerStore,
-  ) {}
+  private constructor(private readonly controllers: ControllerStore) {}
 
   generate(): OpenAPIObject {
     const builder = OpenApiBuilder.create(structuredClone(DocumentationGenerator.initial));
 
-    const controllers = Array.from(this.controllers.keys()).filter(ControllerNs.is) as unknown as ControllerNs.Meta[];
+    const controllers = Array.from(this.controllers.keys()).filter(
+      ControllerNs.is,
+    ) as unknown as ControllerNs.Meta[];
 
     const usedTags: OpenApiTag[] = [];
     for (const controller of controllers) {
@@ -49,15 +51,16 @@ export class DocumentationGenerator {
         }
 
         const responses = Object.fromEntries(
-          openapi.responses
-            .map(OpenApiResponseNs.meta)
-            .map((r) => [r.status, {
+          openapi.responses.map(OpenApiResponseNs.meta).map((r) => [
+            r.status,
+            {
               description: `<div>${r.description}</div>`,
               content: r.content,
-            } as ResponseObject]),
+            } as ResponseObject,
+          ]),
         );
 
-        const method = route.type === "ws" ? "trace" : route.method.toLowerCase() as "get";
+        const method = route.type === "ws" ? "trace" : (route.method.toLowerCase() as "get");
 
         builder.addPath(route.path, {
           [method as "get"]: {

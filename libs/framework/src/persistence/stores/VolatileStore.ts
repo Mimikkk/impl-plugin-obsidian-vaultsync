@@ -5,9 +5,7 @@ export class VolatileStore<K, V> implements Store<K, V> {
     return new VolatileStore<K, V>(new Map());
   }
 
-  private constructor(
-    private readonly map: Map<K, V>,
-  ) {}
+  private constructor(private readonly map: Map<K, V>) {}
 
   find(key: K): V | undefined {
     return this.map.get(key);

@@ -1,5 +1,8 @@
 import { resolve } from "@nimir/framework";
-import { SyncState, SyncStateSchema } from "@plugin/features/synchronization/infrastructure/SyncState.ts";
+import {
+  SyncState,
+  SyncStateSchema,
+} from "@plugin/features/synchronization/infrastructure/SyncState.ts";
 import { TFile } from "obsidian";
 import type { StateConfiguration } from "../../../core/middlewares/presets/withState.ts";
 
@@ -10,22 +13,26 @@ export const syncStateConfiguration: StateConfiguration = {
   state,
   schema,
   setup(plugin) {
-    plugin.registerEvent(plugin.app.vault.on("delete", (file) => {
-      if (!(file instanceof TFile)) return;
+    plugin.registerEvent(
+      plugin.app.vault.on("delete", (file) => {
+        if (!(file instanceof TFile)) return;
 
-      state.set("deletedFiles", (previous) => {
-        previous.set(file.path, Date.now());
-        return previous;
-      });
-    }));
+        state.set("deletedFiles", (previous) => {
+          previous.set(file.path, Date.now());
+          return previous;
+        });
+      }),
+    );
 
-    plugin.registerEvent(plugin.app.vault.on("rename", (file, previousPath) => {
-      if (!(file instanceof TFile)) return;
+    plugin.registerEvent(
+      plugin.app.vault.on("rename", (file, previousPath) => {
+        if (!(file instanceof TFile)) return;
 
-      state.set("deletedFiles", (previous) => {
-        previous.set(previousPath, Date.now());
-        return previous;
-      });
-    }));
+        state.set("deletedFiles", (previous) => {
+          previous.set(previousPath, Date.now());
+          return previous;
+        });
+      }),
+    );
   },
 };

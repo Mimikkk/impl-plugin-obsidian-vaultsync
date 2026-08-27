@@ -21,7 +21,9 @@ const transformers: Transformer[] = [
     transform: (value: number) => value.toString(),
   },
 ];
-export const serializeSearchParams = <P extends object | undefined>(params: P): URLSearchParams | undefined => {
+export const serializeSearchParams = <P extends object | undefined>(
+  params: P,
+): URLSearchParams | undefined => {
   if (!params) return undefined;
 
   const result = new URLSearchParams();

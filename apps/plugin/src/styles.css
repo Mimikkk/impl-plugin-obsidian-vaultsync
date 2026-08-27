@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+.vault-sync-diff {
+  max-height: 50vh;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 0.5rem;
+}
+
+.vault-sync-diff-del {
+  background: rgba(var(--color-red-rgb), 0.15);
+}
+
+.vault-sync-diff-add {
+  background: rgba(var(--color-green-rgb), 0.15);
+}

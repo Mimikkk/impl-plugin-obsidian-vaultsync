@@ -6,10 +6,13 @@ export class FileReader {
     return new FileReader();
   }
 
-  async read<T extends FileReader.FileType>(path: string, type: T): Promise<FileReader.FileMap[T] | undefined> {
+  async read<T extends FileReader.FileType>(
+    path: string,
+    type: T,
+  ): Promise<FileReader.FileMap[T] | undefined> {
     try {
       if (type === "string") {
-        return await readFile(path, "utf8") as FileReader.FileMap[T];
+        return (await readFile(path, "utf8")) as FileReader.FileMap[T];
       }
 
       return new Uint8Array(await readFile(path)) as FileReader.FileMap[T];

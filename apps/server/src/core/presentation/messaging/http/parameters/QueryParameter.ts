@@ -1,34 +1,69 @@
 import type { ParameterObject, SchemaObject } from "openapi3-ts/oas31";
 
 export class QueryParameter {
-  static create(
-    { name, example, description, type, format, options, required }: QueryParameterNs.Options,
-  ): QueryParameter {
+  static create({
+    name,
+    example,
+    description,
+    type,
+    format,
+    options,
+    required,
+  }: QueryParameterNs.Options): QueryParameter {
     return new QueryParameter(name, example, description, type, format, options, required);
   }
 
-  static string(
-    { name, options, example = options?.[0] ?? "text", description, required }: QueryParameterNs.StringOptions,
-  ): QueryParameter {
+  static string({
+    name,
+    options,
+    example = options?.[0] ?? "text",
+    description,
+    required,
+  }: QueryParameterNs.StringOptions): QueryParameter {
     return this.create({ name, example, description, type: "string", options, required });
   }
 
-  static boolean({ name, example = true, description }: QueryParameterNs.BooleanOptions): QueryParameter {
+  static boolean({
+    name,
+    example = true,
+    description,
+  }: QueryParameterNs.BooleanOptions): QueryParameter {
     return this.create({ name, example: `${example}`, description, type: "boolean" });
   }
 
-  static integer({ name, example = 0, description, required }: QueryParameterNs.IntegerOptions): QueryParameter {
+  static integer({
+    name,
+    example = 0,
+    description,
+    required,
+  }: QueryParameterNs.IntegerOptions): QueryParameter {
     return this.create({ name, example: `${example}`, description, type: "integer", required });
   }
 
-  static number({ name, example = 0, description, required }: QueryParameterNs.NumberOptions): QueryParameter {
+  static number({
+    name,
+    example = 0,
+    description,
+    required,
+  }: QueryParameterNs.NumberOptions): QueryParameter {
     return this.create({ name, example: `${example}`, description, type: "number", required });
   }
 
-  static strings(
-    { name, example = [], description, required, options }: QueryParameterNs.StringsOptions,
-  ): QueryParameter {
-    return this.create({ name, example: `${example}`, description, type: "array", required, options });
+  static strings({
+    name,
+    example = [],
+    description,
+    required,
+    options,
+  }: QueryParameterNs.StringsOptions): QueryParameter {
+    return this.create({
+      name,
+      example: `${example}`,
+      description,
+      type: "array",
+      required,
+      options,
+    });
   }
 
   private constructor(

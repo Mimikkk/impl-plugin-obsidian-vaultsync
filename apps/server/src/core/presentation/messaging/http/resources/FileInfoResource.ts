@@ -8,8 +8,8 @@ export interface FileInfoResource {
 
 export namespace FileInfoResource {
   export const fromFileInfo = (stats: FileInfo): FileInfoResource => ({
-    createdAt: stats.birthtime?.toISOString()!,
-    updatedAt: stats.mtime?.toISOString()!,
+    createdAt: stats.birthtime?.toISOString() ?? "",
+    updatedAt: stats.mtime?.toISOString() ?? "",
     size: stats.size,
   });
 }

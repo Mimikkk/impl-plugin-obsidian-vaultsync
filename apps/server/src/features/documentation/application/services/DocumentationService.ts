@@ -4,15 +4,11 @@ import type { DocumentationAssetUrl } from "../../infrastructure/DocumentationAs
 
 @singleton
 export class DocumentationService {
-  static create(
-    provider = resolve(DocumentationAssetProvider),
-  ): DocumentationService {
+  static create(provider = resolve(DocumentationAssetProvider)): DocumentationService {
     return new DocumentationService(provider);
   }
 
-  private constructor(
-    private readonly provider: DocumentationAssetProvider,
-  ) {}
+  private constructor(private readonly provider: DocumentationAssetProvider) {}
 
   read<Url extends DocumentationAssetUrl>(url: Url) {
     return this.provider.read(url);

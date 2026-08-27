@@ -1,27 +1,23 @@
 import { resolve, singleton } from "@nimir/framework";
-import { EventService } from "@plugin/features/events/application/services/EventService.ts";
+import { EventClient } from "@plugin/core/infrastructure/clients/EventClient";
 import { FileSyncManager } from "@plugin/features/synchronization/application/managers/FileSyncManager.ts";
+import { resolveConflicts } from "@plugin/features/synchronization/resolveConflicts";
 
 @singleton
 export class SyncService {
-  static create(
-    events = resolve(EventService),
-    manager = resolve(FileSyncManager),
-  ) {
-    return new SyncService(events, manager);
+  static create(manager = resolve(FileSyncManager)) {
+    return new SyncService(manager);
   }
 
-  private constructor(
-    private readonly events: EventService,
-    private readonly manager: FileSyncManager,
-  ) {}
+  private constructor(private readonly manager: FileSyncManager) {}
 
   async synchronize() {
-    await this.events.scan();
-    const changes = await this.manager.synchronize();
+    await EventClient.scan.fetch({});
+    const result = await this.manager.synchronize();
 
-    console.log("changes:", changes);
-
-    return changes;
+    if (result.conflicts.length > 0) {
+      await resolveConflicts(result.conflicts);
+    }
+    return result;
   }
 }

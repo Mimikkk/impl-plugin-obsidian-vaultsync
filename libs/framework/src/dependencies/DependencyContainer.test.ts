@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { type Constructible, DependencyContainer } from "./DependencyContainer.ts";
+import { DependencyContainer, type Constructible } from "./DependencyContainer.ts";
 import { resolve, singletonTo } from "./decorators.ts";
 
-// Test interfaces and implementations
 interface AService {
   work(): string;
 }
@@ -91,7 +90,7 @@ describe("DependencyContainer", () => {
     });
   });
 
-  describe("Basic Registration and Resolution", () => {
+  describe("Registration and Resolution", () => {
     it("should register and resolve a service", () => {
       container.register(AServiceImpl);
 
@@ -160,7 +159,6 @@ describe("DependencyContainer", () => {
       it("should default singleton to false when no options provided", () => {
         container.register(ExampleService);
 
-        // Verify it behaves as non-singleton by checking instance creation
         const service1 = container.get(ExampleService);
         const service2 = container.get(ExampleService);
 

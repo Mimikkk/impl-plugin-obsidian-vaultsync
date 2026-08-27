@@ -25,5 +25,6 @@ export namespace StatusNs {
     return Status.Idle;
   };
 
-  export const accessQuery = (query: UseQueryResult): Accessor<Status> => createMemo(() => fromQuery(query));
+  export const accessQuery = (query: UseQueryResult): Accessor<Status> =>
+    createMemo(() => fromQuery(query));
 }

@@ -10,7 +10,10 @@ enum FileHashStoreType {
 }
 
 const provide = (type: FileHashStoreType, state = resolve(SyncState)) => {
-  const filesystem = type === FileHashStoreType.Remote ? resolve(RemoteFileOperations) : resolve(LocalFileOperations);
+  const filesystem =
+    type === FileHashStoreType.Remote
+      ? resolve(RemoteFileOperations)
+      : resolve(LocalFileOperations);
 
   const key = type === FileHashStoreType.Remote ? "remoteFilesHashes" : "localFilesHashes";
 

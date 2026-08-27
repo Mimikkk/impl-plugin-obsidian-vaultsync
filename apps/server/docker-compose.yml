@@ -1,9 +1,14 @@
 services:
-  syncthing:
-    extends:
-      file: external/docker-compose.yml
-      service: syncthing
-  filebrowser:
-    extends:
-      file: external/docker-compose.yml
-      service: filebrowser
+  server:
+    build:
+      context: ../..
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 8080
+      STORAGE_URL: /data
+    volumes:
+      - ${STORAGE_URL:-./data}:/data
+    restart: unless-stopped

@@ -10,12 +10,12 @@ import {
 
 export const SyncStateSchema = singleton({
   create: () =>
-    StateSchemaBuilder
-      .create()
+    StateSchemaBuilder.create()
       .with("lastSyncTs", StateFields.number())
       .with("deletedFiles", StateFields.map<string, number>())
       .with("localFilesHashes", StateFields.map<string, string>())
       .with("remoteFilesHashes", StateFields.map<string, string>())
+      .with("baseHashes", StateFields.map<string, string>())
       .build(),
   name: "SyncStateSchema",
 });

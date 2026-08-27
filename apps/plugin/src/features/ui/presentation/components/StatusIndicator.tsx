@@ -1,7 +1,7 @@
 import { Status, StatusNs, withQueryClient } from "@nimir/interaction";
 import cx from "clsx";
 import { createMemo } from "solid-js";
-import { useHealthCheck } from "../../../health/presentation/queries/useHealthCheck.ts";
+import { useHealthCheck } from "../../../health/useHealthCheck.ts";
 
 export const StatusIndicator = withQueryClient(() => <Indicator />);
 

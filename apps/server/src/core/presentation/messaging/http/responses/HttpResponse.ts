@@ -6,6 +6,7 @@ export namespace HttpResponse {
     content: Fn;
     headers: HeadersInit;
     spec: OpenApiResponseNs.Spec;
+    name?: string;
   }
 }
 
@@ -14,13 +15,14 @@ export class HttpResponse {
     return new HttpResponse(new Response(content, { headers, status }));
   }
 
-  private constructor(
-    private readonly response: Response,
-  ) {}
+  private constructor(private readonly response: Response) {}
 
-  static custom<const ContentFn extends (...args: any[]) => any>(
-    { content, headers, spec }: HttpResponse.CustomOptions<ContentFn>,
-  ) {
+  static custom<const ContentFn extends (...args: any[]) => any>({
+    content,
+    headers,
+    spec,
+    name = "HttpResponse",
+  }: HttpResponse.CustomOptions<ContentFn>) {
     const response = content instanceof Function ? content : () => content;
 
     @OpenApiNs.response(spec)
@@ -33,9 +35,7 @@ export class HttpResponse {
         return Class.create(...params).toResponse();
       }
 
-      private constructor(
-        private readonly response: HttpResponse,
-      ) {}
+      private constructor(private readonly response: HttpResponse) {}
 
       toResponse(): Response {
         return this.response.toResponse();
@@ -44,7 +44,10 @@ export class HttpResponse {
 
     Object.defineProperty(Class, "name", { value: name, writable: false });
 
-    return [Class, Class.toResponse] as [(typeof Class) & OpenApiResponseNs.Meta, typeof Class.toResponse];
+    return [Class, Class.toResponse] as [
+      typeof Class & OpenApiResponseNs.Meta,
+      typeof Class.toResponse,
+    ];
   }
 
   toResponse(): Response {

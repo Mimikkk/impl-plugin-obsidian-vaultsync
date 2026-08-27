@@ -1,9 +1,11 @@
 import { TimeMs } from "@nimir/shared";
+import { resolve } from "@nimir/framework";
 import { logListen, ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
 import { ApplicationComposer } from "@server/core/infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "@server/core/infrastructure/middlewares/MiddlewareNs.ts";
 import { HttpRouter } from "@server/core/infrastructure/routing/routes/HttpRouter.ts";
 import { WsRouter } from "@server/core/infrastructure/routing/routes/WsRouter.ts";
+import { EventService } from "@server/features/events/application/services/EventService.ts";
 
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
@@ -23,3 +25,4 @@ const bunServer = Bun.serve({
   fetch: server,
 });
 logListen(bunServer.hostname!, bunServer.port!);
+resolve(EventService);

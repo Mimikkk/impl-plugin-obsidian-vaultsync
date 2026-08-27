@@ -18,10 +18,11 @@ export class TimeoutMiddleware implements Middleware {
   ) {}
 
   handle(request: Request, next: Dispatch): Awaitable<Response> {
-    const timeoutMs = this.exceptions.find(({ path }) => request.url.includes(path))?.timeoutMs ?? this.timeoutMs;
+    const timeoutMs =
+      this.exceptions.find(({ path }) => request.url.includes(path))?.timeoutMs ?? this.timeoutMs;
 
     const timeout = new Promise<Response>((resolve) =>
-      setTimeout(() => resolve(HttpJsonResponse.timeout()), timeoutMs)
+      setTimeout(() => resolve(HttpJsonResponse.timeout()), timeoutMs),
     );
 
     return Promise.race([next(request), timeout]);

@@ -17,10 +17,12 @@ export namespace HttpFileResponse {
     description,
     schema,
     status,
+    name,
   }: CustomOptions<Fn>) =>
     HttpResponse.custom({
       content: (file: Uint8Array) => file,
       headers,
+      name,
       spec: { status, description, content: { "application/octet-stream": { schema, example } } },
     });
 }

@@ -8,9 +8,7 @@ export class WsRouteMatcher implements RequestMatcher {
     return new WsRouteMatcher(RequestRouteUrlMatcher.create(url));
   }
 
-  private constructor(
-    public readonly urlMatcher: RequestRouteUrlMatcher,
-  ) {}
+  private constructor(public readonly urlMatcher: RequestRouteUrlMatcher) {}
 
   matches(request: RequestContext): boolean {
     return this.urlMatcher.matches(request);

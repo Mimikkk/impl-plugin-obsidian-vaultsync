@@ -7,11 +7,12 @@ export class StateSchemaBuilder<T extends StateRecord = StateRecord> {
     return new StateSchemaBuilder<StateRecord>(new Map());
   }
 
-  private constructor(
-    private readonly map: Map<unknown, unknown>,
-  ) {}
+  private constructor(private readonly map: Map<unknown, unknown>) {}
 
-  with<K extends string, S extends StateField>(key: K, value: S): StateSchemaBuilder<T & { [key in K]: S }> {
+  with<K extends string, S extends StateField>(
+    key: K,
+    value: S,
+  ): StateSchemaBuilder<T & { [key in K]: S }> {
     this.map.set(key, value);
     return this as unknown as StateSchemaBuilder<T & { [key in K]: S }>;
   }

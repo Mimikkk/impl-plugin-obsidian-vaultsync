@@ -1,21 +1,27 @@
 import { resolve, singleton } from "@nimir/framework";
 import { DateTimeNs, type FileInfo, FileType } from "@nimir/shared";
+import { FileChanges, type FileChange } from "../../domain/FileChange.ts";
 import { FileComparator } from "@plugin/features/synchronization/infrastructure/comparators/FileComparator.ts";
+import { FileHashProvider } from "@plugin/features/synchronization/infrastructure/providers/FileHashProvider.ts";
 import { FileProvider } from "@plugin/features/synchronization/infrastructure/providers/FileProvider.ts";
-import { type FileChange, FileChanges } from "../../domain/FileChange.ts";
+import { BaseHashStore } from "@plugin/features/synchronization/infrastructure/stores/BaseHashStore.ts";
 
 @singleton
 export class FileChangeDetector {
   static create(
     files = resolve(FileProvider),
     comparator = resolve(FileComparator),
+    hashes = resolve(FileHashProvider),
+    bases = resolve(BaseHashStore),
   ) {
-    return new FileChangeDetector(files, comparator);
+    return new FileChangeDetector(files, comparator, hashes, bases);
   }
 
   private constructor(
     private readonly files: FileProvider,
     private readonly comparator: FileComparator,
+    private readonly hashes: FileHashProvider,
+    private readonly bases: BaseHashStore,
   ) {}
 
   async detect(): Promise<FileChange[]> {
@@ -34,7 +40,11 @@ export class FileChangeDetector {
     const commands: FileChange[] = [];
 
     for (const local of locals) {
-      const info = await this.files.info({ path: local.path, updatedAt: undefined!, type: FileType.Remote });
+      const info = await this.files.info({
+        path: local.path,
+        updatedAt: undefined!,
+        type: FileType.Remote,
+      });
 
       if (info) {
         const wasDeleted = info.deleted;
@@ -60,7 +70,11 @@ export class FileChangeDetector {
     const commands: FileChange[] = [];
 
     for (const remote of remotes) {
-      const info = await this.files.info({ path: remote.path, updatedAt: undefined!, type: FileType.Local });
+      const info = await this.files.info({
+        path: remote.path,
+        updatedAt: undefined!,
+        type: FileType.Local,
+      });
 
       if (info) {
         const deletedAt = info.deletedAt;
@@ -79,21 +93,30 @@ export class FileChangeDetector {
     return commands;
   }
 
-  async detectConflicts(
-    conflicts: { local: FileInfo; remote: FileInfo }[],
-  ): Promise<FileChange[]> {
+  async detectConflicts(pairs: { local: FileInfo; remote: FileInfo }[]): Promise<FileChange[]> {
     const commands: FileChange[] = [];
 
-    for (const { local, remote } of conflicts) {
+    for (const { local, remote } of pairs) {
       const isUpToDate = await this.comparator.compare(local, remote);
-
       if (isUpToDate) continue;
 
-      const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
-      if (isLocalNewer) {
+      const [localHash, remoteHash] = await Promise.all([
+        this.hashes.get(local),
+        this.hashes.get(remote),
+      ]);
+      const base = this.bases.get(local.path);
+
+      if (base === remoteHash) {
         commands.push(FileChanges.updateRemote(local.path));
-      } else {
+      } else if (base === localHash) {
         commands.push(FileChanges.updateLocal(local.path));
+      } else if (base === undefined) {
+        const isLocalNewer = DateTimeNs.isAfterOrEqual(local.updatedAt, remote.updatedAt);
+        commands.push(
+          isLocalNewer ? FileChanges.updateRemote(local.path) : FileChanges.updateLocal(local.path),
+        );
+      } else {
+        commands.push(FileChanges.conflict(local.path));
       }
     }
 

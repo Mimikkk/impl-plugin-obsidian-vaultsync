@@ -7,9 +7,7 @@ export class RouteRequestRouteParameters<P extends Record<string, any>> {
     return new RouteRequestRouteParameters(values);
   }
 
-  private constructor(
-    public readonly values: P,
-  ) {}
+  private constructor(public readonly values: P) {}
 
   static fromUrls<P extends Record<string, any>>(
     { segments }: RouteUrl,

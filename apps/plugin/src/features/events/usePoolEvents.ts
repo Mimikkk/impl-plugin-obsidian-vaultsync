@@ -1,12 +1,10 @@
-import { lazyResolve } from "@nimir/framework";
 import { createUseQuery } from "@nimir/interaction";
 import { TimeMs } from "@nimir/shared";
-import { EventService } from "@plugin/features/events/application/services/EventService.ts";
+import { EventClient } from "@plugin/core/infrastructure/clients/EventClient";
 
-const events = lazyResolve(EventService);
 export const usePoolEvents = createUseQuery({
   queryKey: ["pool-events"],
-  queryFn: () => events().pool(),
+  queryFn: () => EventClient.events.fetch({ params: {} }),
   refetchInterval: TimeMs.seconds(60),
   refetchIntervalInBackground: true,
   refetchOnWindowFocus: false,

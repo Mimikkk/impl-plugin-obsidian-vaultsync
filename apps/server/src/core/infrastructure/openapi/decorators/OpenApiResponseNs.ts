@@ -7,7 +7,7 @@ export namespace OpenApiResponseNs {
   }
   export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
   export const meta = (value: Meta): Spec => value[symbol];
-  export const get = (value: any): Spec | undefined => is(value) ? meta(value) : undefined;
+  export const get = (value: any): Spec | undefined => (is(value) ? meta(value) : undefined);
 
   export interface Spec {
     status: number;
@@ -21,11 +21,13 @@ export namespace OpenApiResponseNs {
     content: ContentObject;
   }
 
-  export const decorate = ({ status, description, content }: Options) => (target: any) => {
-    target[symbol] = {
-      status,
-      description,
-      content,
-    } satisfies Spec;
-  };
+  export const decorate =
+    ({ status, description, content }: Options) =>
+    (target: any) => {
+      target[symbol] = {
+        status,
+        description,
+        content,
+      } satisfies Spec;
+    };
 }

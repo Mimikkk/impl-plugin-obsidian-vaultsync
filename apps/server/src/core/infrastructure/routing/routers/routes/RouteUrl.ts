@@ -1,7 +1,12 @@
 export type ParameterType = "number" | "string" | "integer";
 
 export class RouteSegment {
-  static create(part: string, value: string, variant: RouteSegment.Variant, type: ParameterType): RouteSegment {
+  static create(
+    part: string,
+    value: string,
+    variant: RouteSegment.Variant,
+    type: ParameterType,
+  ): RouteSegment {
     return new RouteSegment(part, value, variant, type);
   }
 

@@ -1,6 +1,6 @@
+import { rspack } from "@rspack/core";
 import { copyFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { rspack } from "@rspack/core";
 import "../../../scripts/read-env.ts";
 
 rspack({
@@ -13,7 +13,7 @@ rspack({
     library: { type: "commonjs-static" },
   },
   resolve: {
-    extensions: [".ts", ".tsx"],
+    extensions: [".tsx", ".ts", ".js", ".json"],
     alias: {
       "@plugin": resolve("src"),
       "@env": resolve(".env"),
@@ -25,7 +25,7 @@ rspack({
       "@framework": resolve("../../libs/framework/src"),
     },
   },
-  experiments: { css: true, cache: { type: "persistent" } },
+  cache: true,
   externals: ["obsidian"],
   module: {
     rules: [
@@ -73,9 +73,7 @@ rspack({
 
   const files = ["manifest.json", "versions.json", ".hotreload"];
   console.info("Moving static files...");
-  await Promise.all(
-    files.map((file) => copyFile(resolve("assets", file), resolve("dist", file))),
-  );
+  await Promise.all(files.map((file) => copyFile(resolve("assets", file), resolve("dist", file))));
   console.info(files.map((file) => `- asset ${file}`).join("\n"));
   console.info("Static files moved successfully!");
 

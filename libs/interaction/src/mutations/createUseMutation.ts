@@ -33,7 +33,12 @@ export const createUseMutation = <T = unknown, E = DefaultError, V = void, C = u
     const mutation = useMutation(getOptions, QueryClientNs.get);
     const isMutating = isAnyMutating(getOptions);
 
-    const result = [mutation.mutateAsync, mutation, isMutating] as CreateUseMutationResult<T, E, V, C>;
+    const result = [mutation.mutateAsync, mutation, isMutating] as CreateUseMutationResult<
+      T,
+      E,
+      V,
+      C
+    >;
     result.mutate = mutation.mutateAsync;
     result.mutation = mutation;
     result.isMutating = isMutating;

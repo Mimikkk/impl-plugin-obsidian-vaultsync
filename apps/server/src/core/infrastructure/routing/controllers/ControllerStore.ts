@@ -1,17 +1,16 @@
 import { singleton, type Store, VolatileStore } from "@nimir/framework";
-import type { Controller, ControllerClass } from "@server/core/infrastructure/routing/controllers/ControllerTypes.ts";
+import type {
+  Controller,
+  ControllerClass,
+} from "@server/core/infrastructure/routing/controllers/ControllerTypes.ts";
 
 @singleton
 export class ControllerStore {
-  static create(
-    store = VolatileStore.create<ControllerClass, Controller>(),
-  ): ControllerStore {
+  static create(store = VolatileStore.create<ControllerClass, Controller>()): ControllerStore {
     return new ControllerStore(store);
   }
 
-  private constructor(
-    private readonly controllers: Store<ControllerClass, Controller>,
-  ) {}
+  private constructor(private readonly controllers: Store<ControllerClass, Controller>) {}
 
   get<C extends ControllerClass>(key: C): Controller<C> {
     let instance = this.controllers.find(key);

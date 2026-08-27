@@ -1,6 +1,6 @@
 import { readdir, stat } from "node:fs/promises";
 import type { Stats } from "node:fs";
-import { extname, resolve } from "node:path";
+import { extname, relative, resolve, sep } from "node:path";
 import { FileReader } from "@server/core/infrastructure/files/readers/FileReader.ts";
 import { StaticFileNs } from "@server/features/static/domain/StaticFile.ts";
 
@@ -12,6 +12,11 @@ export interface FileInfo {
   birthtime: Date | null;
 }
 
+export interface ListedFile {
+  path: string;
+  updatedAt: number;
+}
+
 function toFileInfo(stats: Stats): FileInfo {
   return {
     isFile: stats.isFile(),
@@ -20,6 +25,10 @@ function toFileInfo(stats: Stats): FileInfo {
     mtime: stats.mtime,
     birthtime: stats.birthtime,
   };
+}
+
+function toPosix(path: string): string {
+  return path.split(sep).join("/");
 }
 
 export class FileSystemReader {
@@ -63,30 +72,36 @@ export class FileSystemReader {
   }
 
   async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
-    async function traverse(paths: string[], path: string, recursive: boolean): Promise<string[]> {
-      const entries = await readdir(path, { withFileTypes: true });
-      for (const entry of entries) {
-        const next = resolve(path, entry.name);
-        paths.push(next);
+    const files = await this.listFiles(options);
+    return files.map((file) => file.path);
+  }
 
-        if (recursive && entry.isDirectory()) {
-          await traverse(paths, next, recursive);
-        }
-      }
-
-      return paths;
-    }
+  async listFiles(options: { path?: string; recursive?: boolean } = {}): Promise<ListedFile[]> {
     const start = this.path(options.path ?? ".");
+    const recursive = options.recursive ?? false;
+    const files: ListedFile[] = [];
 
-    const exists = await this.exists(start);
-    if (!exists) return [];
+    if (!(await this.exists(options.path ?? "."))) return [];
 
-    const stats = await stat(start);
-    if (!stats.isDirectory()) return [];
+    const root = await stat(start);
+    if (!root.isDirectory()) return [];
 
-    const paths = await traverse([], start, options.recursive ?? false);
+    const walk = async (dir: string) => {
+      const entries = await readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const abs = resolve(dir, entry.name);
+        if (entry.isDirectory()) {
+          if (recursive) await walk(abs);
+          continue;
+        }
+        if (!entry.isFile()) continue;
+        const stats = await stat(abs);
+        files.push({ path: toPosix(relative(start, abs)), updatedAt: stats.mtimeMs });
+      }
+    };
 
-    return paths.map((path) => path.replace(start + "\\", ""));
+    await walk(start);
+    return files;
   }
 
   async exists(path: string): Promise<boolean> {

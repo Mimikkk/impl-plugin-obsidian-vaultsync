@@ -4,9 +4,16 @@ export namespace ValidationError {
   export const is = (error: unknown): error is ValidationError | ValidationError[] =>
     Array.isArray(error)
       ? error.some(ValidationError.is)
-      : typeof error === "object" && error !== null && "field" in error && "path" in error && "errors" in error;
+      : typeof error === "object" &&
+        error !== null &&
+        "field" in error &&
+        "path" in error &&
+        "errors" in error;
 
-  export const sum = (errors: ValidationError[], error: ValidationError | ValidationError[]): ValidationError[] => {
+  export const sum = (
+    errors: ValidationError[],
+    error: ValidationError | ValidationError[],
+  ): ValidationError[] => {
     if (Array.isArray(error)) {
       errors.push(...error);
     } else {
@@ -16,5 +23,6 @@ export namespace ValidationError {
     return errors;
   };
 
-  export const collect = (errors: ValidationError[]): true | ValidationError[] => errors.length > 0 ? errors : true;
+  export const collect = (errors: ValidationError[]): true | ValidationError[] =>
+    errors.length > 0 ? errors : true;
 }

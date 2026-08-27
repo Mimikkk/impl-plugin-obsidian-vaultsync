@@ -15,8 +15,7 @@ export namespace ControllerNs {
     const meta = target as ControllerClass & Meta;
     const prototype = target.prototype;
 
-    const routes = Object
-      .getOwnPropertyNames(prototype)
+    const routes = Object.getOwnPropertyNames(prototype)
       .map((key) => prototype[key])
       .filter(RouteNs.is)
       .map(RouteNs.meta);
@@ -24,7 +23,11 @@ export namespace ControllerNs {
     const group = options.group ?? "";
 
     for (const route of routes) {
-      route.path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
+      route.path = route.path.startsWith("/")
+        ? route.path
+        : route.path
+          ? `/${group}/${route.path}`
+          : `/${group}`;
     }
 
     meta[symbol] = {

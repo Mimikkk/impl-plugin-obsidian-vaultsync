@@ -1,4 +1,7 @@
-import { type FileInfo, FileSystemReader } from "@server/core/infrastructure/files/readers/FileSystemReader.ts";
+import {
+  type FileInfo,
+  FileSystemReader,
+} from "@server/core/infrastructure/files/readers/FileSystemReader.ts";
 import { FileSystemWriter } from "@server/core/infrastructure/files/writers/FileSystemWriter.ts";
 import type { StaticFileNs } from "@server/features/static/domain/StaticFile.ts";
 
@@ -15,6 +18,10 @@ export class FileSystemManager {
 
   list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
     return this.reader.list(options);
+  }
+
+  listFiles(options: { path?: string; recursive?: boolean } = {}) {
+    return this.reader.listFiles(options);
   }
 
   readStr(path: string): Promise<string | undefined> {

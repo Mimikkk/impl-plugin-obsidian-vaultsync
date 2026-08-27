@@ -11,7 +11,7 @@ export namespace OpenApiRouteNs {
   }
   export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
   export const meta = (value: Meta): Spec => value[symbol];
-  export const get = (value: any): Spec | undefined => is(value) ? meta(value) : undefined;
+  export const get = (value: any): Spec | undefined => (is(value) ? meta(value) : undefined);
 
   export interface Spec {
     summary: string;
@@ -36,7 +36,16 @@ export namespace OpenApiRouteNs {
   }
 
   export const decorate =
-    ({ summary, description, tags, responses, deprecated, routeParameters, queryParameters, content }: Options) =>
+    ({
+      summary,
+      description,
+      tags,
+      responses,
+      deprecated,
+      routeParameters,
+      queryParameters,
+      content,
+    }: Options) =>
     (target: any) => {
       target[symbol] = {
         summary,

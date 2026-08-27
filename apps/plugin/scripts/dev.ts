@@ -30,9 +30,13 @@ const rebuild = async () => {
   return "build-success";
 };
 
-const createDebouncedEventHandler = (
-  { onEvent, debounceMs = 200 }: { onEvent: (event: FsEvent) => Promise<void> | void; debounceMs?: number },
-) => {
+const createDebouncedEventHandler = ({
+  onEvent,
+  debounceMs = 200,
+}: {
+  onEvent: (event: FsEvent) => Promise<void> | void;
+  debounceMs?: number;
+}) => {
   let timeout: ReturnType<typeof setTimeout> | undefined;
   let lastEvent: FsEvent | undefined;
   const handle = async () => {
@@ -98,7 +102,9 @@ const urls = await parseUrls(vaultPath);
 
 if (urls === "vault-path-not-set") {
   console.error(`${colors.red("[error]")} VAULT_PATH is not set.`);
-  console.error("- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.");
+  console.error(
+    "- Please set the VAULT_PATH environment variable to the path of your Obsidian vault.",
+  );
   process.exit(1);
 }
 
@@ -112,7 +118,10 @@ await synchronize(urls);
 if (!watching) process.exit(0);
 
 const paths = [resolve("."), resolve("../../libs/interaction"), resolve("../../libs/shared")];
-const handleEvent = createDebouncedEventHandler({ onEvent: () => synchronize(urls), debounceMs: 500 });
+const handleEvent = createDebouncedEventHandler({
+  onEvent: () => synchronize(urls),
+  debounceMs: 500,
+});
 for (const path of paths) {
   watch(path, { recursive: true }, (_event, filename) => {
     handleEvent({ paths: [filename ? join(path, filename) : path] });

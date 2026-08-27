@@ -20,21 +20,22 @@ export namespace HttpJsonResponse {
     description,
     schema,
     status,
+    name,
   }: CustomOptions<Fn>) =>
     HttpResponse.custom({
       content: (...params: Parameters<Fn>) => JSON.stringify(content(...params)),
       headers,
+      name,
       spec: { status, description, content: { "application/json": { schema, example } } },
     });
 
-  export interface ContentOptions<Fn extends (...args: any[]) => any>
-    extends Omit<CustomOptions<Fn>, "status" | "content"> {
-  }
+  export interface ContentOptions<Fn extends (...args: any[]) => any> extends Omit<
+    CustomOptions<Fn>,
+    "status" | "content"
+  > {}
 
   const createContent = <C>(content: C) => content;
-  export const content = <C>(
-    options: ContentOptions<() => C>,
-  ) =>
+  export const content = <C>(options: ContentOptions<() => C>) =>
     custom({
       content: createContent<C>,
       example: options.example,
@@ -56,7 +57,10 @@ export namespace HttpJsonResponse {
     example: { message: "The request was successful", status: 200 },
     name: "Success",
     description: "The request was successful",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 200,
   });
 
@@ -65,7 +69,10 @@ export namespace HttpJsonResponse {
     example: { message: "The resource was created successfully", status: 201 },
     name: "Created",
     description: "The resource was created successfully",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 201,
   });
 
@@ -74,7 +81,10 @@ export namespace HttpJsonResponse {
     example: { message: "The request was invalid", status: 400 },
     name: "Failure",
     description: "The request was invalid",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 400,
   });
 
@@ -91,7 +101,10 @@ export namespace HttpJsonResponse {
     },
     name: "Validation errors",
     description: "Validation errors",
-    schema: { type: "object", properties: { errors: { type: "array", items: { type: "string" } } } },
+    schema: {
+      type: "object",
+      properties: { errors: { type: "array", items: { type: "string" } } },
+    },
     status: 400,
   });
 
@@ -100,7 +113,10 @@ export namespace HttpJsonResponse {
     example: { message: "The resource was not found", status: 404 },
     name: "NotFound",
     description: "The resource was not found",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 404,
   });
 
@@ -109,7 +125,10 @@ export namespace HttpJsonResponse {
     example: { message: "An unknown error occurred", status: 500 },
     name: "Unknown",
     description: "An unknown error occurred",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 500,
   });
 
@@ -118,7 +137,10 @@ export namespace HttpJsonResponse {
     example: { message: "The request is not implemented", status: 501 },
     name: "Unimplemented",
     description: "The request is not implemented",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 501,
   });
 
@@ -127,12 +149,19 @@ export namespace HttpJsonResponse {
     example: { message: "The service is unavailable", status: 503 },
     name: "Unavailable",
     description: "The service is unavailable",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 503,
   });
 
   export const [Internal, internal] = custom({
-    content: (error: unknown) => ({ message: "Internal server error", status: 500, error: (error as Error)?.message }),
+    content: (error: unknown) => ({
+      message: "Internal server error",
+      status: 500,
+      error: (error as Error)?.message,
+    }),
     example: { message: "Internal server error", status: 500, error: "Unknown error" },
     name: "Internal",
     description: "Internal server error",
@@ -145,9 +174,12 @@ export namespace HttpJsonResponse {
     example: { message: "Request timeout", status: 504 },
     name: "Timeout",
     description: "Request timeout",
-    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    schema: {
+      type: "object",
+      properties: { message: { type: "string" }, status: { type: "number" } },
+    },
     status: 504,
   });
 
-  export const fromBoolean = (value: boolean) => value ? success() : failure();
+  export const fromBoolean = (value: boolean) => (value ? success() : failure());
 }

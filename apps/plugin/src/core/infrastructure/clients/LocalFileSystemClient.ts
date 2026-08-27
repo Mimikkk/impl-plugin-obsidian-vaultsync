@@ -9,9 +9,7 @@ export class LocalFileSystemClient {
     return new LocalFileSystemClient();
   }
 
-  private constructor(
-    private readonly fs = globalThis.app.vault,
-  ) {}
+  private constructor(private readonly fs = globalThis.app.vault) {}
 
   isFile(path: string): boolean {
     return this.getFile(path) !== null;
@@ -37,12 +35,31 @@ export class LocalFileSystemClient {
     if (this.isFile(path)) return true;
 
     const e = path.substring(path.lastIndexOf(".") + 1);
-    return e === "md" || e === "canvas" || e === "pdf" ||
-      e === "avif" || e === "bmp" || e === "gif" || e === "jpeg" || e === "jpg" || e === "png" ||
-      e === "svg" || e === "webp" ||
-      e === "flac" || e === "m4a" || e === "mp3" || e === "ogg" || e === "wav" || e === "webm" || e === "3gp" ||
+    return (
+      e === "md" ||
+      e === "canvas" ||
+      e === "pdf" ||
+      e === "avif" ||
+      e === "bmp" ||
+      e === "gif" ||
+      e === "jpeg" ||
+      e === "jpg" ||
+      e === "png" ||
+      e === "svg" ||
+      e === "webp" ||
+      e === "flac" ||
+      e === "m4a" ||
+      e === "mp3" ||
+      e === "ogg" ||
+      e === "wav" ||
+      e === "webm" ||
+      e === "3gp" ||
       e === "mkv" ||
-      e === "mov" || e === "mp4" || e === "ogv" || e === "webm";
+      e === "mov" ||
+      e === "mp4" ||
+      e === "ogv" ||
+      e === "webm"
+    );
   }
 
   folderOf(path: string) {
@@ -90,6 +107,10 @@ export class LocalFileSystemClient {
   list(): FileInfo[] {
     const files = this.fs.getFiles();
 
-    return files.map((file) => ({ path: file.path, updatedAt: file.stat.mtime, type: FileType.Local }));
+    return files.map((file) => ({
+      path: file.path,
+      updatedAt: file.stat.mtime,
+      type: FileType.Local,
+    }));
   }
 }

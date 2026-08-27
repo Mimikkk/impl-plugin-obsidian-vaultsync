@@ -1,9 +1,14 @@
 import type { RequestBodyObject, SchemaObject } from "openapi3-ts/oas31";
 
 export class RequestContent<T = object> {
-  static create<T>(
-    { name, example, description, properties, type, required }: RequestContent.Options<T>,
-  ): RequestContent<T> {
+  static create<T>({
+    name,
+    example,
+    description,
+    properties,
+    type,
+    required,
+  }: RequestContent.Options<T>): RequestContent<T> {
     return new RequestContent(name, example, description, properties, type, required);
   }
 

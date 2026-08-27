@@ -1,7 +1,10 @@
 import { resolve, singleton } from "@nimir/framework";
 import type { FileInfo, FileMeta } from "@nimir/shared";
 import { LocalFileSystemClient } from "@plugin/core/infrastructure/clients/LocalFileSystemClient.ts";
-import { type ISyncState, SyncState } from "@plugin/features/synchronization/infrastructure/SyncState.ts";
+import {
+  type ISyncState,
+  SyncState,
+} from "@plugin/features/synchronization/infrastructure/SyncState.ts";
 import type { FileSearch } from "@plugin/features/synchronization/infrastructure/filesystems/Filesystem.ts";
 
 @singleton
